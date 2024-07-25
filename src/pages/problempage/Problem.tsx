@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Split from "react-split";
 import ProblemDetails from "./ProblemDetails";
-import { twoSum } from "../../components/constants/constants";
 import CodeSection from "./CodeSection";
+import axios from "axios";
 
 type ProblemPageProps = {};
 type WorkSpaceProps = {
@@ -12,9 +12,19 @@ type WorkSpaceProps = {
 const ProblemPage: React.FC<ProblemPageProps> = ({ params }: any) => {
   const [problem, setProblem] = useState();
 
+  async function fetchProblem() {
+    const data = await axios.get(
+      `http://localhost:4000/api/v1/problem/two-sum`
+    );
+
+    setProblem(data.data.result);
+  }
+  useEffect(() => {
+    fetchProblem();
+  }, []);
   return (
     <div className="text-white z-10 w-full max-h-[calc(100vh-70px)] overflow-hidden">
-      <WorkSpace problem={twoSum} />
+      <WorkSpace problem={problem} />
     </div>
   );
 };

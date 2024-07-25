@@ -8,9 +8,10 @@ import Split from "react-split";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
+import { ProblemDetailsProps } from "../../components/constants/types";
 
 type CodeSectionProps = {
-  problem: any;
+  problem: ProblemDetailsProps;
 };
 
 const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
@@ -88,7 +89,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
               height="100%"
               defaultLanguage="javascript"
               theme="vs-dark"
-              value={problem?.starterCode}
+              value={problem?.infoPage.starterCode.js}
               onChange={(t) => setUserCode(t ?? "")}
               options={{ fontSize: settings.fontSize }}
             />

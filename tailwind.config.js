@@ -1,5 +1,7 @@
 //File: tailwind.config.js
 
+const { nextui } = require('@nextui-org/react');
+
 // const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
@@ -17,8 +19,6 @@ module.exports = {
   },
   theme: {
     extend: {
-      // value of 100 represents base value, and <100 represets tints and >100
-      // represents tints
       transitionProperty: {
         width: "width",
       },
@@ -78,6 +78,22 @@ module.exports = {
         link: {
           DEFAULT: "#00FFD7",
         },
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "hero-bg": "url('/public/homebg.jpg')",
+        "footer-texture": "url('/img/footer-texture.png')",
+      },
+      fontFamily: {
+        roboto: ["Roboto Slab", "sans-serif"],
+        rubik: ["Rubik", "sans-serif"],
+        salsa: ["Salsa", "cursive"],
+        merri: ["Merriweather", "serif"],
+        domine: ["Domine", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        inter: ["Inter", "sans-serif"],
       },
       keyframes: {
         shine: {
@@ -156,19 +172,19 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwindcss-animate")
-    // nextui({
-    //   defaultTheme: "dark",
-    //   themes: {
-    //     dark: {
-    //       colors: {
-    //         primary: {
-    //           DEFAULT: "#FFD700",
-    //           foreground: "#000000",
-    //         },
-    //       },
-    //     },
-    //   },
-    // }),
+    require("tailwindcss-animate"),
+    nextui({
+      defaultTheme: "dark",
+      themes: {
+        dark: {
+          colors: {
+            primary: {
+              DEFAULT: "#FFD700",
+              foreground: "#000000",
+            },
+          },
+        },
+      },
+    }),
   ],
 };

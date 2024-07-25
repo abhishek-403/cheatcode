@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { ProblemDetailsProps } from "../constants/types";
 type TestCasesProps = {
-  problem: any;
+  problem: ProblemDetailsProps;
 };
 
 const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
@@ -8,7 +9,7 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
   return (
     <>
       <div className="flex my-2">
-        {problem?.examples.map((example: any, index: any) => (
+        {problem?.infoPage.examples.map((example: any, index: any) => (
           <div
             className="mr-2 items-start mt-2 "
             key={index}
@@ -29,11 +30,11 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
       <div className="font-semibold my-4">
         <p className="text-sm font-medium mt-4 text-white">Input :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {problem?.examples[activeTestCaseId].inputText}
+          {problem?.infoPage.examples[activeTestCaseId].inputText}
         </div>
         <p className="text-sm font-medium mt-4 text-white">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {problem?.examples[activeTestCaseId].outputText}
+          {problem?.infoPage.examples[activeTestCaseId].outputText}
         </div>
       </div>
     </>

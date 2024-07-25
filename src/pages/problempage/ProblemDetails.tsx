@@ -56,14 +56,14 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
             <div className="text-white text-sm">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: problem?.problemStatement,
+                  __html: problem?.infoPage.problemStatement,
                 }}
               />
             </div>
 
             {/* Examples */}
             <div className="mt-4">
-              {problem?.examples?.map((example: any, index: any) => (
+              {problem?.infoPage.examples?.map((example: any, index: any) => (
                 <div key={example.id}>
                   <p className="font-medium text-white ">
                     Example {index + 1}:{" "}
@@ -95,7 +95,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
               <ul className="text-white ml-5 list-disc ">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: problem?.constraints,
+                    __html: problem?.infoPage.constraints,
                   }}
                 />
               </ul>

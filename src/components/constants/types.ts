@@ -12,16 +12,25 @@ export type ProblemSchema = {
   videoLink: string;
   category: string;
 };
-export interface ProblemExampleProps{
-  id:number;
-  imageUrl?:string;
-  inputText:string;
-  outputText:string;
-  explanation?:string;
+export interface ProblemExampleProps {
+  id: number;
+  imageUrl?: string;
+  inputText: string;
+  outputText: string;
+  explanation?: string;
 }
+
+interface StarterCode {
+  js: string;
+  java?: string;
+  cpp?: string;
+}
+
 export interface ProblemDetailsProps extends ProblemSchema {
-    problemStatement:string;
-    examples:ProblemExampleProps[];
-    constraints:string;
-    starterCode:string;
+  infoPage: {
+    problemStatement: string;
+    examples: ProblemExampleProps[];
+    constraints: string;
+    starterCode: StarterCode;
+  };
 }
