@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { problem } from "../constants/constants";
 import { ProblemSchema } from "../constants/types";
+import { useIonRouter } from "@ionic/react";
 
 export default function ProblemCard() {
   //   const [problem, setProblem] = useState([]);
@@ -19,6 +20,7 @@ export default function ProblemCard() {
   //   useEffect(() => {
   //     fetchProblems();
   //   }, []);
+  const navigate = useIonRouter();
   return (
     <>
       <tbody className="text-white  ">
@@ -31,20 +33,15 @@ export default function ProblemCard() {
               : "text-pink-500";
           return (
             <tr
-              className={`hover:bg-[#2222226b] b-[2px] border-b border-[#1a1a1a] cursor-pointer  `}
+              className={`hover:bg-[#2222226b] b-[2px] border-b border-[#1a1a1a] hover:text-[#5eb6ff] cursor-pointer  `}
               key={idx}
+              onClick={() => navigate.push(`/problem/${problem.id}`,"root","replace")}
             >
               <td className="px-6 py-4">
-                <Link
-                  className="hover:text-[#5eb6ff] cursor-pointer"
-                  to={`/problem/${problem.id}`}
-                  target="_blank"
-                >
-                  <div className="flex gap-2">
-                    <div className="">{problem.problemNo + "."} </div>
-                    <div className="">{problem.name}</div>
-                  </div>
-                </Link>
+                <div className="flex gap-2">
+                  <div className="">{problem.problemNo + "."} </div>
+                  <div className="">{problem.name}</div>
+                </div>
               </td>
               <td className={`px-6 py-4 ${difficulyColor}`}>
                 {problem.difficulty}

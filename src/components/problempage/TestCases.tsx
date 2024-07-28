@@ -1,5 +1,17 @@
-import { useState } from "react";
-import { ProblemDetailsProps } from "../constants/types";
+import { useEffect, useState } from "react";
+import {
+  checkOutputResponse,
+  ProblemDetailsProps,
+  ResponseStatusType,
+  SubmissionDescriptionType,
+  SubmissionStatusType,
+} from "../constants/types";
+import { IonIcon } from "@ionic/react";
+import {
+  checkmarkCircle,
+  checkmarkDoneCircle,
+  closeCircleOutline,
+} from "ionicons/icons";
 type TestCasesProps = {
   problem: ProblemDetailsProps;
 };
@@ -41,10 +53,16 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
   );
 };
 
-type TestCasesResultProps = {
+interface TestCasesResultProps {
   problem: any;
-  resultSummary: any;
-};
+  resultSummary:
+    | {
+        submission_status: SubmissionStatusType;
+        detailedInfo: checkOutputResponse[];
+      }
+    | null
+    | ResponseStatusType.Error;
+}
 
 export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   problem,
@@ -59,55 +77,49 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
       </div>
     );
   }
-  if (
-    resultSummary.error_type === "Syntax Error" ||
-    resultSummary.error_type === "Runtime Error"
-  ) {
+  if (resultSummary === ResponseStatusType.Error) {
     return (
-      <div>
-        <div className={`text-red-500 my-2 font-bold text-xl`}>
-          <span className="">{resultSummary.submission_status} : </span>
-          <span className="">{resultSummary.error_type}</span>
-        </div>
-        <div>
-          <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-            {resultSummary.error_message}
-          </div>
-        </div>
+      <div className="flex items-center justify-center mt-16 text-red-400 font-semibold">
+        Internal Error
       </div>
     );
   }
+  const isAccepted =
+    resultSummary.submission_status === SubmissionStatusType.accepted;
 
-  if (
-    resultSummary.submission_status === "Accepted" ||
-    resultSummary.error_type === "Wrong Answer"
-  ) {
-    return (
-      <>
-        <div className="my-2 font-bold text-xl">
-          {resultSummary.submission_status === "Accepted" ? (
-            <div className={`text-green-400`}>
-              {resultSummary.submission_status}
-            </div>
-          ) : (
-            <div className={`text-red-500`}>
-              <span className="">{resultSummary.submission_status} : </span>
-              <span className="">{resultSummary.error_type}</span>
-            </div>
-          )}
-        </div>
-        <div className="flex my-2">
-          {problem?.examples?.map((example: any, index: any) => (
+  return (
+    <>
+      <div className="my-2 font-bold text-xl">
+        {isAccepted ? (
+          <div className={`text-green-400 py-3 px-2`}>
+            {resultSummary.submission_status}
+          </div>
+        ) : (
+          <div className={`text-red-500 py-3 px-2`}>
+            <span className="">{resultSummary.submission_status} </span>
+            <span className="">
+              {resultSummary.detailedInfo[activeTestCaseId].message !==
+                SubmissionDescriptionType.success &&
+                ": " + resultSummary.detailedInfo[activeTestCaseId].message}
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-2 ">
+        {problem?.infoPage?.examples
+          ?.slice(0, resultSummary.detailedInfo.length)
+          .map((example: any, index: number) => (
             <div
-              className="mr-2 items-start mt-2 "
+              className="items-start "
               key={example.id}
               onClick={() => setActiveTestCaseId(index)}
             >
               <div className="flex flex-wrap items-center gap-y-4">
                 <div
-                  className={`font-medium items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
+                  className={`font-semibold items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
                   ${
-                    resultSummary.compare_result[index] == "1"
+                    resultSummary.detailedInfo[index].status ===
+                    SubmissionStatusType.accepted
                       ? activeTestCaseId === index
                         ? "border-green-500 text-green-500 "
                         : "text-green-500"
@@ -118,29 +130,86 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
 
                     `}
                 >
-                  Case {index + 1}
+                  <div className="flex gap-2 items-center justify-center">
+                    {resultSummary.detailedInfo[index].status ===
+                    SubmissionStatusType.accepted ? (
+                      <IonIcon icon={checkmarkCircle} size="lg"/>
+                    ) : (
+                      <IonIcon icon={closeCircleOutline}  size="lg"/>
+                    )}{" "}
+                    Case {index + 1}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+      </div>
+      <div className="font-semibold my-4">
+        <p className="text-sm font-medium mt-4 text-white">Input :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {problem.infoPage.examples[activeTestCaseId].inputText}
         </div>
-        <div className="font-semibold my-4">
-          <p className="text-sm font-medium mt-4 text-white">Input :</p>
-          <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-            {problem?.examples[activeTestCaseId].inputText}
-          </div>
-          <p className="text-sm font-medium mt-4 text-white">Output :</p>
-          <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-            {resultSummary.userOutputArray[activeTestCaseId]}
-          </div>
-          <p className="text-sm font-medium mt-4 text-white">Expected :</p>
-          <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-            {resultSummary.expectedOutputArray[activeTestCaseId]}
-          </div>
+        <p className="text-sm font-medium mt-4 text-white">Output :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {resultSummary.detailedInfo[activeTestCaseId].user_output}
         </div>
-      </>
-    );
-  }
+        <p className="text-sm font-medium mt-4 text-white">Expected :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {resultSummary.detailedInfo[activeTestCaseId].expected_output}
+        </div>
+      </div>
+    </>
+  );
 };
 
+function TestCaseSummary({
+  example,
+  index,
+  summary,
+  isAccepted,
+  isActive,
+}: {
+  example: any;
+  index: number;
+  summary: any;
+  isAccepted: boolean;
+  isActive: boolean;
+}) {
+  return (
+    <div className="">
+      <div className="mr-2 items-start mt-2 ">
+        <div className="flex flex-wrap items-center gap-y-4">
+          <div
+            className={`font-medium items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
+                  ${
+                    isAccepted && isActive
+                      ? " border-green-500 text-green-500"
+                      : isAccepted
+                      ? "text-green-500"
+                      : isActive
+                      ? "border-red-500 text-red-500"
+                      : "text-red-500"
+                  }`}
+          >
+            Case {index + 1}
+          </div>
+        </div>
+      </div>
+      <div className="font-semibold my-4">
+        <p className="text-sm font-medium mt-4 text-white">Input :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {example.inputText}
+        </div>
+        <p className="text-sm font-medium mt-4 text-white">Output :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {summary.user_output}
+        </div>
+        <p className="text-sm font-medium mt-4 text-white">Expected :</p>
+        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+          {summary.expected_output}
+        </div>
+      </div>
+    </div>
+  );
+}
 export default TestCases;

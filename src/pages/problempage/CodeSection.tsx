@@ -1,14 +1,17 @@
-import { useCallback, useState } from "react";
-import useLocalStorage from "../../hooks/useLocation";
-import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
-import { githubDark } from "@uiw/codemirror-theme-github";
-import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import Split from "react-split";
+import {
+  checkOutputResponse,
+  ProblemDetailsProps,
+  ResponseStatusType,
+  SubmissionStatusType,
+} from "../../components/constants/types";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
-import { ProblemDetailsProps } from "../../components/constants/types";
+import useLocalStorage from "../../hooks/useLocation";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -16,7 +19,15 @@ type CodeSectionProps = {
 
 const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
   let [userCode, setUserCode] = useState<string>("");
-  const [resultSummary, setResultSummary] = useState(null);
+
+  useEffect(() => {
+    setUserCode(problem?.infoPage.starterCode.js);
+  }, [problem]);
+
+  const [resultSummary, setResultSummary] = useState<{
+    submission_status: SubmissionStatusType;
+    detailedInfo: checkOutputResponse[];
+  } | null | ResponseStatusType.Error >(null);
   // const [isResultActive, setIsResultActive] = useState<boolean>(false);
 
   const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
@@ -71,7 +82,29 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
   //   }
   // }
 
-  function handleRun() {}
+  async function handleRun() {
+    try {
+      console.log("hi");
+
+      const res = await axios.post(
+        `http://localhost:4000/api/v1/problem/${problem.id}/check`,
+        {
+          sourceCode: userCode,
+          languageId: "js",
+        }
+      );
+      if (res.data.status === ResponseStatusType.Error) {
+        
+        setResultSummary(res.data.status);
+        console.log("dd",res.data.status);
+      } else {
+        setResultSummary(res.data.result);
+      }
+      setIsResultActive(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
   function handleSubmit() {}
 
   return (
@@ -89,7 +122,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
               height="100%"
               defaultLanguage="javascript"
               theme="vs-dark"
-              value={problem?.infoPage.starterCode.js}
+              value={userCode}
               onChange={(t) => setUserCode(t ?? "")}
               options={{ fontSize: settings.fontSize }}
             />
@@ -102,15 +135,29 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
         <div className="w-full px-5 overflow-auto">
           {/* testcase heading */}
           <div className="flex h-10 items-center space-x-6 cursor-pointer">
-            <div className="relative flex h-full flex-col justify-center ">
+            <div
+              onClick={() => setIsResultActive(false)}
+              className="relative flex h-full flex-col justify-center "
+            >
               <div className="text-sm font-medium leading-5 text-white">
                 Testcases
               </div>
+              {!isResultActive && (
+                <hr className="absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white" />
+              )}
             </div>
-            <div className={`relative flex h-full flex-col justify-center`}>
+            <div
+              onClick={() => setIsResultActive(true)}
+              className={`relative flex h-full flex-col justify-center`}
+            >
               <div className="text-sm font-medium leading-5 text-white">
                 Testcases result
               </div>
+              {isResultActive && (
+                <hr
+                  className={`absolute bottom-0 h-0.5 w-full rounded-full border-none bg-white`}
+                />
+              )}
             </div>
           </div>
 

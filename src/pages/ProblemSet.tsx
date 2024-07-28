@@ -13,7 +13,7 @@ export default function ProblemSet() {
             CheatCode Special
           </div>
           <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
-            <table className="text-sm text-left text-gray-400  w-full max-w-[1500px] mx-auto gap-[2px]  ">
+            <table className="relative text-sm text-left text-gray-400  w-full max-w-[1500px] mx-auto gap-[2px]  ">
               {
                 <thead className="text-md font-bold font-rubik text-gray-300  uppercase  border-b border-[#2a2a2a] ">
                   <tr>

@@ -3,6 +3,7 @@ import Split from "react-split";
 import ProblemDetails from "./ProblemDetails";
 import CodeSection from "./CodeSection";
 import axios from "axios";
+import { useParams } from "react-router";
 
 type ProblemPageProps = {};
 type WorkSpaceProps = {
@@ -11,10 +12,10 @@ type WorkSpaceProps = {
 
 const ProblemPage: React.FC<ProblemPageProps> = ({ params }: any) => {
   const [problem, setProblem] = useState();
-
+  const questionId: { problemId: string } = useParams();
   async function fetchProblem() {
     const data = await axios.get(
-      `http://localhost:4000/api/v1/problem/two-sum`
+      `http://localhost:4000/api/v1/problem/${questionId.problemId}`
     );
 
     setProblem(data.data.result);
@@ -34,7 +35,7 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
     <div className="flex gap-2">
       {/* <Navbar /> */}
       <Split
-        className="flex"
+        className="flex w-full"
         // sizes={[50, 50]}
         // minSize={100}
       >

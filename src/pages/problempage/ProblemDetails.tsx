@@ -1,4 +1,6 @@
+import Markdown from "react-markdown";
 import { ProblemDetailsProps } from "../../components/constants/types";
+import remarkGfm from "remark-gfm";
 
 type ProblemsDetailsProps = {
   problem: any;
@@ -8,7 +10,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
   //   const [activeTab, setActiveTab] = useRecoilState(WorkSpaceActiveTab);
   return (
     <div>
-      <div className="flex gap-2 py-2 w-full h-[50px] items-center px-4   border-b border-[#2a2a2a] text-white overflow-y-hidden">
+      <div className="flex gap-2 py-2 w-full h-[50px] items-center px-4   border-b border-[#2a2a2a] text-white overflow-hidden">
         <button
           //   onClick={() => setActiveTab("Description")}
           className={` font-inter rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2 `}
@@ -33,7 +35,6 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
   );
 };
 
-
 type ProblemsDescriptionProps = {
   problem: ProblemDetailsProps;
 };
@@ -41,6 +42,12 @@ type ProblemsDescriptionProps = {
 const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   problem,
 }) => {
+  
+  // return (
+  //   <div className="w-full p-4">
+  //     <Markdown remarkPlugins={[remarkGfm]}>{des}</Markdown>
+  //   </div>
+  // );
   return (
     <div className="">
       <div className="flex px-0 py-4 h-[calc(100vh-120px)] overflow-y-auto w-full">
@@ -76,7 +83,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
                       <strong className="text-white">Input: </strong>{" "}
                       {example.inputText}
                       <br />
-                      <strong>Output:</strong>
+                      <strong>Output: </strong>
                       {example.outputText} <br />
                       {example.explanation && (
                         <>
@@ -106,6 +113,5 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
     </div>
   );
 };
-
 
 export default ProblemDetails;

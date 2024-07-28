@@ -39,7 +39,7 @@ const Routes = () => (
     <RootLayOut>
       <Route exact path="/" component={Home} />
       <Route exact path="/problems" component={ProblemSet} />
-      <Route exact path="/problem/:pid" component={ProblemPage} />
+      <Route exact path="/problem/:problemId" component={ProblemPage} />
     </RootLayOut>
     {/* <ProblemLayOut>
       <Route path={"/problem/:pid"}>

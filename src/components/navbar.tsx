@@ -51,15 +51,15 @@ export default function Navbar() {
     <div className="bg-black h-[70px] border-b border-[#2a2a2a] px-10 flex items-center justify-between ">
       <Link
         to={"/"}
-        className="flex gap-5 items-center cursor-pointer justify-center"
+        className="flex gap-2 items-center cursor-pointer justify-center"
       >
-        {/* <Image
-          src="/logo.png"
-          width={30}
-          height={30}
+        <Image
+          src="./logo.png"
+          width={40}
+          height={40}
           alt="Picture of the author"
-        /> */}
-        <span className="text-white font-mono font-bold">CHEATCODE</span>
+        />
+        <span className="text-white font-mono font-bold text-xl">CHEATCODE</span>
       </Link>
       <ul className="flex flex-row gap-10  text-base cursor-pointer mr-10 ">
             {TABS.map((tab, i) => (

@@ -1,8 +1,9 @@
-import { IonIcon } from "@ionic/react";
+import { IonIcon, useIonRouter } from "@ionic/react";
 import { flashOutline } from "ionicons/icons";
 import { Typewriter } from "react-simple-typewriter";
 import { PrimaryButton } from "../components/custom-ui/button";
 const Home: React.FC = () => {
+  const navigate = useIonRouter();
   return (
     <div className=" bg-neutral-90 flex h-full  items-center justify-center">
       <div className="text-white  flex gap-5 flex-col items-center justify-center">
@@ -23,7 +24,7 @@ const Home: React.FC = () => {
             />
           </div>
         </div>
-        <div className="mt-5">
+        <div className="mt-5" onClick={() => navigate.push("/problems")}>
           <PrimaryButton
             title="Get Started"
             icon={
