@@ -36,8 +36,8 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
       {/* <Navbar /> */}
       <Split
         className="flex w-full"
-        // sizes={[50, 50]}
-        // minSize={100}
+        sizes={[50, 50]}
+        minSize={40}
       >
         <div>
           <ProblemDetails problem={problem} />

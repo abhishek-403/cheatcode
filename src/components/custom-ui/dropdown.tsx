@@ -1,11 +1,13 @@
-import React, { SetStateAction } from "react";
+import { IonIcon } from "@ionic/react";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/react";
+import { chevronDownOutline } from "ionicons/icons";
+import React, { SetStateAction } from "react";
 
 export function LanguageDropdownComponent({
   items,
@@ -41,7 +43,7 @@ export function LanguageDropdownComponent({
           variant="bordered"
           className="capitalize py-1 h-8 border border-neutral-10"
         >
-          {selectedValue}
+          {selectedValue} <IonIcon icon={chevronDownOutline}/>
         </Button>
       </DropdownTrigger>
       <DropdownMenu

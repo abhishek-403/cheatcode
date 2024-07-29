@@ -25,7 +25,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
 
   return (
     <div>
-      <div className="flex gap-2 py-2 w-full items-center px-4   border-b border-[#2a2a2a] text-white overflow-y-hidden">
+      <div className="flex gap-2 py-2 w-full items-center px-4   border-b border-[#2a2a2a] text-white overflow-hidden">
         <button
           onClick={() => setActiveTab(ProblemTabs.description)}
           className={`${

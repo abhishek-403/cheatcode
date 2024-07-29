@@ -1,7 +1,12 @@
 import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
-import { closeOutline, scanOutline, settingsOutline } from "ionicons/icons";
+import {
+  closeOutline,
+  refreshOutline,
+  scanOutline,
+  settingsOutline,
+} from "ionicons/icons";
 import { SetStateAction, useEffect, useState } from "react";
 import Split from "react-split";
 import {
@@ -18,7 +23,6 @@ import TestCases, {
 } from "../../components/problempage/TestCases";
 import useLocalStorage from "../../hooks/useLocation";
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
-import { PrimaryButton } from "../../components/custom-ui/button";
 import { Button } from "@nextui-org/react";
 
 type CodeSectionProps = {
@@ -36,7 +40,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     | null
     | ResponseStatusType.Error
   >(null);
-  // const [isResultActive, setIsResultActive] = useState<boolean>(false);
   const [isLoading, setisLoading] = useState<boolean>(false);
 
   const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
@@ -48,50 +51,8 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
   const [settings, setSettings] = useState<any>({
     fontSize: fontSize,
     settingsModalIsOpen: false,
+    wordWrap: true,
   });
-  // const setCodeSubmissionResult = useSetRecoilState(CodeSubmissionResult);
-  // const setWorkSpaceActiveTab = useSetRecoilState(WorkSpaceActiveTab);
-  // async function handleSubmit() {
-  //   try {
-  //     if (!getItem("accessToken")) {
-  //       toast.error("Login to submit");
-  //       return;
-  //     }
-
-  //     setWorkSpaceActiveTab("Submissions");
-  //     await handleRun();
-
-  //     const res = await axiosClient.post(
-  //       `/problems/65c352b084a0a5097c027e19/submit`,
-  //       { userCode }
-  //     );
-
-  //     console.log(res.data);
-  //     setCodeSubmissionResult(res.data.result);
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //   }
-  // }
-  // async function handleRun() {
-  //   try {
-  //     if (typeof userCode.split("return")[1] != typeof Array) {
-  //       console.log("h", userCode.split("return")[1]);
-  //       return;
-  //     }
-  //     const res = await axiosClient.post(
-  //       `/problems/65c352b084a0a5097c027e19/check`,
-  //       { userCode }
-  //     );
-
-  //     if (res.data.status === "success") {
-  //       setResultSummary(res.data.result);
-  //     }
-  //     setIsResultActive(true);
-  //     console.log(res.data);
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //   }
-  // }
 
   useEffect(() => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
@@ -120,29 +81,35 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     }
   }
   function handleSubmit() {}
-
+  function resetCode() {
+    setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
+  }
   return (
     <div className="flex flex-col relative overflow-hidden text-white ">
       <PreferenceNav
         settings={settings}
         setSettings={setSettings}
         setSelectedLanguage={setSelectedLanguage}
+        resetCode={resetCode}
       />
       <Split
         className="h-[calc(100vh-100px)]"
         direction="vertical"
-        sizes={[60, 40]}
-        minSize={60}
+     
       >
         <div className="flex flex-col overflow-auto  rounded relative min-h-[10vh] min-w-[50vw]">
           <div className="overflow-auto h-full  ">
             <Editor
               height="100%"
+              width={"100%"}
               language={selectedLanguage.key}
               theme="vs-dark"
               value={userCode}
               onChange={(t) => setUserCode(t ?? "")}
-              options={{ fontSize: settings.fontSize }}
+              options={{
+                fontSize: settings.fontSize,
+                wordWrap: settings.wordWrap,
+              }}
             />
           </div>
         </div>
@@ -204,12 +171,14 @@ type PreferenceNavProps = {
   settings: any;
   setSettings: any;
   setSelectedLanguage: React.Dispatch<SetStateAction<any>>;
+  resetCode: () => void;
 };
 
 const PreferenceNav: React.FC<PreferenceNavProps> = ({
   setSettings,
   settings,
   setSelectedLanguage,
+  resetCode,
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -249,26 +218,34 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
       </div>
 
       <div className="flex items-center gap-4">
-        <button
-          className="group"
+        <div
           onClick={() =>
             setSettings({ ...settings, settingsModalIsOpen: true })
           }
+          className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
+          title="Settings"
         >
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            <IonIcon icon={settingsOutline} />
-          </div>
-        </button>
+          <IonIcon icon={settingsOutline} />
+        </div>
 
-        <button className="preferenceBtn group" onClick={handleFullScreen}>
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            {!isFullScreen ? (
-              <IonIcon icon={scanOutline} />
-            ) : (
-              <IonIcon icon={closeOutline} />
-            )}
-          </div>
-        </button>
+        <div
+          onClick={handleFullScreen}
+          className=" text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
+          title={`${isFullScreen ? "Minimize" : "Maximize"}`}
+        >
+          {!isFullScreen ? (
+            <IonIcon icon={scanOutline} />
+          ) : (
+            <IonIcon icon={closeOutline} />
+          )}
+        </div>
+        <div
+          onClick={resetCode}
+          className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
+          title="Reset"
+        >
+          <IonIcon icon={refreshOutline} />
+        </div>
       </div>
       {settings.settingsModalIsOpen && (
         <CodeEditorSettingModal settings={settings} setSettings={setSettings} />
