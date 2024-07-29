@@ -35,14 +35,15 @@ export default function ProblemCard() {
             <tr
               className={`hover:bg-[#2222226b] b-[2px] border-b border-[#1a1a1a] hover:text-[#5eb6ff] cursor-pointer  `}
               key={idx}
-              onClick={() => navigate.push(`/problem/${problem.id}`,"root","replace")}
             >
-              <td className="px-6 py-4">
-                <div className="flex gap-2">
-                  <div className="">{problem.problemNo + "."} </div>
-                  <div className="">{problem.name}</div>
-                </div>
-              </td>
+              <Link to={`/problem/${problem.id}`} target="_blank">
+                <td className="px-6 py-4">
+                  <div className="flex gap-2">
+                    <div className="">{problem.problemNo + "."} </div>
+                    <div className="">{problem.name}</div>
+                  </div>
+                </td>
+              </Link>
               <td className={`px-6 py-4 ${difficulyColor}`}>
                 {problem.difficulty}
               </td>

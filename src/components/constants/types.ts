@@ -21,7 +21,7 @@ export interface ProblemExampleProps {
 }
 
 interface StarterCode {
-  js: string;
+  javascript: string;
   java?: string;
   cpp?: string;
 }
@@ -31,10 +31,15 @@ export interface ProblemDetailsProps extends ProblemSchema {
     problemStatement: string;
     examples: ProblemExampleProps[];
     constraints: string;
-    starterCode: StarterCode;
+    starterCode: any;
   };
 }
 
+export const SUPPORTED_LANGUAGES_ARRAY = [
+  { key: "javascript", value: "JavaScript" },
+  { key: "java", value: "Java" },
+  { key: "cpp", value: "C++" },
+];
 export const LANGUAGE_MAPPING: {
   [key: string]: {
     judge0: number;
@@ -43,7 +48,12 @@ export const LANGUAGE_MAPPING: {
     monaco: string;
   };
 } = {
-  js: { judge0: 63, internal: 1, name: "Javascript", monaco: "javascript" },
+  javascript: {
+    judge0: 63,
+    internal: 1,
+    name: "Javascript",
+    monaco: "javascript",
+  },
   cpp: { judge0: 54, internal: 2, name: "C++", monaco: "cpp" },
   java: { judge0: 62, internal: 4, name: "Java", monaco: "java" },
 };
@@ -52,7 +62,7 @@ export interface checkOutputResponse {
   status: SubmissionStatusType;
   user_output: any;
   expected_output: any;
-  message:SubmissionDescriptionType
+  message: SubmissionDescriptionType;
 }
 
 enum SubmissionDescriptionType {
@@ -73,4 +83,4 @@ enum ResponseStatusType {
   Error = "error",
 }
 
-export { SubmissionStatusType, SubmissionDescriptionType ,ResponseStatusType};
+export { SubmissionStatusType, SubmissionDescriptionType, ResponseStatusType };

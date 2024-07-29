@@ -42,7 +42,7 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
         <div>
           <ProblemDetails problem={problem} />
         </div>
-        <div className="">
+        <div >
           <CodeSection problem={problem} />
         </div>
       </Split>

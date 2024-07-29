@@ -6,12 +6,9 @@ import {
   SubmissionDescriptionType,
   SubmissionStatusType,
 } from "../constants/types";
-import { IonIcon } from "@ionic/react";
-import {
-  checkmarkCircle,
-  checkmarkDoneCircle,
-  closeCircleOutline,
-} from "ionicons/icons";
+import { IonButton, IonIcon, IonLoading } from "@ionic/react";
+import { checkmarkCircle, closeCircleOutline } from "ionicons/icons";
+import Spinner from "../custom-ui/loading";
 type TestCasesProps = {
   problem: ProblemDetailsProps;
 };
@@ -62,14 +59,23 @@ interface TestCasesResultProps {
       }
     | null
     | ResponseStatusType.Error;
+  isLoading: boolean;
 }
 
 export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   problem,
   resultSummary,
+  isLoading,
 }) => {
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
 
+  if (isLoading) {
+    return (
+      <div className="relative flex items-center justify-center mt-16">
+        <Spinner isOpen={true} />
+      </div>
+    );
+  }
   if (resultSummary === null) {
     return (
       <div className="flex items-center justify-center mt-16">
@@ -133,9 +139,9 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
                   <div className="flex gap-2 items-center justify-center">
                     {resultSummary.detailedInfo[index].status ===
                     SubmissionStatusType.accepted ? (
-                      <IonIcon icon={checkmarkCircle} size="lg"/>
+                      <IonIcon icon={checkmarkCircle} size="lg" />
                     ) : (
-                      <IonIcon icon={closeCircleOutline}  size="lg"/>
+                      <IonIcon icon={closeCircleOutline} size="lg" />
                     )}{" "}
                     Case {index + 1}
                   </div>
@@ -151,7 +157,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
         </div>
         <p className="text-sm font-medium mt-4 text-white">Output :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {resultSummary.detailedInfo[activeTestCaseId].user_output}
+          {resultSummary.detailedInfo[activeTestCaseId].user_output ?? "null"}
         </div>
         <p className="text-sm font-medium mt-4 text-white">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
@@ -162,54 +168,4 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   );
 };
 
-function TestCaseSummary({
-  example,
-  index,
-  summary,
-  isAccepted,
-  isActive,
-}: {
-  example: any;
-  index: number;
-  summary: any;
-  isAccepted: boolean;
-  isActive: boolean;
-}) {
-  return (
-    <div className="">
-      <div className="mr-2 items-start mt-2 ">
-        <div className="flex flex-wrap items-center gap-y-4">
-          <div
-            className={`font-medium items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-                  ${
-                    isAccepted && isActive
-                      ? " border-green-500 text-green-500"
-                      : isAccepted
-                      ? "text-green-500"
-                      : isActive
-                      ? "border-red-500 text-red-500"
-                      : "text-red-500"
-                  }`}
-          >
-            Case {index + 1}
-          </div>
-        </div>
-      </div>
-      <div className="font-semibold my-4">
-        <p className="text-sm font-medium mt-4 text-white">Input :</p>
-        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {example.inputText}
-        </div>
-        <p className="text-sm font-medium mt-4 text-white">Output :</p>
-        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {summary.user_output}
-        </div>
-        <p className="text-sm font-medium mt-4 text-white">Expected :</p>
-        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {summary.expected_output}
-        </div>
-      </div>
-    </div>
-  );
-}
 export default TestCases;

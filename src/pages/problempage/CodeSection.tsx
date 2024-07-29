@@ -1,17 +1,25 @@
+import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { closeOutline, scanOutline, settingsOutline } from "ionicons/icons";
+import { SetStateAction, useEffect, useState } from "react";
 import Split from "react-split";
 import {
   checkOutputResponse,
+  LANGUAGE_MAPPING,
   ProblemDetailsProps,
   ResponseStatusType,
   SubmissionStatusType,
+  SUPPORTED_LANGUAGES_ARRAY,
 } from "../../components/constants/types";
+import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
 import useLocalStorage from "../../hooks/useLocation";
+import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
+import { PrimaryButton } from "../../components/custom-ui/button";
+import { Button } from "@nextui-org/react";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -20,23 +28,26 @@ type CodeSectionProps = {
 const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
   let [userCode, setUserCode] = useState<string>("");
 
-  useEffect(() => {
-    setUserCode(problem?.infoPage.starterCode.js);
-  }, [problem]);
-
-  const [resultSummary, setResultSummary] = useState<{
-    submission_status: SubmissionStatusType;
-    detailedInfo: checkOutputResponse[];
-  } | null | ResponseStatusType.Error >(null);
+  const [resultSummary, setResultSummary] = useState<
+    | {
+        submission_status: SubmissionStatusType;
+        detailedInfo: checkOutputResponse[];
+      }
+    | null
+    | ResponseStatusType.Error
+  >(null);
   // const [isResultActive, setIsResultActive] = useState<boolean>(false);
+  const [isLoading, setisLoading] = useState<boolean>(false);
 
   const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
   const [isResultActive, setIsResultActive] = useState<boolean>(false);
-
-  const [settings, setSettings] = useState({
+  const [selectedLanguage, setSelectedLanguage] = useState<{
+    key: string;
+    value: string;
+  }>(SUPPORTED_LANGUAGES_ARRAY[0]);
+  const [settings, setSettings] = useState<any>({
     fontSize: fontSize,
     settingsModalIsOpen: false,
-    dropdownIsOpen: false,
   });
   // const setCodeSubmissionResult = useSetRecoilState(CodeSubmissionResult);
   // const setWorkSpaceActiveTab = useSetRecoilState(WorkSpaceActiveTab);
@@ -82,34 +93,41 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
   //   }
   // }
 
+  useEffect(() => {
+    setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
+  }, [problem, selectedLanguage]);
+
   async function handleRun() {
     try {
-      console.log("hi");
-
+      setisLoading(true);
+      setIsResultActive(true);
       const res = await axios.post(
         `http://localhost:4000/api/v1/problem/${problem.id}/check`,
         {
           sourceCode: userCode,
-          languageId: "js",
+          languageId: selectedLanguage.key,
         }
       );
       if (res.data.status === ResponseStatusType.Error) {
-        
         setResultSummary(res.data.status);
-        console.log("dd",res.data.status);
       } else {
         setResultSummary(res.data.result);
       }
-      setIsResultActive(true);
     } catch (e) {
       console.log(e);
+    } finally {
+      setisLoading(false);
     }
   }
   function handleSubmit() {}
 
   return (
     <div className="flex flex-col relative overflow-hidden text-white ">
-      {/* <PreferenceNav settings={settings} setSettings={setSettings} /> */}
+      <PreferenceNav
+        settings={settings}
+        setSettings={setSettings}
+        setSelectedLanguage={setSelectedLanguage}
+      />
       <Split
         className="h-[calc(100vh-100px)]"
         direction="vertical"
@@ -120,21 +138,18 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
           <div className="overflow-auto h-full  ">
             <Editor
               height="100%"
-              defaultLanguage="javascript"
+              language={selectedLanguage.key}
               theme="vs-dark"
               value={userCode}
               onChange={(t) => setUserCode(t ?? "")}
               options={{ fontSize: settings.fontSize }}
             />
           </div>
-          <div>
-            <EditorFooter handleSubmit={handleSubmit} handleRun={handleRun} />
-          </div>
         </div>
 
         <div className="w-full px-5 overflow-auto">
           {/* testcase heading */}
-          <div className="flex h-10 items-center space-x-6 cursor-pointer">
+          <div className="flex h-10 items-center space-x-6 cursor-pointer border-b border-neutral-80">
             <div
               onClick={() => setIsResultActive(false)}
               className="relative flex h-full flex-col justify-center "
@@ -161,13 +176,103 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
             </div>
           </div>
 
-          {isResultActive ? (
-            <TestCasesResult resultSummary={resultSummary} problem={problem} />
-          ) : (
-            <TestCases problem={problem} />
-          )}
+          <div className="pb-14 relative">
+            {isResultActive ? (
+              <TestCasesResult
+                resultSummary={resultSummary}
+                isLoading={isLoading}
+                problem={problem}
+              />
+            ) : (
+              <TestCases problem={problem} />
+            )}
+          </div>
+          <div className=" absolute bg-dark-fill  w-full bottom-0 right-0 px-4 pb-4 ">
+            <EditorFooter
+              handleSubmit={handleSubmit}
+              handleRun={handleRun}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
       </Split>
+    </div>
+  );
+};
+
+type PreferenceNavProps = {
+  settings: any;
+  setSettings: any;
+  setSelectedLanguage: React.Dispatch<SetStateAction<any>>;
+};
+
+const PreferenceNav: React.FC<PreferenceNavProps> = ({
+  setSettings,
+  settings,
+  setSelectedLanguage,
+}) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleFullScreen = () => {
+    if (isFullScreen) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+    setIsFullScreen(!isFullScreen);
+  };
+
+  useEffect(() => {
+    function exitHandler(e: any) {
+      if (!document.fullscreenElement) {
+        setIsFullScreen(false);
+        return;
+      }
+      setIsFullScreen(true);
+    }
+
+    if (document.addEventListener) {
+      document.addEventListener("fullscreenchange", exitHandler);
+      document.addEventListener("webkitfullscreenchange", exitHandler);
+      document.addEventListener("mozfullscreenchange", exitHandler);
+      document.addEventListener("MSFullscreenChange", exitHandler);
+    }
+  }, [isFullScreen]);
+
+  return (
+    <div className="relative flex items-center justify-between  px-5 h-11 w-full ">
+      <div className="flex items-center border border-neutral-80 rounded-lg bg-neutral-80">
+        <LanguageDropdownComponent
+          items={SUPPORTED_LANGUAGES_ARRAY}
+          setSelectedValue={setSelectedLanguage}
+        />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <button
+          className="group"
+          onClick={() =>
+            setSettings({ ...settings, settingsModalIsOpen: true })
+          }
+        >
+          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
+            <IonIcon icon={settingsOutline} />
+          </div>
+        </button>
+
+        <button className="preferenceBtn group" onClick={handleFullScreen}>
+          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
+            {!isFullScreen ? (
+              <IonIcon icon={scanOutline} />
+            ) : (
+              <IonIcon icon={closeOutline} />
+            )}
+          </div>
+        </button>
+      </div>
+      {settings.settingsModalIsOpen && (
+        <CodeEditorSettingModal settings={settings} setSettings={setSettings} />
+      )}
     </div>
   );
 };
@@ -175,28 +280,32 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
 type EditorFooterProps = {
   handleSubmit: () => void;
   handleRun: () => void;
+  isLoading: boolean;
 };
 
 const EditorFooter: React.FC<EditorFooterProps> = ({
   handleSubmit,
   handleRun,
+  isLoading,
 }) => {
   return (
-    <div className="flex absolute bottom-0 z-10 w-full">
+    <div className="flex  z-10 w-full">
       <div className="mx-5 my-[10px] flex justify-between w-full">
         <div className="ml-auto flex items-center space-x-4">
-          <button
-            className="px-3 py-1.5 text-sm font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-dark-fill-3  hover:bg-dark-fill-2 text-dark-label-2 rounded-lg"
+          {/* <button
+            className="px-3 py-1.5 text-base font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-neutral-80  hover:bg-neutral-70 text-dark-label-2 rounded-lg"
             onClick={handleRun}
           >
             Run
-          </button>
-          <button
-            className="px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-green-s hover:bg-green-3 rounded-lg"
-            onClick={handleSubmit}
+          </button> */}
+          <Button
+            className="px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-primary-100 font-inter hover:bg-green-3 rounded-xl"
+            // onClick={handleSubmit}
+            onClick={handleRun}
+            disabled={isLoading}
           >
             Submit
-          </button>
+          </Button>
         </div>
       </div>
     </div>

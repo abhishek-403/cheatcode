@@ -1,36 +1,56 @@
 import Markdown from "react-markdown";
 import { ProblemDetailsProps } from "../../components/constants/types";
-import remarkGfm from "remark-gfm";
+import { useState } from "react";
 
 type ProblemsDetailsProps = {
   problem: any;
 };
-
+enum ProblemTabs {
+  description = "Description",
+  submissions = "Submissions",
+}
 const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
-  //   const [activeTab, setActiveTab] = useRecoilState(WorkSpaceActiveTab);
+  const [activeTab, setActiveTab] = useState<ProblemTabs>(
+    ProblemTabs.description
+  );
+
+  function displayTab() {
+    switch (activeTab) {
+      case ProblemTabs.description:
+        return <ProblemsDescription problem={problem} />;
+      case ProblemTabs.submissions:
+        return <div className="py-10 w-full flex items-center justify-center" >Coming Soon</div>;
+    }
+  }
+
   return (
     <div>
-      <div className="flex gap-2 py-2 w-full h-[50px] items-center px-4   border-b border-[#2a2a2a] text-white overflow-hidden">
+      <div className="flex gap-2 py-2 w-full items-center px-4   border-b border-[#2a2a2a] text-white overflow-y-hidden">
         <button
-          //   onClick={() => setActiveTab("Description")}
-          className={` font-inter rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2 `}
+          onClick={() => setActiveTab(ProblemTabs.description)}
+          className={`${
+            activeTab == ProblemTabs.description ? "bg-neutral-80 " : "text-[#848484]"
+          } font-inter rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2 `}
         >
           Description
         </button>
         <button
-          //   onClick={() => setActiveTab("Submissions")}
-          className={`font-inter  rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2`}
+          onClick={() => setActiveTab(ProblemTabs.submissions)}
+          className={`font-inter  ${
+            activeTab ==ProblemTabs.submissions ? "bg-neutral-80" : "text-[#848484]"
+          }  rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2`}
         >
           Submissions
         </button>
       </div>
-      <ProblemsDescription problem={problem} />
-      {/* <div>
-        {activeTab == "Description" ? (
+      <div>
+        {/* {activeTab == "Description" ? (
+          <ProblemsDescription problem={problem} />
         ) : (
           <Submissions />
-        )}
-      </div> */}
+        )} */}
+        {displayTab()}
+      </div>
     </div>
   );
 };
@@ -42,7 +62,6 @@ type ProblemsDescriptionProps = {
 const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   problem,
 }) => {
-  
   // return (
   //   <div className="w-full p-4">
   //     <Markdown remarkPlugins={[remarkGfm]}>{des}</Markdown>
