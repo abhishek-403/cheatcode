@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Split from "react-split";
-import ProblemDetails from "./ProblemDetails";
-import CodeSection from "./CodeSection";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import Split from "react-split";
+import CodeSection from "./CodeSection";
+import ProblemDetails from "./ProblemDetails";
 
-type ProblemPageProps = {};
 type WorkSpaceProps = {
   problem: any;
 };
 
-const ProblemPage: React.FC<ProblemPageProps> = ({ params }: any) => {
+const ProblemPage: React.FC<any> = () => {
   const [problem, setProblem] = useState();
   const questionId: { problemId: string } = useParams();
   async function fetchProblem() {
@@ -34,15 +33,11 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
   return (
     <div className="flex gap-2">
       {/* <Navbar /> */}
-      <Split
-        className="flex w-full"
-        sizes={[50, 50]}
-        minSize={40}
-      >
+      <Split className="flex w-full" sizes={[50, 50]} minSize={40}>
         <div>
           <ProblemDetails problem={problem} />
         </div>
-        <div >
+        <div>
           <CodeSection problem={problem} />
         </div>
       </Split>

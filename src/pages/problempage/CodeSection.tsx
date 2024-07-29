@@ -1,5 +1,6 @@
 import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
+import { Button } from "@nextui-org/react";
 import axios from "axios";
 import {
   closeOutline,
@@ -11,26 +12,24 @@ import { SetStateAction, useEffect, useState } from "react";
 import Split from "react-split";
 import {
   checkOutputResponse,
-  LANGUAGE_MAPPING,
   ProblemDetailsProps,
   ResponseStatusType,
   SubmissionStatusType,
-  SUPPORTED_LANGUAGES_ARRAY,
+  SUPPORTED_LANGUAGES_ARRAY
 } from "../../components/constants/types";
+import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
 import useLocalStorage from "../../hooks/useLocation";
-import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
-import { Button } from "@nextui-org/react";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
 };
 
 const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
-  let [userCode, setUserCode] = useState<string>("");
+  const [userCode, setUserCode] = useState<string>("");
 
   const [resultSummary, setResultSummary] = useState<
     | {

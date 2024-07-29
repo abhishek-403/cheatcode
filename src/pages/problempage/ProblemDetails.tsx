@@ -1,6 +1,5 @@
-import Markdown from "react-markdown";
+import React, { useState } from "react";
 import { ProblemDetailsProps } from "../../components/constants/types";
-import { useState } from "react";
 
 type ProblemsDetailsProps = {
   problem: any;
