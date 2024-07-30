@@ -1,6 +1,6 @@
-import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+import { Route } from "react-router-dom";
 import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
@@ -12,17 +12,17 @@ import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
 
 /* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
+import "@ionic/react/css/display.css";
+import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/palettes/dark.system.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
-import "@ionic/react/css/palettes/dark.system.css";
-import RootLayOut, { ProblemLayOut } from "./components/layouts";
+import { LayoutRoute, ProblemLayout } from "./components/layouts";
 import ProblemSet from "./pages/ProblemSet";
-import Problem from "./pages/problempage/Problem";
 import ProblemPage from "./pages/problempage/Problem";
+import RootLayout from "./components/layouts";
 
 setupIonicReact();
 
@@ -36,18 +36,16 @@ const App: React.FC = () => (
 
 const Routes = () => (
   <IonRouterOutlet>
-    <RootLayOut>
+    <RootLayout>
       <Route exact path="/" component={Home} />
       <Route exact path="/problems" component={ProblemSet} />
-      <Route exact path="/problem/:problemId" component={ProblemPage} />
-    </RootLayOut>
-    {/* <ProblemLayOut>
-      <Route path={"/problem/:pid"}>
-        <Route exact path={"/problem/:pid"}>
-          <Redirect to={"/problem/:pid/description"} />
-        </Route>
-      </Route>
-    </ProblemLayOut> */}
+    </RootLayout>
+    <LayoutRoute
+      component={ProblemPage}
+      layout={ProblemLayout}
+      path="/problem/:problemId"
+      exact
+    />
   </IonRouterOutlet>
 );
 

@@ -1,6 +1,6 @@
 import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
-import { Button } from "@nextui-org/react";
+import { Button, cn } from "@nextui-org/react";
 import axios from "axios";
 import {
   closeOutline,
@@ -15,7 +15,7 @@ import {
   ProblemDetailsProps,
   ResponseStatusType,
   SubmissionStatusType,
-  SUPPORTED_LANGUAGES_ARRAY
+  SUPPORTED_LANGUAGES_ARRAY,
 } from "../../components/constants/types";
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
@@ -23,6 +23,10 @@ import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
 import useLocalStorage from "../../hooks/useLocation";
+import { getUser } from "../../hooks/useAuth";
+import toast from "react-hot-toast";
+import { useSignInWithGoogleMutation } from "../../store/services/auth";
+import Spinner from "../../components/custom-ui/loading";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -47,6 +51,8 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     key: string;
     value: string;
   }>(SUPPORTED_LANGUAGES_ARRAY[0]);
+  const user = getUser();
+
   const [settings, setSettings] = useState<any>({
     fontSize: fontSize,
     settingsModalIsOpen: false,
@@ -59,6 +65,11 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
 
   async function handleRun() {
     try {
+      if (!user.isAuthenticated) {
+        toast.error("Login to submit");
+        return;
+      }
+
       setisLoading(true);
       setIsResultActive(true);
       const res = await axios.post(
@@ -84,7 +95,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
   }
   return (
-    <div className="flex flex-col relative overflow-hidden text-white ">
+    <div className="flex flex-col relative overflow-hidden text-white h-full ">
       <PreferenceNav
         settings={settings}
         setSettings={setSettings}
@@ -92,9 +103,10 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
         resetCode={resetCode}
       />
       <Split
-        className="h-[calc(100vh-100px)]"
+        className="h-[calc(100vh-var(--navbar-height))]"
         direction="vertical"
-     
+        sizes={[60, 40]}
+        minSize={20}
       >
         <div className="flex flex-col overflow-auto  rounded relative min-h-[10vh] min-w-[50vw]">
           <div className="overflow-auto h-full  ">
@@ -113,7 +125,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
           </div>
         </div>
 
-        <div className="w-full px-5 overflow-auto">
+        <div className="w-full px-5 overflow-auto h-full">
           {/* testcase heading */}
           <div className="flex h-10 items-center space-x-6 cursor-pointer border-b border-neutral-80">
             <div
@@ -142,7 +154,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
             </div>
           </div>
 
-          <div className="pb-14 relative">
+          <div className="pb-12 relative">
             {isResultActive ? (
               <TestCasesResult
                 resultSummary={resultSummary}
@@ -153,7 +165,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
               <TestCases problem={problem} />
             )}
           </div>
-          <div className=" absolute bg-dark-fill  w-full bottom-0 right-0 px-4 pb-4 ">
+          <div className="bg-neutral-90 w-full absolute px-4 bottom-0 rounded-lg ">
             <EditorFooter
               handleSubmit={handleSubmit}
               handleRun={handleRun}
@@ -208,7 +220,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
   }, [isFullScreen]);
 
   return (
-    <div className="relative flex items-center justify-between  px-5 h-11 w-full ">
+    <div className="relative flex items-center justify-between  px-5 h-11 w-full  ">
       <div className="flex items-center border border-neutral-80 rounded-lg bg-neutral-80">
         <LanguageDropdownComponent
           items={SUPPORTED_LANGUAGES_ARRAY}
@@ -216,7 +228,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
         />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5 ">
         <div
           onClick={() =>
             setSettings({ ...settings, settingsModalIsOpen: true })
@@ -224,7 +236,10 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
           className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
           title="Settings"
         >
-          <IonIcon icon={settingsOutline} />
+          <IonIcon
+            icon={settingsOutline}
+            className="flex items-center justify-center"
+          />
         </div>
 
         <div
@@ -233,9 +248,15 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
           title={`${isFullScreen ? "Minimize" : "Maximize"}`}
         >
           {!isFullScreen ? (
-            <IonIcon icon={scanOutline} />
+            <IonIcon
+              icon={scanOutline}
+              className="flex items-center justify-center"
+            />
           ) : (
-            <IonIcon icon={closeOutline} />
+            <IonIcon
+              icon={closeOutline}
+              className="flex items-center justify-center"
+            />
           )}
         </div>
         <div
@@ -243,7 +264,10 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
           className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
           title="Reset"
         >
-          <IonIcon icon={refreshOutline} />
+          <IonIcon
+            icon={refreshOutline}
+            className="flex items-center justify-center"
+          />
         </div>
       </div>
       {settings.settingsModalIsOpen && (
@@ -264,26 +288,59 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
   handleRun,
   isLoading,
 }) => {
+  const { isAuthenticated, isLoading: authLoading } = getUser();
+  const [singInWithGoogle, { isLoading: signinLoading }] =
+    useSignInWithGoogleMutation();
+  async function handleSignIn() {
+    try {
+      if (signinLoading) return;
+      const { error } = await singInWithGoogle();
+      if (error) throw error;
+      toast.success("Logged In");
+    } catch (e) {
+      toast.error("Internal Error");
+      console.log(e);
+    }
+  }
   return (
-    <div className="flex  z-10 w-full">
-      <div className="mx-5 my-[10px] flex justify-between w-full">
-        <div className="ml-auto flex items-center space-x-4">
-          {/* <button
+    <div className="flex items-center py-3 pr-10 w-full justify-end">
+      {/* <button
             className="px-3 py-1.5 text-base font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-neutral-80  hover:bg-neutral-70 text-dark-label-2 rounded-lg"
             onClick={handleRun}
           >
             Run
           </button> */}
-          <Button
-            className="px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-primary-100 font-inter hover:bg-green-3 rounded-xl"
-            // onClick={handleSubmit}
-            onClick={handleRun}
-            disabled={isLoading}
-          >
-            Submit
-          </Button>
-        </div>
-      </div>
+      {isAuthenticated ? (
+        <Button
+          className={cn(
+            "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-primary-100 font-inter hover:bg-green-3 rounded-xl",
+            isLoading && "opacity-70"
+          )}
+          onClick={handleRun}
+          disabled={isLoading}
+        >
+          Submit
+        </Button>
+      ) : (
+        <Button
+          className={cn(
+            "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-neutral-80 font-inter hover:bg-green-3 rounded-xl",
+            signinLoading && "opacity-70"
+          )}
+          disabled={signinLoading}
+        >
+          {authLoading ? (
+            <Spinner size={8} variant="dots" />
+          ) : (
+            <li
+              onClick={handleSignIn}
+              className="flex items-center justify-center bg-neutral-80 px-4 py-1 rounded-lg text-primary-60"
+            >
+              Login
+            </li>
+          )}
+        </Button>
+      )}
     </div>
   );
 };

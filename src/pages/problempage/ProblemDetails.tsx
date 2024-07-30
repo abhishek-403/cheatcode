@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ProblemDetailsProps } from "../../components/constants/types";
+import { Link } from "react-router-dom";
+import { Image } from "@nextui-org/react";
 
 type ProblemsDetailsProps = {
   problem: any;
@@ -18,17 +20,35 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
       case ProblemTabs.description:
         return <ProblemsDescription problem={problem} />;
       case ProblemTabs.submissions:
-        return <div className="py-10 w-full flex items-center justify-center" >Coming Soon</div>;
+        return (
+          <div className="py-10 w-full flex items-center justify-center">
+            Coming Soon
+          </div>
+        );
     }
   }
 
   return (
     <div>
-      <div className="flex gap-2 py-2 w-full items-center px-4   border-b border-[#2a2a2a] text-white overflow-hidden">
+      <div className="flex gap-4 py-2 w-full items-center px-4 h-[var(--problem-header-height)]   border-b border-[#2a2a2a] text-white overflow-hidden">
+        <Link
+          to={"/"}
+          className="flex gap-2 items-center cursor-pointer justify-center"
+        >
+          <Image
+            src="./logo.png"
+            width={30}
+            height={30}
+            alt="Picture of the author"
+          />
+         
+        </Link>
         <button
           onClick={() => setActiveTab(ProblemTabs.description)}
           className={`${
-            activeTab == ProblemTabs.description ? "bg-neutral-80 " : "text-[#848484]"
+            activeTab == ProblemTabs.description
+              ? "bg-neutral-80 "
+              : "text-[#848484]"
           } font-inter rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2 `}
         >
           Description
@@ -36,7 +56,9 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
         <button
           onClick={() => setActiveTab(ProblemTabs.submissions)}
           className={`font-inter  ${
-            activeTab ==ProblemTabs.submissions ? "bg-neutral-80" : "text-[#848484]"
+            activeTab == ProblemTabs.submissions
+              ? "bg-neutral-80"
+              : "text-[#848484]"
           }  rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2`}
         >
           Submissions
@@ -68,7 +90,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   // );
   return (
     <div className="">
-      <div className="flex px-0 py-4 h-[calc(100vh-120px)] overflow-y-auto w-full">
+      <div className="flex px-0 py-4 h-[calc(100vh-var(--problem-header-height))] scrollbar-hide overflow-y-auto w-full">
         <div className="px-5">
           {/* Problem heading */}
           <div className="w-full">

@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import { Image } from "@nextui-org/react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { TABS } from "./constants/constants";
-// import axios from "axios";
-// import {
-//   GoogleLogin,
-//   GoogleOAuthProvider,
-//   googleLogout,
-// } from "@react-oauth/google";
-// import { jwtDecode } from "jwt-decode";
+import { IonLoading, useIonRouter } from "@ionic/react";
+import {
+  useSignInWithGoogleMutation,
+  useSignOutMutation,
+} from "../store/services/auth";
+import { getUser } from "../hooks/useAuth";
+import { getAuth } from "firebase/auth";
+import toast from "react-hot-toast";
+import Spinner from "./custom-ui/loading";
 
 type decodeType = {
   email: string;
@@ -17,85 +19,99 @@ type decodeType = {
 };
 
 export default function Navbar() {
-  //   const router = useRouter();
-  const path = useLocation().pathname;
+  const history = useHistory();
+  const [singInWithGoogle, { isLoading: signinLoading }] =
+    useSignInWithGoogleMutation();
+  const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
+  const user = getUser();
 
-  async function handleSignIn(e: any) {
-    //     try {
-    //       const decode: decodeType = jwtDecode(e.credential);
-    //       console.log(decode.email, decode.name, decode.picture);
-    //       const response = await axios.post(
-    //         "http://localhost:8080/api/v1/auth/signin",
-    //         {
-    //           email: decode.email,
-    //           name: decode.name,
-    //           picture: decode.picture,
-    //         }
-    //       );
-    //       setItem("accessToken", response.data.result.accessToken);
-    //       router.refresh();
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
+  async function handleSignIn() {
+    try {
+      if (signinLoading) return;
+      const { error } = await singInWithGoogle();
+      if (error) throw error;
+      toast.success("Logged In");
+    } catch (e) {
+      toast.error("Internal Error");
+      console.log(e);
+    }
   }
 
-  function handleSignOut() {
+  async function handleSignOut() {
     try {
-      //   googleLogout();
-      //   removeItem("accessToken");
-      //   router.refresh();
-    } catch (e) {}
+      if (logoutLoading) return;
+
+      const { data, error } = await signOut();
+
+      history.go(0);
+      // window.location.reload();
+      if (error) throw error;
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
-    <div className="bg-black h-[70px] border-b border-[#2a2a2a] px-10 flex items-center justify-between ">
-      <Link
-        to={"/"}
-        className="flex gap-2 items-center cursor-pointer justify-center"
-      >
-        <Image
-          src="./logo.png"
-          width={40}
-          height={40}
-          alt="Picture of the author"
-        />
-        <span className="text-white font-mono font-bold text-xl">CHEATCODE</span>
-      </Link>
-      <ul className="flex flex-row gap-10  text-base cursor-pointer mr-10 ">
+    <div className="flex flex-col  ">
+      <div className="bg-black h-[var(--navbar-height)] border-b border-[#2a2a2a] px-10 flex items-center justify-between">
+        <Link
+          to={"/"}
+          className="flex gap-2 items-center cursor-pointer justify-center"
+        >
+          <Image
+            src="./logo.png"
+            width={40}
+            height={40}
+            alt="Picture of the author"
+          />
+          <span className="text-white font-mono font-bold text-xl">
+            CHEATCODE
+          </span>
+        </Link>
+        <div className="text-white  ">
+          <ul className="flex flex-row gap-10  text-base cursor-pointer  my-auto">
             {TABS.map((tab, i) => (
               <TextBox key={i} link={tab.link}>
                 {tab.name}
               </TextBox>
             ))}
-   
-        {/* <li className="flex items-center justify-center">
-          {getItem("accessToken") ? (
-            <div>
-              <p onClick={handleSignOut}>out</p>
+            <div style={{ height: 30, width: 30 }}>
+              {!user.isAuthenticated ? (
+                <div className="flex items-center justify-center">
+                  {user.isLoading ? (
+                    <li>
+                      <Spinner size={24} />
+                    </li>
+                  ) : (
+                    <li
+                      onClick={handleSignIn}
+                      className="flex items-center justify-center bg-neutral-80 px-4 py-1 rounded-lg text-primary-60"
+                    >
+                      Login
+                    </li>
+                  )}
+                </div>
+              ) : (
+                <li
+                // onClick={handleSignOut}
+                >
+                  <Image
+                    src={user.user?.imageUrl ?? undefined}
+                    width={30}
+                    height={30}
+                    alt="Picture of the user"
+                    className="rounded-full"
+                  />
+                </li>
+              )}
             </div>
-          ) : (
-            <GoogleOAuthProvider
-              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
-            >
-              <GoogleLogin
-                size={"medium"}
-                shape={"circle"}
-                theme={"filled_black"}
-                text={"signin"}
-                onSuccess={(e) => handleSignIn(e)}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-              />
-            </GoogleOAuthProvider>
-          )}
-        </li> */}
-      </ul>
+          </ul>
+          <div className="text-neutral-0 dark cursor-pointer text-xl "></div>
+        </div>
+      </div>
     </div>
   );
 }
-
-
 
 export function TextBox({
   children,
@@ -107,16 +123,16 @@ export function TextBox({
   const location = useLocation();
   const isActive = location.pathname === link;
   return (
-    <li className="w-fit list-none ">
+    <li className="w-fit list-none  ">
       <Link
         to={link}
-        className="group font-medium w-fit   text-white transition duration-300 hover:text-[#a6a6a6]"
+        className="group font-medium w-fit  text-white transition duration-300 hover:text-[#a6a6a6]"
       >
         {children}
         {isActive && (
           <span
             className={
-              "block rounded max-w-full group-hover:max-w-full transition-all duration-200 h-[2px] bg-[#3a8fff] "
+              "block rounded group-hover:max-w-full transition-all duration-200 h-[2.2px] bg-primary-100 "
             }
           ></span>
         )}

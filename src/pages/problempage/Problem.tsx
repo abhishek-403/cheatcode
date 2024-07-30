@@ -23,7 +23,7 @@ const ProblemPage: React.FC<any> = () => {
     fetchProblem();
   }, []);
   return (
-    <div className="text-white z-10 w-full max-h-[calc(100vh-70px)] overflow-hidden">
+    <div className="text-white z-10 w-full max-h-[calc(100vh)] overflow-hidden">
       <WorkSpace problem={problem} />
     </div>
   );
@@ -32,7 +32,6 @@ const ProblemPage: React.FC<any> = () => {
 const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
   return (
     <div className="flex gap-2">
-      {/* <Navbar /> */}
       <Split className="flex w-full" sizes={[50, 50]} minSize={40}>
         <div>
           <ProblemDetails problem={problem} />

@@ -28,4 +28,17 @@ const useLocalStorage = (key: string, initialValue: string) => {
   return [value, setValue];
 };
 
+export const KEY_ACCESS_TOKEN = "access_token";
+
+export function getItem(key: any) {
+    return localStorage.getItem(key);
+}
+export function setItem(key: any, value: any) {
+    return localStorage.setItem(key, value);
+}
+
+export function removeItem(key: any) {
+    localStorage.removeItem(key);
+}
+
 export default useLocalStorage;
