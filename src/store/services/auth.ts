@@ -10,23 +10,39 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../../utils/firebaseConfig";
+import { registerUser } from "./user";
+import { ResponseStatusType } from "../../components/constants/types";
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
-    // registerUser:builder.query()
-    // ,
     signInWithGoogle: builder.mutation<any, void>({
-      queryFn: async () => {
+      queryFn: async (
+        _arg,
+        { dispatch, getState },
+        _extraOptions,
+        baseQuer
+      ) => {
         try {
           const provider = new GoogleAuthProvider();
           const result = await signInWithPopup(auth, provider);
-          const credential = GoogleAuthProvider.credentialFromResult(result);
-          const token = credential!.accessToken;
           const user = result.user;
 
-          return { data: { user } };
+          if (!user.displayName || !user.email || !user.uid || !user.photoURL) {
+            return { data: { user } };
+          }
+          const { data: registeredUser } = await dispatch(
+            registerUser.initiate({
+              name: user.displayName,
+              email: user.email,
+              imageUrl: user.photoURL,
+              uid: user.uid,
+            })
+          );
+        
+
+          return { data: { registeredUser } };
         } catch (err) {
           return { error: err };
         }

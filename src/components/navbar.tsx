@@ -93,7 +93,7 @@ export default function Navbar() {
                 </div>
               ) : (
                 <li
-                // onClick={handleSignOut}
+                onClick={handleSignOut}
                 >
                   <Image
                     src={user.user?.imageUrl ?? undefined}

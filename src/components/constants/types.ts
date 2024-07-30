@@ -26,6 +26,7 @@ interface StarterCode {
   cpp?: string;
 }
 
+export type ResponseStatusCode = 200 | 400 | 401 | 403 | 404 | 500;
 export interface ProblemDetailsProps extends ProblemSchema {
   infoPage: {
     problemStatement: string;
