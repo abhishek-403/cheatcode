@@ -76,7 +76,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
       </div>
     );
   }
-  if (resultSummary === null) {
+  if (!resultSummary) {
     return (
       <div className="flex items-center justify-center mt-16">
         Run your code first!

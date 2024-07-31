@@ -8,7 +8,7 @@ export type ProblemSchema = {
   problemNo: number;
   name: string;
   difficulty: string;
-  status: string;
+  isSolved: boolean;
   videoLink: string;
   category: string;
 };
@@ -82,6 +82,11 @@ enum SubmissionStatusType {
 enum ResponseStatusType {
   Success = "success",
   Error = "error",
+}
+export enum ProblemDifficulty {
+  easy = "Easy",
+  medium = "Medium",
+  hard = "Hard",
 }
 
 export { SubmissionStatusType, SubmissionDescriptionType, ResponseStatusType };

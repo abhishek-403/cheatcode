@@ -41,7 +41,6 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
             height={30}
             alt="Picture of the author"
           />
-         
         </Link>
         <button
           onClick={() => setActiveTab(ProblemTabs.description)}
@@ -120,7 +119,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
                   )}
                   <div className="example-card">
                     <pre>
-                      <strong className="text-white">Input: </strong>{" "}
+                      <strong className="text-white">Input: </strong>
                       {example.inputText}
                       <br />
                       <strong>Output: </strong>

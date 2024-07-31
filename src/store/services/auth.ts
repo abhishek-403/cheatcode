@@ -1,17 +1,13 @@
 import {
   createApi,
-  fakeBaseQuery,
-  fetchBaseQuery,
+  fakeBaseQuery
 } from "@reduxjs/toolkit/query/react";
 import {
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithPopup
 } from "firebase/auth";
 import { auth } from "../../utils/firebaseConfig";
 import { registerUser } from "./user";
-import { ResponseStatusType } from "../../components/constants/types";
 
 export const authApi = createApi({
   reducerPath: "authApi",

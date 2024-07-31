@@ -1,27 +1,57 @@
+import { cn } from "@nextui-org/react";
 import React from "react";
+import { SheetsFormat } from "../../store/services/problem";
+import { SheetSkeleton } from "../../utils/skeletons";
 
-type SheetsProps = {};
-const sample = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const Sheets: React.FC<SheetsProps> = () => {
+type SheetsProps = {
+  data: any;
+  isLoading: boolean;
+  setActiveSheet: (_id: string) => void;
+  activeSheet: string | null;
+};
+const Sheets: React.FC<SheetsProps> = ({
+  data,
+  isLoading,
+  setActiveSheet,
+  activeSheet,
+}) => {
   return (
     <div className="">
       <header className="font-rubik font-bold flex items-center justify-center py-3 text-2xl border-y-2 border-[#2a2a2a] rounded  bg-gradient-to-r from-[#8438ff] via-[#ff45ff] to-[#ffec3e] bg-clip-text text-transparent  ">
         Popular Sheets
       </header>
       <main className=" flex flex-col ">
-        {new Array(9).fill(null).map((item, i) => (
-          <Card key={i} />
-        ))}
+        {isLoading ? (
+          <SheetSkeleton />
+        ) : (
+          data?.result.map((item: any, i: number) => (
+            <div key={i} onClick={() => setActiveSheet(item._id)}>
+              <Card {...item} isActive={item._id === activeSheet} />
+            </div>
+          ))
+        )}
       </main>
     </div>
   );
 };
 
-function Card() {
+function Card({
+  name,
+  totalProblems,
+  solvedByUser,
+  isActive,
+}: SheetsFormat & { isActive: boolean }) {
   return (
-    <div className="flex items-center justify-between cursor-pointer py-3 px-3  bg-black hover:bg-[#131313] rounded border-b border-[#1a1a1a]">
-      <span className="font-rubik">Love Babar Sheet</span>
-      <span className="text-[#707070] text-xs">0/100</span>
+    <div
+      className={cn(
+        "flex items-center justify-between cursor-pointer py-3 px-3  bg-black hover:bg-neutral-90 border-b border-[#1a1a1a]",
+        isActive && "bg-neutral-90"
+      )}
+    >
+      <span className="font-rubik">{name}</span>
+      <span className="text-[#707070] text-sm">
+        {solvedByUser}/{totalProblems}
+      </span>
     </div>
   );
 }

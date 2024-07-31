@@ -1,8 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
-import {
-  ResponseStatusCode,
-  ResponseStatusType,
-} from "../../components/constants/types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 export interface RegisterUserProps {
   name: string;
   email: string;
@@ -14,15 +11,7 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4000/api/v1" }),
   tagTypes: ["User"],
   endpoints: (builder) => ({
-    registerUser: builder.mutation<
-      //   {
-      //     status: ResponseStatusType;
-      //     statusCode: ResponseStatusCode;
-      //     result: any;
-      //   },
-      any,
-      RegisterUserProps
-    >({
+    registerUser: builder.mutation<any, RegisterUserProps>({
       query: (body) => ({
         url: "/auth/registerUser",
         method: "POST",
@@ -32,5 +21,5 @@ export const userApi = createApi({
   }),
 });
 
-// export const { useRegisterUserMutataion } = userApi;
+export const { useRegisterUserMutation } = userApi;
 export const { registerUser } = userApi.endpoints;
