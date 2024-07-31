@@ -21,7 +21,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
         return <ProblemsDescription problem={problem} />;
       case ProblemTabs.submissions:
         return (
-          <div className="py-10 w-full flex items-center justify-center">
+          <div className="py-10 w-full flex items-center justify-center  h-[calc(100vh-var(--problem-header-height))]">
             Coming Soon
           </div>
         );

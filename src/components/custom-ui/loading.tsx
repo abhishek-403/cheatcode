@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { cn } from "@nextui-org/react";
 
-type LoadingVariants = "default" | "dots" | "yellow" | "green";
+type LoadingVariants = "default" | "dots" ;
 
 const Spinner = ({
   isOpen = true,

@@ -27,6 +27,7 @@ import { getUser } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useSignInWithGoogleMutation } from "../../store/services/auth";
 import Spinner from "../../components/custom-ui/loading";
+import { useRunProblemMutation } from "../../store/services/problem";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -59,6 +60,9 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     wordWrap: true,
   });
 
+  const [runProblem, { isLoading: runLoading, error }] =
+    useRunProblemMutation();
+
   useEffect(() => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
   }, [problem, selectedLanguage]);
@@ -72,13 +76,19 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
 
       setisLoading(true);
       setIsResultActive(true);
-      const res = await axios.post(
-        `http://localhost:4000/api/v1/problem/${problem.id}/check`,
-        {
-          sourceCode: userCode,
-          languageId: selectedLanguage.key,
-        }
-      );
+      // const res = await axios.post(
+      //   `http://localhost:4000/api/v1/problem/${problem.id}/check`,
+      //   {
+      //     sourceCode: userCode,
+      //     languageId: selectedLanguage.key,
+      //   }
+      // );
+      const res = await runProblem({
+        sourceCode: userCode,
+        languageId: selectedLanguage.key,
+        problemId: problem.id,
+      });
+      
       if (res.data.status === ResponseStatusType.Error) {
         setResultSummary(res.data.status);
       } else {
@@ -330,7 +340,7 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
           disabled={signinLoading}
         >
           {authLoading ? (
-            <Spinner size={8} variant="dots" />
+            <Spinner size={8} variant={"dots"} />
           ) : (
             <li
               onClick={handleSignIn}

@@ -1,16 +1,46 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+  RootState,
+} from "@reduxjs/toolkit/query/react";
+import { getAuth } from "firebase/auth";
 
 export type SheetsFormat = {
   name: string;
   solvedByUser: number;
   totalProblems: number;
 };
+const fetchBaseQueryWithAuth = () => {
+  return async (args: string | FetchArgs, api: any, extraOptions: any) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    let token = "";
 
+    if (user) {
+      try {
+        token = await user.getIdToken();
+      } catch (error) {
+        // Handle error if needed
+        // throw new Error();
+        console.log("no user");
+      }
+    }
+
+    const headers = new Headers();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+
+    return fetchBaseQuery({
+      baseUrl: "http://localhost:4000/api/v1",
+      headers,
+    })(args, api, extraOptions);
+  };
+};
 export const problemApi = createApi({
   reducerPath: "problemApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000/api/v1",
-  }),
+  baseQuery: fetchBaseQueryWithAuth(),
   tagTypes: ["Sheets"],
   endpoints: (builder) => ({
     getAllSheets: builder.query<any, void>({
@@ -25,8 +55,24 @@ export const problemApi = createApi({
         method: "Get",
       }),
     }),
+    runProblem: builder.mutation<
+      any,
+      { sourceCode: string; languageId: string; problemId: string }
+    >({
+      query: (args) => ({
+        url: `/problem/${args.problemId}/check`,
+        method: "Post",
+        body: {
+          sourceCode: args.sourceCode,
+          languageId: args.languageId,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAllSheetsQuery, useGetProblemsBySheetIdQuery } =
-  problemApi;
+export const {
+  useGetAllSheetsQuery,
+  useGetProblemsBySheetIdQuery,
+  useRunProblemMutation,
+} = problemApi;
