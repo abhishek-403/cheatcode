@@ -22,7 +22,6 @@ export default function ProblemSet() {
     }
   }, [sheetsData, sheetsLoading]);
 
-  console.log(problemsArray, sheetsData);
 
   return (
     <div className="text-white px-[40px] mt-8">
@@ -41,26 +40,16 @@ export default function ProblemSet() {
               ?.name ?? "CheatCode Special"}
           </div>
           <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
-            <table className="relative text-sm text-left text-gray-400 border-2 border-[#2a2a2a]  w-full max-w-[1500px] mx-auto gap-[2px]  ">
+            <table className="relative text-sm text-left text-gray-400 border-2 border-[#2a2a2a]  w-full mx-auto gap-[2px]  ">
               {
                 <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-[#2a2a2a]   ">
                   <tr>
-                    <th scope="col" className=" px-6 py-3 w-0 font-medium">
-                      Title
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-0 font-medium">
-                      Difficulty
-                    </th>
+                    <th className="px-6 py-3  font-medium w-[180px]">Title</th>
+                    <th className="px-6 py-3 w-0 font-medium">Difficulty</th>
 
-                    <th scope="col" className="px-6 py-3 w-0 font-medium">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3 w-0 font-medium">
-                      Solution
-                    </th>
-                    <th scope="col" className="px-1 py-3 w-0 font-medium">
-                      Status
-                    </th>
+                    <th className="px-6 py-3 w-0 font-medium">Category</th>
+                    <th className="px-6 py-3 w-0 font-medium">Status</th>
+                    <th className="px-1 py-3 w-0 font-medium">Solution</th>
                   </tr>
                 </thead>
               }
@@ -73,3 +62,39 @@ export default function ProblemSet() {
     </div>
   );
 }
+
+// <div className="text-sm text-gray-200">
+// <table className="w-full">
+//   <thead>
+//     <tr className="text-left">
+//       <th>Status</th>
+//       <th>Title</th>
+//       <th>Solution</th>
+//       <th>Acceptance</th>
+//       <th>Difficulty</th>
+//       <th>Frequency</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     {problems.map((problem, index) => (
+//       <tr
+//         key={index}
+//         className="h-12 border-t border-gray-600 text-center"
+//       >
+//         <td>
+//           <i className={`fas fa-${problem.status}`}></i>
+//         </td>
+//         <td className="text-left">{problem.title}</td>
+//         <td>
+//           <i className={`fas fa-${problem.solution}`}></i>
+//         </td>
+//         <td>{problem.acceptance}</td>
+//         <td className="text-green-500">{problem.difficulty}</td>
+//         <td>
+//           <i className={`fas fa-${problem.frequency}`}></i>
+//         </td>
+//       </tr>
+//     ))}
+//   </tbody>
+// </table>
+// </div>

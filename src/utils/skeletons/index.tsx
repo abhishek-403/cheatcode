@@ -1,6 +1,64 @@
+import { cn } from "@nextui-org/react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+export function ProblemPageSkeleton() {
+  return (
+    <div className="p-2 flex w-full h-screen gap-3">
+      <div className="flex-1 h-full flex flex-col gap-1 ">
+        <CustomSkeleton height={50} />
+        <div className="pt-2">
+          <CustomSkeleton width={250} height={60} />
+        </div>
+        <div className="pt-2 flex flex-col gap-1">
+          <CustomSkeleton height={30} />
+          <CustomSkeleton height={30} />
+          <CustomSkeleton height={30} className="w-[90%]" />
+        </div>
+        <div className="pt-8">
+          <CustomSkeleton height={30} width={160} />
+          <CustomSkeleton height={80} />
+        </div>
+        <div className="pt-4">
+          <CustomSkeleton height={30} width={160} />
+          <CustomSkeleton height={80} />
+        </div>
+        <div className="pt-4">
+          <CustomSkeleton height={30} width={160} />
+          <CustomSkeleton height={80} />
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col h-full gap-2">
+        <div className="h-[42vh]">
+          <CustomSkeleton height={50} />
+          <CustomSkeleton className="h-full" />
+        </div>
+        <div className="pt-12">
+          <TestCasesSkeleton />
+        </div>
+      </div>
+    </div>
+  );
+}
+export function TestCasesSkeleton() {
+  return (
+    <div className="w-full flex flex-col gap-3 my-2">
+      <div>
+        <CustomSkeleton height={50} width={200} />
+      </div>
+      <div className="flex gap-2">
+        <CustomSkeleton count={1} width={80} height={35} />
+        <CustomSkeleton count={1} width={80} height={35} />
+        <CustomSkeleton count={1} width={80} height={35} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <CustomSkeleton count={1} height={60} />
+        <CustomSkeleton count={1} height={60} />
+        <CustomSkeleton count={1} height={60} />
+      </div>
+    </div>
+  );
+}
 export function SheetSkeleton() {
   return (
     <Skeleton
@@ -33,6 +91,25 @@ export function ProblemSkeleton() {
   );
 }
 
-{
-  /* <Skeleton count={5} />; */
+export function CustomSkeleton({
+  count,
+  height,
+  width,
+  className,
+}: {
+  count?: number;
+  height?: number | string;
+  width?: number | string;
+  className?: string;
+}) {
+  return (
+    <Skeleton
+      count={count}
+      height={height}
+      width={width}
+      baseColor="#212121"
+      highlightColor="#313131"
+      className={cn("rounded-lg", className)}
+    />
+  );
 }

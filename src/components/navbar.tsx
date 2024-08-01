@@ -24,6 +24,7 @@ export default function Navbar() {
     useSignInWithGoogleMutation();
   const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
   const user = getUser();
+  console.log(user);
 
   async function handleSignIn() {
     try {
@@ -92,15 +93,13 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <li
-                onClick={handleSignOut}
-                >
+                <li onClick={handleSignOut}>
                   <Image
                     src={user.user?.imageUrl ?? undefined}
                     width={30}
                     height={30}
                     alt="Picture of the user"
-                    className="rounded-full"
+                    className="rounded-full border border-neutral-70"
                   />
                 </li>
               )}

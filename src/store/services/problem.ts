@@ -2,7 +2,6 @@ import {
   createApi,
   FetchArgs,
   fetchBaseQuery,
-  RootState,
 } from "@reduxjs/toolkit/query/react";
 import { getAuth } from "firebase/auth";
 
@@ -55,12 +54,31 @@ export const problemApi = createApi({
         method: "Get",
       }),
     }),
+    getProblem: builder.query<any, { problemId: string }>({
+      query: (args) => ({
+        url: `/problem/${args.problemId}`,
+        method: "Get",
+      }),
+    }),
     runProblem: builder.mutation<
       any,
       { sourceCode: string; languageId: string; problemId: string }
     >({
       query: (args) => ({
         url: `/problem/${args.problemId}/check`,
+        method: "Post",
+        body: {
+          sourceCode: args.sourceCode,
+          languageId: args.languageId,
+        },
+      }),
+    }),
+    submitProblem: builder.mutation<
+      any,
+      { sourceCode: string; languageId: string; problemId: string }
+    >({
+      query: (args) => ({
+        url: `/problem/${args.problemId}/submit`,
         method: "Post",
         body: {
           sourceCode: args.sourceCode,
@@ -75,4 +93,6 @@ export const {
   useGetAllSheetsQuery,
   useGetProblemsBySheetIdQuery,
   useRunProblemMutation,
+  useSubmitProblemMutation,
+  useGetProblemQuery,
 } = problemApi;

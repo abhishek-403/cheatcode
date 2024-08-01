@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { ProblemDetailsProps } from "../../components/constants/types";
 import { Link } from "react-router-dom";
 import { Image } from "@nextui-org/react";
+import ProblemSubmission from "./ProblemSubmissions";
 
 type ProblemsDetailsProps = {
   problem: any;
+  activeTab: ProblemTabs;
+  setActiveTab: React.Dispatch<SetStateAction<ProblemTabs>>;
 };
-enum ProblemTabs {
+export enum ProblemTabs {
   description = "Description",
   submissions = "Submissions",
 }
-const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
-  const [activeTab, setActiveTab] = useState<ProblemTabs>(
-    ProblemTabs.description
-  );
-
+const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
+  problem,
+  activeTab,
+  setActiveTab,
+}) => {
   function displayTab() {
     switch (activeTab) {
       case ProblemTabs.description:
@@ -22,7 +25,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({ problem }) => {
       case ProblemTabs.submissions:
         return (
           <div className="py-10 w-full flex items-center justify-center  h-[calc(100vh-var(--problem-header-height))]">
-            Coming Soon
+            <ProblemSubmission />
           </div>
         );
     }
@@ -82,11 +85,6 @@ type ProblemsDescriptionProps = {
 const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   problem,
 }) => {
-  // return (
-  //   <div className="w-full p-4">
-  //     <Markdown remarkPlugins={[remarkGfm]}>{des}</Markdown>
-  //   </div>
-  // );
   return (
     <div className="">
       <div className="flex px-0 py-4 h-[calc(100vh-var(--problem-header-height))] scrollbar-hide overflow-y-auto w-full">

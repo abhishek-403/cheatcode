@@ -27,13 +27,22 @@ import { getUser } from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import { useSignInWithGoogleMutation } from "../../store/services/auth";
 import Spinner from "../../components/custom-ui/loading";
-import { useRunProblemMutation } from "../../store/services/problem";
+import {
+  useRunProblemMutation,
+  useSubmitProblemMutation,
+} from "../../store/services/problem";
+import { ProblemTabs } from "./ProblemDetails";
+import { CustomSkeleton, SheetSkeleton } from "../../utils/skeletons";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
+  setActiveProblemTab: React.Dispatch<SetStateAction<ProblemTabs>>;
 };
 
-const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
+const CodeSection: React.FC<CodeSectionProps> = ({
+  problem,
+  setActiveProblemTab,
+}) => {
   const [userCode, setUserCode] = useState<string>("");
 
   const [resultSummary, setResultSummary] = useState<
@@ -44,7 +53,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     | null
     | ResponseStatusType.Error
   >(null);
-  const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
   const [isResultActive, setIsResultActive] = useState<boolean>(false);
@@ -60,8 +69,9 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     wordWrap: true,
   });
 
-  const [runProblem, { isLoading: runLoading, error }] =
-    useRunProblemMutation();
+  const [runProblem, { isLoading: runLoading }] = useRunProblemMutation();
+  const [submitProblem, { isLoading: submitLoading }] =
+    useSubmitProblemMutation();
 
   useEffect(() => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
@@ -74,21 +84,14 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
         return;
       }
 
-      setisLoading(true);
+      setIsLoading(true);
       setIsResultActive(true);
-      // const res = await axios.post(
-      //   `http://localhost:4000/api/v1/problem/${problem.id}/check`,
-      //   {
-      //     sourceCode: userCode,
-      //     languageId: selectedLanguage.key,
-      //   }
-      // );
       const res = await runProblem({
         sourceCode: userCode,
         languageId: selectedLanguage.key,
         problemId: problem.id,
       });
-      
+
       if (res.data.status === ResponseStatusType.Error) {
         setResultSummary(res.data.status);
       } else {
@@ -97,10 +100,35 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
     } catch (e) {
       console.log(e);
     } finally {
-      setisLoading(false);
+      setIsLoading(false);
     }
   }
-  function handleSubmit() {}
+  async function handleSubmit() {
+    try {
+      if (!user.isAuthenticated) {
+        toast.error("Login to submit");
+        return;
+      }
+
+      setIsLoading(true);
+      setActiveProblemTab(ProblemTabs.submissions);
+      // const res = await submitProblem({
+      //   sourceCode: userCode,
+      //   languageId: selectedLanguage.key,
+      //   problemId: problem.id,
+      // });
+
+      // if (res.data.status === ResponseStatusType.Error) {
+      //   setResultSummary(res.data.status);
+      // } else {
+      //   setResultSummary(res.data.result);
+      // }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
   function resetCode() {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
   }
@@ -131,11 +159,16 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
                 fontSize: settings.fontSize,
                 wordWrap: settings.wordWrap,
               }}
+              loading={
+                <div className="w-full h-full">
+                  <CustomSkeleton className="h-full" />
+                </div>
+              }
             />
           </div>
         </div>
 
-        <div className="w-full px-5 overflow-auto h-full">
+        <div className="px-4  overflow-idden w-full  h-full overflow-y-auto">
           {/* testcase heading */}
           <div className="flex h-10 items-center space-x-6 cursor-pointer border-b border-neutral-80">
             <div
@@ -175,7 +208,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({ problem }) => {
               <TestCases problem={problem} />
             )}
           </div>
-          <div className="bg-neutral-90 w-full absolute px-4 bottom-0 rounded-lg ">
+          <div className="bg-neutral-90 border w-[97%] mb-1 border-neutral-80 absolute px-4 bottom-0 rounded-lg ">
             <EditorFooter
               handleSubmit={handleSubmit}
               handleRun={handleRun}
@@ -298,7 +331,7 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
   handleRun,
   isLoading,
 }) => {
-  const { isAuthenticated, isLoading: authLoading } = getUser();
+  const { isAuthenticated, isLoading: fetchAuthLoading } = getUser();
   const [singInWithGoogle, { isLoading: signinLoading }] =
     useSignInWithGoogleMutation();
   async function handleSignIn() {
@@ -313,41 +346,55 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
     }
   }
   return (
-    <div className="flex items-center py-3 pr-10 w-full justify-end">
-      {/* <button
-            className="px-3 py-1.5 text-base font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-neutral-80  hover:bg-neutral-70 text-dark-label-2 rounded-lg"
-            onClick={handleRun}
-          >
-            Run
-          </button> */}
+    <div className="flex items-center py-2 w-full  ">
       {isAuthenticated ? (
-        <Button
-          className={cn(
-            "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-primary-100 font-inter hover:bg-green-3 rounded-xl",
-            isLoading && "opacity-70"
+        <div className="w-full h-[40px]">
+          {isLoading ? (
+            <div className="gap-3 ml-auto py-3 flex items-center w-fit bg-neutral-80 px-14  rounded-lg text-primary-60">
+              <Spinner variant="dots" size={12} />
+            </div>
+          ) : (
+            <div className="flex gap-3 items-center justify-end w-full">
+              <Button
+                className={cn(
+                  "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-neutral-80 font-inter hover:bg-green-3 rounded-xl",
+                  isLoading && "opacity-70"
+                )}
+                onClick={handleRun}
+                disabled={isLoading}
+              >
+                Run
+              </Button>
+              <Button
+                className={cn(
+                  "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-primary-100 font-inter hover:bg-green-3 rounded-xl",
+                  isLoading && "opacity-70"
+                )}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                Submit
+              </Button>
+            </div>
           )}
-          onClick={handleRun}
-          disabled={isLoading}
-        >
-          Submit
-        </Button>
+        </div>
       ) : (
         <Button
           className={cn(
-            "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-neutral-80 font-inter hover:bg-green-3 rounded-xl",
+            "px-4 py-2 font-medium items-center transition-all focus:outline-none inline-flex text-base text-white bg-neutral-80 font-inter hover:bg-green-3 rounded-xl justify-end w-fit ml-auto h-[40px] ",
             signinLoading && "opacity-70"
           )}
           disabled={signinLoading}
         >
-          {authLoading ? (
-            <Spinner size={8} variant={"dots"} />
+          {fetchAuthLoading || signinLoading ? (
+            <Spinner size={8} variant={"dots"} className="w-[75px]" />
           ) : (
-            <li
+            <div
               onClick={handleSignIn}
               className="flex items-center justify-center bg-neutral-80 px-4 py-1 rounded-lg text-primary-60"
             >
               Login
-            </li>
+            </div>
           )}
         </Button>
       )}

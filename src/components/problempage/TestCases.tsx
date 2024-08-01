@@ -9,6 +9,7 @@ import {
 import { IonButton, IonIcon, IonLoading } from "@ionic/react";
 import { checkmarkCircle, closeCircleOutline } from "ionicons/icons";
 import Spinner from "../custom-ui/loading";
+import { SheetSkeleton, TestCasesSkeleton } from "../../utils/skeletons";
 type TestCasesProps = {
   problem: ProblemDetailsProps;
 };
@@ -71,8 +72,8 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
 
   if (isLoading) {
     return (
-      <div className="relative flex items-center justify-center mt-16">
-        <Spinner isOpen={true} />
+      <div className="relative">
+        <TestCasesSkeleton />
       </div>
     );
   }

@@ -2,16 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { cn } from "@nextui-org/react";
 
-type LoadingVariants = "default" | "dots" ;
+type LoadingVariants = "default" | "dots";
 
 const Spinner = ({
-  isOpen = true,
   variant = "default",
   size = 20,
+  className,
 }: {
-  isOpen?: boolean;
   variant?: LoadingVariants;
   size?: number;
+  className?: string;
 }) => {
   function loader() {
     switch (variant) {
@@ -22,18 +22,26 @@ const Spinner = ({
               height: size,
               width: size,
             }}
-            className={`border-neutral-60  animate-spin rounded-full border-4 border-t-neutral-10`}
+            className={cn(
+              "border-neutral-60  animate-spin rounded-full border-4 border-t-neutral-10 ",
+              className
+            )}
           />
         );
       case "dots":
         return (
-          <div className="flex space-x-2 justify-center items-center dark:invert">
+          <div
+            className={cn(
+              "flex space-x-2 justify-center items-center dark:invert",
+              className
+            )}
+          >
             <div
               style={{
                 height: size,
                 width: size,
               }}
-              className={`bg-white rounded-full animate-bounce [animation-delay:-0.3s]`}
+              className={`bg-white rounded-full animate-bounce [animation-delay:-0.3s] `}
             ></div>
             <div
               style={{
@@ -55,11 +63,6 @@ const Spinner = ({
   }
 
   return <div className="flex justify-center items-center  ">{loader()}</div>;
-};
-
-Spinner.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  variant: PropTypes.oneOf(["default", "red", "green", "yellow"]),
 };
 
 export default Spinner;
