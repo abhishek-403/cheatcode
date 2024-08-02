@@ -2,6 +2,29 @@ import { cn } from "@nextui-org/react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+export function SubmissionResultSkeleton() {
+  return (
+    <div className="w-full px-3 flex flex-col gap-1 mb-3">
+      <div className="flex w-full flex-col">
+        <CustomSkeleton height={50} width={300} />
+        <CustomSkeleton height={20} width={200} />
+      </div>
+      <CustomSkeleton height={220} />
+    </div>
+  );
+}
+export function SubmissionListSkeleton() {
+  return (
+    <div className="w-full px-2 flex flex-col gap-1">
+      <CustomSkeleton className="" height={40} />
+      <div className="flex flex-col ">
+        <CustomSkeleton className="" height={60} />
+        <CustomSkeleton className="" height={60} />
+        <CustomSkeleton className="" height={60} />
+      </div>
+    </div>
+  );
+}
 export function ProblemPageSkeleton() {
   return (
     <div className="p-2 flex w-full h-screen gap-3">

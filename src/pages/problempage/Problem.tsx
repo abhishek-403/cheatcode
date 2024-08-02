@@ -11,21 +11,19 @@ type WorkSpaceProps = {
 };
 
 const ProblemPage: React.FC<any> = () => {
-  // const [problem, setProblem] = useState();
   const questionId: { problemId: string } = useParams();
-  const { data: problem, isLoading: problemLoading } = useGetProblemQuery({
+  const {
+    data: problem,
+    isLoading: problemLoading,
+    error,
+  } = useGetProblemQuery({
     problemId: questionId.problemId,
   });
-  // async function fetchProblem() {
-  //   const data = await axios.get(
-  //     `http://localhost:4000/api/v1/problem/${questionId.problemId}`
-  //   );
-
-  //   // setProblem(data.data.result);
-  // }
-  // useEffect(() => {
-  //   fetchProblem();
-  // }, []);
+  
+  
+  if (error) {
+    return <div>Network failure</div>;
+  }
 
   return (
     <div className="text-white z-10 w-full max-h-[calc(100vh)] overflow-hidden">
@@ -42,6 +40,7 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
   const [activeProblemTab, setActiveProblemTab] = useState<ProblemTabs>(
     ProblemTabs.description
   );
+  
   return (
     <div className="flex gap-2">
       <Split className="flex w-full" sizes={[50, 50]} minSize={40}>

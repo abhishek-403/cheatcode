@@ -88,5 +88,13 @@ export enum ProblemDifficulty {
   medium = "Medium",
   hard = "Hard",
 }
+export interface submitOutputResponse {
+  submission_status: SubmissionStatusType;
+  submission_description: SubmissionDescriptionType;
+  runtime: number;
+  memoryUsed: number;
+  totalTestCasesPassed: number;
+  totalTestCases: number;
+}
 
 export { SubmissionStatusType, SubmissionDescriptionType, ResponseStatusType };

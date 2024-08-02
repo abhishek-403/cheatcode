@@ -33,6 +33,12 @@ import {
 } from "../../store/services/problem";
 import { ProblemTabs } from "./ProblemDetails";
 import { CustomSkeleton, SheetSkeleton } from "../../utils/skeletons";
+import { useDispatch } from "react-redux";
+import {
+  resetSubmissionData,
+  setSubmissionData,
+  setSubmissionLoading,
+} from "../../store/slices/workspaceSlice";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -53,7 +59,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
     | null
     | ResponseStatusType.Error
   >(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
   const [isResultActive, setIsResultActive] = useState<boolean>(false);
@@ -73,6 +78,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
   const [submitProblem, { isLoading: submitLoading }] =
     useSubmitProblemMutation();
 
+  const dispatch = useDispatch();
   useEffect(() => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
   }, [problem, selectedLanguage]);
@@ -84,7 +90,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         return;
       }
 
-      setIsLoading(true);
       setIsResultActive(true);
       const res = await runProblem({
         sourceCode: userCode,
@@ -99,8 +104,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
       }
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsLoading(false);
     }
   }
   async function handleSubmit() {
@@ -110,23 +113,27 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         return;
       }
 
-      setIsLoading(true);
+      dispatch(
+        setSubmissionLoading({
+          submissionData: null,
+          isLoading: true,
+        })
+      );
       setActiveProblemTab(ProblemTabs.submissions);
-      // const res = await submitProblem({
-      //   sourceCode: userCode,
-      //   languageId: selectedLanguage.key,
-      //   problemId: problem.id,
-      // });
-
-      // if (res.data.status === ResponseStatusType.Error) {
-      //   setResultSummary(res.data.status);
-      // } else {
-      //   setResultSummary(res.data.result);
-      // }
+      const res = await submitProblem({
+        sourceCode: userCode,
+        languageId: selectedLanguage.key,
+        problemId: problem.id,
+      });
+      dispatch(
+        setSubmissionData({
+          submissionData: res.data.result,
+          isLoading: false,
+        })
+      );
+      console.log(res.data);
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsLoading(false);
     }
   }
   function resetCode() {
@@ -158,6 +165,8 @@ const CodeSection: React.FC<CodeSectionProps> = ({
               options={{
                 fontSize: settings.fontSize,
                 wordWrap: settings.wordWrap,
+                smoothScrolling: true,
+                automaticLayout: true,
               }}
               loading={
                 <div className="w-full h-full">
@@ -169,7 +178,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         </div>
 
         <div className="px-4  overflow-idden w-full  h-full overflow-y-auto">
-          {/* testcase heading */}
           <div className="flex h-10 items-center space-x-6 cursor-pointer border-b border-neutral-80">
             <div
               onClick={() => setIsResultActive(false)}
@@ -201,7 +209,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
             {isResultActive ? (
               <TestCasesResult
                 resultSummary={resultSummary}
-                isLoading={isLoading}
+                isLoading={runLoading}
                 problem={problem}
               />
             ) : (
@@ -212,7 +220,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
             <EditorFooter
               handleSubmit={handleSubmit}
               handleRun={handleRun}
-              isLoading={isLoading}
+              isLoading={runLoading || submitLoading}
             />
           </div>
         </div>
@@ -348,9 +356,9 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
   return (
     <div className="flex items-center py-2 w-full  ">
       {isAuthenticated ? (
-        <div className="w-full h-[40px]">
+        <div className="w-full h-[40px] flex items-center">
           {isLoading ? (
-            <div className="gap-3 ml-auto py-3 flex items-center w-fit bg-neutral-80 px-14  rounded-lg text-primary-60">
+            <div className="gap-3 ml-auto py-3 flex items-center justify-center w-fit bg-neutral-80 px-14  rounded-lg text-primary-60">
               <Spinner variant="dots" size={12} />
             </div>
           ) : (
@@ -387,7 +395,11 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
           disabled={signinLoading}
         >
           {fetchAuthLoading || signinLoading ? (
-            <Spinner size={8} variant={"dots"} className="w-[75px]" />
+            <Spinner
+              size={8}
+              variant={"dots"}
+              className="w-[75px] flex items-center justify-center"
+            />
           ) : (
             <div
               onClick={handleSignIn}

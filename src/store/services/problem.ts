@@ -86,6 +86,12 @@ export const problemApi = createApi({
         },
       }),
     }),
+
+    getMySubmissionsByProblemId: builder.query<any, { problemId: string }>({
+      query: (args) => ({
+        url: `/problem/${args.problemId}/getSubmissions`,
+      }),
+    }),
   }),
 });
 
@@ -95,4 +101,5 @@ export const {
   useRunProblemMutation,
   useSubmitProblemMutation,
   useGetProblemQuery,
+  useGetMySubmissionsByProblemIdQuery
 } = problemApi;

@@ -5,6 +5,7 @@ import {
   useGetAllSheetsQuery,
   useGetProblemsBySheetIdQuery,
 } from "../store/services/problem";
+import { CustomSkeleton } from "../utils/skeletons";
 
 export default function ProblemSet() {
   const { data: sheetsData, isLoading: sheetsLoading } = useGetAllSheetsQuery();
@@ -22,7 +23,6 @@ export default function ProblemSet() {
     }
   }, [sheetsData, sheetsLoading]);
 
-
   return (
     <div className="text-white px-[40px] mt-8">
       <div className="flex gap-5 justify-between">
@@ -36,8 +36,13 @@ export default function ProblemSet() {
         </div>
         <main className="w-[75%] overflow-auto ">
           <div className="flex items-center justify-center font-salsa text-3xl py-3 rounded border border-[#2a2a2a] bg-gradient-to-r from-[#88ff4c] via-[#61edff] to-[#966fe5] bg-clip-text text-transparent font-bold ">
-            {sheetsData?.result?.find((sheet: any) => sheet._id === activeSheet)
-              ?.name ?? "CheatCode Special"}
+            {sheetsLoading || problemsLoading ? (
+              <CustomSkeleton width={300} height={30}/>
+            ) : (
+              sheetsData?.result?.find(
+                (sheet: any) => sheet._id === activeSheet
+              )?.name ?? ""
+            )}
           </div>
           <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
             <table className="relative text-sm text-left text-gray-400 border-2 border-[#2a2a2a]  w-full mx-auto gap-[2px]  ">
@@ -54,7 +59,10 @@ export default function ProblemSet() {
                 </thead>
               }
 
-              <ProblemCard data={problemsArray} isLoading={problemsLoading} />
+              <ProblemCard
+                data={problemsArray}
+                isLoading={problemsLoading || sheetsLoading}
+              />
             </table>
           </div>
         </main>
