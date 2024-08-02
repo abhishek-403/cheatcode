@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
 import { Image } from "@nextui-org/react";
+import React from "react";
+import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { TABS } from "./constants/constants";
-import { IonLoading, useIonRouter } from "@ionic/react";
+import { getUser } from "../hooks/useAuth";
 import {
   useSignInWithGoogleMutation,
   useSignOutMutation,
 } from "../store/services/auth";
-import { getUser } from "../hooks/useAuth";
-import { getAuth } from "firebase/auth";
-import toast from "react-hot-toast";
+import { TABS } from "./constants/constants";
 import Spinner from "./custom-ui/loading";
 
 type decodeType = {
@@ -24,7 +22,6 @@ export default function Navbar() {
     useSignInWithGoogleMutation();
   const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
   const user = getUser();
-  console.log(user);
 
   async function handleSignIn() {
     try {
@@ -34,7 +31,6 @@ export default function Navbar() {
       toast.success("Logged In");
     } catch (e) {
       toast.error("Internal Error");
-      console.log(e);
     }
   }
 
@@ -48,7 +44,6 @@ export default function Navbar() {
       // window.location.reload();
       if (error) throw error;
     } catch (e) {
-      console.log(e);
     }
   }
 

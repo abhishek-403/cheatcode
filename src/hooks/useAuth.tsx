@@ -1,24 +1,8 @@
-import { useSelector } from "react-redux";
-import { AuthState } from "../store/slices/authSlice";
-import { RootState } from "../store";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { auth } from "../utils/firebaseConfig";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { useIonRouter } from "@ionic/react";
 
-export function useAuth() {
-  // const auth = useSelector<RootState, AuthState>((state) => state.auth);
-  const user = getAuth().currentUser;
-  if (user) {
-    return {
-      isAuthenticated: true,
-      refreshToken: user.refreshToken,
-    };
-  }
-  return {
-    isAuthenticated: false,
-  };
-}
+
 interface AuthUser {
   imageUrl: string;
   email: string;

@@ -1,7 +1,6 @@
 import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
 import { Button, cn } from "@nextui-org/react";
-import axios from "axios";
 import {
   closeOutline,
   refreshOutline,
@@ -9,6 +8,8 @@ import {
   settingsOutline,
 } from "ionicons/icons";
 import { SetStateAction, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import Split from "react-split";
 import {
   checkOutputResponse,
@@ -18,27 +19,24 @@ import {
   SUPPORTED_LANGUAGES_ARRAY,
 } from "../../components/constants/types";
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
+import Spinner from "../../components/custom-ui/loading";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
-import useLocalStorage from "../../hooks/useLocation";
 import { getUser } from "../../hooks/useAuth";
-import toast from "react-hot-toast";
+import useLocalStorage from "../../hooks/useLocation";
 import { useSignInWithGoogleMutation } from "../../store/services/auth";
-import Spinner from "../../components/custom-ui/loading";
 import {
   useRunProblemMutation,
   useSubmitProblemMutation,
 } from "../../store/services/problem";
-import { ProblemTabs } from "./ProblemDetails";
-import { CustomSkeleton, SheetSkeleton } from "../../utils/skeletons";
-import { useDispatch } from "react-redux";
 import {
-  resetSubmissionData,
   setSubmissionData,
-  setSubmissionLoading,
+  setSubmissionLoading
 } from "../../store/slices/workspaceSlice";
+import { CustomSkeleton } from "../../utils/skeletons";
+import { ProblemTabs } from "./ProblemDetails";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -103,7 +101,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         setResultSummary(res.data.result);
       }
     } catch (e) {
-      console.log(e);
     }
   }
   async function handleSubmit() {
@@ -131,9 +128,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
           isLoading: false,
         })
       );
-      console.log(res.data);
     } catch (e) {
-      console.log(e);
     }
   }
   function resetCode() {
@@ -350,7 +345,6 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
       toast.success("Logged In");
     } catch (e) {
       toast.error("Internal Error");
-      console.log(e);
     }
   }
   return (

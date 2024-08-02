@@ -19,11 +19,7 @@ const fetchBaseQueryWithAuth = () => {
     if (user) {
       try {
         token = await user.getIdToken();
-      } catch (error) {
-        // Handle error if needed
-        // throw new Error();
-        console.log("no user");
-      }
+      } catch (error) {}
     }
 
     const headers = new Headers();
@@ -40,7 +36,7 @@ const fetchBaseQueryWithAuth = () => {
 export const problemApi = createApi({
   reducerPath: "problemApi",
   baseQuery: fetchBaseQueryWithAuth(),
-  tagTypes: ["Sheets"],
+  tagTypes: ["Sheets", "ProblemList"],
   endpoints: (builder) => ({
     getAllSheets: builder.query<any, void>({
       query: () => ({
@@ -101,5 +97,5 @@ export const {
   useRunProblemMutation,
   useSubmitProblemMutation,
   useGetProblemQuery,
-  useGetMySubmissionsByProblemIdQuery
+  useGetMySubmissionsByProblemIdQuery,
 } = problemApi;

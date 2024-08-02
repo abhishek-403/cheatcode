@@ -40,7 +40,6 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   const { data, isLoading } = useGetMySubmissionsByProblemIdQuery({
     problemId,
   });
-  console.log(data, codeSubmissionResult);
 
   if (isLoading) {
     return <SubmissionListSkeleton />;

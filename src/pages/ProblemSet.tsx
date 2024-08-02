@@ -6,17 +6,36 @@ import {
   useGetProblemsBySheetIdQuery,
 } from "../store/services/problem";
 import { CustomSkeleton } from "../utils/skeletons";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../utils/firebaseConfig";
 
 export default function ProblemSet() {
-  const { data: sheetsData, isLoading: sheetsLoading } = useGetAllSheetsQuery();
+  const {
+    data: sheetsData,
+    isLoading: sheetsLoading,
+    refetch: refetchSheets,
+  } = useGetAllSheetsQuery();
   const [activeSheet, setActiveSheet] = useState<string | null>(null);
 
-  const { data: problemsArray, isLoading: problemsLoading } =
-    useGetProblemsBySheetIdQuery(
-      { sheetId: activeSheet ?? "" },
-      { skip: !activeSheet }
-    );
+  const {
+    data: problemsArray,
+    isLoading: problemsLoading,
+    refetch: refetchProblems,
+  } = useGetProblemsBySheetIdQuery(
+    { sheetId: activeSheet ?? "" },
+    { skip: !activeSheet }
+  );
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        refetchProblems();
+        refetchSheets();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [refetchSheets, refetchProblems]);
   useEffect(() => {
     if (!sheetsLoading && sheetsData?.result?.length > 0) {
       setActiveSheet(sheetsData.result[0]._id);
@@ -37,34 +56,18 @@ export default function ProblemSet() {
         <main className="w-[75%] overflow-auto ">
           <div className="flex items-center justify-center font-salsa text-3xl py-3 rounded border border-[#2a2a2a] bg-gradient-to-r from-[#88ff4c] via-[#61edff] to-[#966fe5] bg-clip-text text-transparent font-bold ">
             {sheetsLoading || problemsLoading ? (
-              <CustomSkeleton width={300} height={30}/>
+              <CustomSkeleton width={300} height={30} />
             ) : (
               sheetsData?.result?.find(
                 (sheet: any) => sheet._id === activeSheet
               )?.name ?? ""
             )}
           </div>
-          <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
-            <table className="relative text-sm text-left text-gray-400 border-2 border-[#2a2a2a]  w-full mx-auto gap-[2px]  ">
-              {
-                <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-[#2a2a2a]   ">
-                  <tr>
-                    <th className="px-6 py-3  font-medium w-[180px]">Title</th>
-                    <th className="px-6 py-3 w-0 font-medium">Difficulty</th>
 
-                    <th className="px-6 py-3 w-0 font-medium">Category</th>
-                    <th className="px-6 py-3 w-0 font-medium">Status</th>
-                    <th className="px-1 py-3 w-0 font-medium">Solution</th>
-                  </tr>
-                </thead>
-              }
-
-              <ProblemCard
-                data={problemsArray}
-                isLoading={problemsLoading || sheetsLoading}
-              />
-            </table>
-          </div>
+          <ProblemCard
+            data={problemsArray}
+            isLoading={problemsLoading || sheetsLoading}
+          />
         </main>
       </div>
     </div>

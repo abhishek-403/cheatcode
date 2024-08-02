@@ -15,7 +15,7 @@ const ProblemPage: React.FC<any> = () => {
   const {
     data: problem,
     isLoading: problemLoading,
-    error,
+    error
   } = useGetProblemQuery({
     problemId: questionId.problemId,
   });
