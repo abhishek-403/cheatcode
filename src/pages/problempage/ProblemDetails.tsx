@@ -1,18 +1,16 @@
-import React, { SetStateAction, useState } from "react";
-import { ProblemDetailsProps } from "../../components/constants/types";
+import React, { SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { Image } from "@nextui-org/react";
 import ProblemSubmission from "./ProblemSubmissions";
+import { ProblemDetailsProps } from "../../common/problem/types";
+import { ProblemTabs } from "../../components/constants/problem-types";
 
 type ProblemsDetailsProps = {
-  problem: any;
+  problem: ProblemDetailsProps ;
   activeTab: ProblemTabs;
   setActiveTab: React.Dispatch<SetStateAction<ProblemTabs>>;
 };
-export enum ProblemTabs {
-  description = "Description",
-  submissions = "Submissions",
-}
+
 const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
   problem,
   activeTab,

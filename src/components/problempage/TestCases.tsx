@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+import { IonIcon } from "@ionic/react";
+import { checkmarkCircle, closeCircleOutline } from "ionicons/icons";
+import { TestCasesSkeleton } from "../../utils/skeletons";
 import {
-  checkOutputResponse,
+  CheckOutputResponse,
   ProblemDetailsProps,
   ResponseStatusType,
   SubmissionDescriptionType,
   SubmissionStatusType,
-} from "../constants/types";
-import { IonButton, IonIcon, IonLoading } from "@ionic/react";
-import { checkmarkCircle, closeCircleOutline } from "ionicons/icons";
-import Spinner from "../custom-ui/loading";
-import { SheetSkeleton, TestCasesSkeleton } from "../../utils/skeletons";
+} from "../../common/problem/types";
 type TestCasesProps = {
   problem: ProblemDetailsProps;
 };
@@ -56,7 +56,7 @@ interface TestCasesResultProps {
   resultSummary:
     | {
         submission_status: SubmissionStatusType;
-        detailedInfo: checkOutputResponse[];
+        detailedInfo: CheckOutputResponse[];
       }
     | null
     | ResponseStatusType.Error;

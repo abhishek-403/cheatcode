@@ -11,13 +11,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Split from "react-split";
-import {
-  checkOutputResponse,
-  ProblemDetailsProps,
-  ResponseStatusType,
-  SubmissionStatusType,
-  SUPPORTED_LANGUAGES_ARRAY,
-} from "../../components/constants/types";
+
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
 import Spinner from "../../components/custom-ui/loading";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
@@ -33,10 +27,18 @@ import {
 } from "../../store/services/problem";
 import {
   setSubmissionData,
-  setSubmissionLoading
+  setSubmissionLoading,
 } from "../../store/slices/workspaceSlice";
 import { CustomSkeleton } from "../../utils/skeletons";
-import { ProblemTabs } from "./ProblemDetails";
+import {
+  CheckOutputResponse,
+  ProblemDetailsProps,
+  ResponseStatusType,
+  SubmissionStatusType,
+  SUPPORTED_LANGUAGES_ARRAY,
+} from "../../common/problem/types";
+import { ProblemTabs } from "../../components/constants/problem-types";
+import { EDITOR_FONT_SIZES_OPTIONS, LS_SETTINGS } from "../../components/constants/constants";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -52,13 +54,16 @@ const CodeSection: React.FC<CodeSectionProps> = ({
   const [resultSummary, setResultSummary] = useState<
     | {
         submission_status: SubmissionStatusType;
-        detailedInfo: checkOutputResponse[];
+        detailedInfo: CheckOutputResponse[];
       }
     | null
     | ResponseStatusType.Error
   >(null);
 
-  const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
+  const [fontSize, setFontSize] = useLocalStorage(
+    LS_SETTINGS.fontSize,
+    EDITOR_FONT_SIZES_OPTIONS[4]
+  );
   const [isResultActive, setIsResultActive] = useState<boolean>(false);
   const [selectedLanguage, setSelectedLanguage] = useState<{
     key: string;
@@ -100,8 +105,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
       } else {
         setResultSummary(res.data.result);
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
   async function handleSubmit() {
     try {
@@ -128,8 +132,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
           isLoading: false,
         })
       );
-    } catch (e) {
-    }
+    } catch (e) {}
   }
   function resetCode() {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);

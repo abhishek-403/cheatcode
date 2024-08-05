@@ -3,16 +3,13 @@ import { Editor } from "@monaco-editor/react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { checkmarkCircle, skullSharp } from "ionicons/icons";
 import React from "react";
-import {
-  LANGUAGE_MAPPING,
-  SubmissionStatusType,
-} from "../../components/constants/types";
 import { useAppSelector } from "../../store";
 import { useGetMySubmissionsByProblemIdQuery } from "../../store/services/problem";
 import {
   SubmissionListSkeleton,
-  SubmissionResultSkeleton
+  SubmissionResultSkeleton,
 } from "../../utils/skeletons";
+import { LANGUAGE_MAPPING, SubmissionStatusType } from "../../common/problem/types";
 
 const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   // const codeSubmissionResult = "";

@@ -7,8 +7,8 @@ export default function ToastProvider() {
 
   useEffect(() => {
     toasts
-      .filter((t) => t.visible) // only dismiss visible toasts
-      .filter((_, i) => i >= limit) // only dismiss toasts after the limit
+      .filter((t) => t.visible)
+      .filter((_, i) => i >= limit)
       .forEach((t) => toast.dismiss(t.id));
   }, [toasts, limit]);
 

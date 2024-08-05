@@ -5,8 +5,11 @@ import {
   logoYoutube,
 } from "ionicons/icons";
 import { Link } from "react-router-dom";
-import { CustomSkeleton, ProblemSkeleton } from "../../utils/skeletons";
-import { ProblemDifficulty, ProblemSchema } from "../constants/types";
+import { ProblemSkeleton } from "../../utils/skeletons";
+import {
+  ProblemDifficulty,
+  ProblemResponseType,
+} from "../../common/problem/types";
 
 type ProblemProps = {
   data: any;
@@ -14,7 +17,6 @@ type ProblemProps = {
 };
 
 const ProblemCard = ({ data, isLoading }: ProblemProps) => {
-  console.log(data);
   return (
     <>
       <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
@@ -36,7 +38,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
             {isLoading ? (
               <ProblemSkeleton />
             ) : (
-              data?.result.map((problem: ProblemSchema, idx: number) => {
+              data?.result.map((problem: ProblemResponseType, idx: number) => {
                 const difficulyColor =
                   problem.difficulty === ProblemDifficulty.easy
                     ? "text-green-500"

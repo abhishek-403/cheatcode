@@ -1,8 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  SubmissionStatusType,
-  submitOutputResponse,
-} from "../../components/constants/types";
 
 export interface WorkSpaceState {
   isLoading: boolean;

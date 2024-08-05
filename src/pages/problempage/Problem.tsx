@@ -4,7 +4,8 @@ import Split from "react-split";
 import { useGetProblemQuery } from "../../store/services/problem";
 import { ProblemPageSkeleton } from "../../utils/skeletons";
 import CodeSection from "./CodeSection";
-import ProblemDetails, { ProblemTabs } from "./ProblemDetails";
+import ProblemDetails from "./ProblemDetails";
+import { ProblemTabs } from "../../components/constants/problem-types";
 
 type WorkSpaceProps = {
   problem: any;
@@ -15,12 +16,11 @@ const ProblemPage: React.FC<any> = () => {
   const {
     data: problem,
     isLoading: problemLoading,
-    error
+    error,
   } = useGetProblemQuery({
     problemId: questionId.problemId,
   });
-  
-  
+
   if (error) {
     return <div>Network failure</div>;
   }
@@ -40,7 +40,7 @@ const WorkSpace: React.FC<WorkSpaceProps> = ({ problem }) => {
   const [activeProblemTab, setActiveProblemTab] = useState<ProblemTabs>(
     ProblemTabs.description
   );
-  
+
   return (
     <div className="flex gap-2">
       <Split className="flex w-full" sizes={[50, 50]} minSize={40}>
