@@ -9,30 +9,12 @@ import {
   SubmissionListSkeleton,
   SubmissionResultSkeleton,
 } from "../../utils/skeletons";
-import { LANGUAGE_MAPPING, SubmissionStatusType } from "../../common/problem/types";
+import {
+  LANGUAGE_MAPPING,
+  SubmissionStatusType,
+} from "../../common/problem/types";
 
 const ProblemSubmission = ({ problemId }: { problemId: string }) => {
-  // const codeSubmissionResult = "";
-  // const [data, setData] = useState([]);
-  // async function fet() {
-  //   try {
-  //     let d = await axios.post(
-  //       "/problems/65a6b0a99b69ec94d5ebe265/getmysubmissions"
-  //     );
-  //     if (d.data.status === "error") {
-  //       setData([]);
-  //       return;
-  //     }
-  //     setData(d.data.result);
-  //   } catch (e) {}
-  // }
-  // useEffect(() => {
-  //   fet();
-  // }, []);
-  // if (!data) {
-  //   return <div></div>;
-  // }
-
   const codeSubmissionResult = useAppSelector((s) => s.workspace);
   const { data, isLoading } = useGetMySubmissionsByProblemIdQuery({
     problemId,
@@ -45,12 +27,15 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
     <div className="w-full">
       {codeSubmissionResult.isLoading ? (
         <SubmissionResultSkeleton />
+      ) : codeSubmissionResult.isError ? (
+        <div className=" rounded-lg w-full mt-8 mb-14  gap-1 flex text-center flex-col font-bold  font-roboto ">
+          <div className="text-red-400 text-xl bg-neutral-80 px-4 py-2 rounded-lg w-fit mx-auto">Submission Failed</div>
+          <div className=" text-red-300  px-4 py-2 rounded-lg w-fit mx-auto">{codeSubmissionResult.submissionData}</div>
+        </div>
       ) : (
-        codeSubmissionResult.submissionData && (
-          <SubmissionAlert
-            codeSubmissionResult={codeSubmissionResult.submissionData}
-          />
-        )
+        <SubmissionAlert
+          codeSubmissionResult={codeSubmissionResult.submissionData}
+        />
       )}
 
       <SubmissionsList data={data.result} />
@@ -58,8 +43,6 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   );
 };
 const SubmissionAlert = ({ codeSubmissionResult }: any) => {
-  // let isAccepted =
-  //   codeSubmissionResult.submission_status == "Accepted" ? true : false;
   const runtime = codeSubmissionResult.data.runtime;
   const memory = codeSubmissionResult.data.memoryUsed;
   const testCasesPassed = codeSubmissionResult.data.testCasesPassed;
@@ -187,7 +170,11 @@ type SubmissionsListProps = { data: any };
 
 const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
   if (!data.length) {
-    return <div>No submissions</div>;
+    return (
+      <div className="w-full mt-10 text-primary-120 font-poppins items-center justify-center flex ">
+        No previous submissions
+      </div>
+    );
   }
   return (
     <div className="pb-4 min-w-[40vw]">

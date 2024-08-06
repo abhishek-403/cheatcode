@@ -2,16 +2,27 @@ import { IonIcon } from "@ionic/react";
 import Editor from "@monaco-editor/react";
 import { Button, cn } from "@nextui-org/react";
 import {
-  closeOutline,
+  contractOutline,
+  expandOutline,
+  readerOutline,
   refreshOutline,
-  scanOutline,
-  settingsOutline,
+  settingsOutline
 } from "ionicons/icons";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Split from "react-split";
 
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import {
+  ProblemDetailsProps,
+  SUPPORTED_LANGUAGES_ARRAY
+} from "../../common/problem/types";
+import {
+  EDITOR_FONT_SIZES_OPTIONS,
+  LS_SETTINGS,
+} from "../../components/constants/constants";
+import { ICheckResultSummary, ProblemTabs } from "../../components/constants/problem-types";
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
 import Spinner from "../../components/custom-ui/loading";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
@@ -30,15 +41,6 @@ import {
   setSubmissionLoading,
 } from "../../store/slices/workspaceSlice";
 import { CustomSkeleton } from "../../utils/skeletons";
-import {
-  CheckOutputResponse,
-  ProblemDetailsProps,
-  ResponseStatusType,
-  SubmissionStatusType,
-  SUPPORTED_LANGUAGES_ARRAY,
-} from "../../common/problem/types";
-import { ProblemTabs } from "../../components/constants/problem-types";
-import { EDITOR_FONT_SIZES_OPTIONS, LS_SETTINGS } from "../../components/constants/constants";
 
 type CodeSectionProps = {
   problem: ProblemDetailsProps;
@@ -51,14 +53,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
 }) => {
   const [userCode, setUserCode] = useState<string>("");
 
-  const [resultSummary, setResultSummary] = useState<
-    | {
-        submission_status: SubmissionStatusType;
-        detailedInfo: CheckOutputResponse[];
-      }
-    | null
-    | ResponseStatusType.Error
-  >(null);
+  const [resultSummary, setResultSummary] = useState<ICheckResultSummary>(null);
 
   const [fontSize, setFontSize] = useLocalStorage(
     LS_SETTINGS.fontSize,
@@ -80,8 +75,16 @@ const CodeSection: React.FC<CodeSectionProps> = ({
   const [runProblem, { isLoading: runLoading }] = useRunProblemMutation();
   const [submitProblem, { isLoading: submitLoading }] =
     useSubmitProblemMutation();
-
   const dispatch = useDispatch();
+
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  function handleIndent() {
+    const editor = editorRef.current;
+    if (editor) {
+      editor.getAction("editor.action.formatDocument")!.run();
+    }
+  }
   useEffect(() => {
     setUserCode(problem?.infoPage.starterCode[selectedLanguage.key]);
   }, [problem, selectedLanguage]);
@@ -100,11 +103,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         problemId: problem.id,
       });
 
-      if (res.data.status === ResponseStatusType.Error) {
-        setResultSummary(res.data.status);
-      } else {
-        setResultSummary(res.data.result);
-      }
+      setResultSummary({ status: res.data.status, data: res.data.result });
     } catch (e) {}
   }
   async function handleSubmit() {
@@ -128,7 +127,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
       });
       dispatch(
         setSubmissionData({
-          submissionData: res.data.result,
+          submissionData: res.data,
           isLoading: false,
         })
       );
@@ -144,6 +143,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         setSettings={setSettings}
         setSelectedLanguage={setSelectedLanguage}
         resetCode={resetCode}
+        indentCode={handleIndent}
       />
       <Split
         className="h-[calc(100vh-var(--navbar-height))]"
@@ -165,6 +165,10 @@ const CodeSection: React.FC<CodeSectionProps> = ({
                 wordWrap: settings.wordWrap,
                 smoothScrolling: true,
                 automaticLayout: true,
+                autoIndent: "full",
+              }}
+              onMount={(editor) => {
+                editorRef.current = editor;
               }}
               loading={
                 <div className="w-full h-full">
@@ -232,6 +236,7 @@ type PreferenceNavProps = {
   setSettings: any;
   setSelectedLanguage: React.Dispatch<SetStateAction<any>>;
   resetCode: () => void;
+  indentCode: () => void;
 };
 
 const PreferenceNav: React.FC<PreferenceNavProps> = ({
@@ -239,6 +244,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
   settings,
   setSelectedLanguage,
   resetCode,
+  indentCode,
 }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -279,18 +285,15 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
 
       <div className="flex items-center gap-5 ">
         <div
-          onClick={() =>
-            setSettings({ ...settings, settingsModalIsOpen: true })
-          }
+          onClick={() => indentCode()}
           className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
-          title="Settings"
+          title="Format"
         >
           <IonIcon
-            icon={settingsOutline}
+            icon={readerOutline}
             className="flex items-center justify-center"
           />
         </div>
-
         <div
           onClick={handleFullScreen}
           className=" text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
@@ -298,12 +301,12 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
         >
           {!isFullScreen ? (
             <IonIcon
-              icon={scanOutline}
+              icon={expandOutline}
               className="flex items-center justify-center"
             />
           ) : (
             <IonIcon
-              icon={closeOutline}
+              icon={contractOutline}
               className="flex items-center justify-center"
             />
           )}
@@ -315,6 +318,19 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({
         >
           <IonIcon
             icon={refreshOutline}
+            className="flex items-center justify-center"
+          />
+        </div>
+
+        <div
+          onClick={() =>
+            setSettings({ ...settings, settingsModalIsOpen: true })
+          }
+          className="text-neutral-30 cursor-pointer hover:text-neutral-10 text-xl"
+          title="Settings"
+        >
+          <IonIcon
+            icon={settingsOutline}
             className="flex items-center justify-center"
           />
         </div>

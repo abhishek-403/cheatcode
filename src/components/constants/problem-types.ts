@@ -1,3 +1,9 @@
+import {
+  CheckOutputResponse,
+  ResponseStatusType,
+  SubmissionStatusType,
+} from "../../common/problem/types";
+
 type TabType = {
   link: string;
   name: string;
@@ -7,4 +13,12 @@ enum ProblemTabs {
   submissions = "Submissions",
 }
 
-export { type TabType, ProblemTabs };
+type ICheckResultSummary = {
+  status: ResponseStatusType;
+  data: {
+    submission_status: SubmissionStatusType;
+    detailedInfo: CheckOutputResponse[];
+  };
+} | null;
+
+export { type TabType, ProblemTabs, type ICheckResultSummary };

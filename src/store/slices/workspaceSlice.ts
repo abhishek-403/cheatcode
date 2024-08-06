@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ResponseStatusType } from "../../common/problem/types";
 
 export interface WorkSpaceState {
   isLoading: boolean;
   submissionData: any | null;
+  isError: boolean;
 }
 
 const initialState: WorkSpaceState = {
   isLoading: false,
   submissionData: null,
+  isError: false,
 };
 
 export const workSpaceSlice = createSlice({
@@ -15,15 +18,25 @@ export const workSpaceSlice = createSlice({
   initialState: initialState,
   reducers: {
     setSubmissionData: (_, action) => {
-      return {
-        submissionData: action.payload.submissionData,
-        isLoading: action.payload.isLoading,
-      };
+      if (action.payload.submissionData.status === ResponseStatusType.Error) {
+        return {
+          submissionData: action.payload.submissionData.result,
+          isLoading: action.payload.isLoading,
+          isError: true,
+        };
+      } else {
+        return {
+          submissionData: action.payload.submissionData.result,
+          isLoading: action.payload.isLoading,
+          isError: false,
+        };
+      }
     },
     resetSubmissionData: (_, __) => {
       return {
         submissionData: null,
         isLoading: false,
+        isError: false,
       };
     },
     setSubmissionLoading: (state, action) => ({

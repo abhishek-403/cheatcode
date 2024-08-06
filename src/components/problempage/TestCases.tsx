@@ -10,6 +10,7 @@ import {
   SubmissionDescriptionType,
   SubmissionStatusType,
 } from "../../common/problem/types";
+import { ICheckResultSummary } from "../constants/problem-types";
 type TestCasesProps = {
   problem: ProblemDetailsProps;
 };
@@ -53,13 +54,7 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
 
 interface TestCasesResultProps {
   problem: any;
-  resultSummary:
-    | {
-        submission_status: SubmissionStatusType;
-        detailedInfo: CheckOutputResponse[];
-      }
-    | null
-    | ResponseStatusType.Error;
+  resultSummary: ICheckResultSummary;
   isLoading: boolean;
 }
 
@@ -84,37 +79,40 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
       </div>
     );
   }
-  if (resultSummary === ResponseStatusType.Error) {
+
+  if (resultSummary.status === ResponseStatusType.Error) {
     return (
-      <div className="flex items-center justify-center mt-16 text-red-400 font-semibold">
-        Internal Error
+      <div className="flex items-center justify-center mt-16 text-red-400 font-semibold w-full h-full">
+        {JSON.stringify(resultSummary.data).replace(/"/g, "")}
       </div>
     );
   }
+
   const isAccepted =
-    resultSummary.submission_status === SubmissionStatusType.accepted;
+    resultSummary.data.submission_status === SubmissionStatusType.accepted;
 
   return (
     <>
       <div className="my-2 font-bold text-xl">
         {isAccepted ? (
           <div className={`text-green-400 py-3 px-2`}>
-            {resultSummary.submission_status}
+            {resultSummary.data.submission_status}
           </div>
         ) : (
           <div className={`text-red-500 py-3 px-2`}>
-            <span className="">{resultSummary.submission_status} </span>
+            <span className="">{resultSummary.data.submission_status} </span>
             <span className="">
-              {resultSummary.detailedInfo[activeTestCaseId].message !==
+              {resultSummary.data.detailedInfo[activeTestCaseId].message !==
                 SubmissionDescriptionType.success &&
-                ": " + resultSummary.detailedInfo[activeTestCaseId].message}
+                ": " +
+                  resultSummary.data.detailedInfo[activeTestCaseId].message}
             </span>
           </div>
         )}
       </div>
       <div className="flex items-center gap-2 ">
         {problem?.infoPage?.examples
-          ?.slice(0, resultSummary.detailedInfo.length)
+          ?.slice(0, resultSummary.data.detailedInfo.length)
           .map((example: any, index: number) => (
             <div
               className="items-start "
@@ -125,7 +123,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
                 <div
                   className={`font-semibold items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
                   ${
-                    resultSummary.detailedInfo[index].status ===
+                    resultSummary.data.detailedInfo[index].status ===
                     SubmissionStatusType.accepted
                       ? activeTestCaseId === index
                         ? "border-green-500 text-green-500 "
@@ -138,7 +136,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
                     `}
                 >
                   <div className="flex gap-2 items-center justify-center">
-                    {resultSummary.detailedInfo[index].status ===
+                    {resultSummary.data.detailedInfo[index].status ===
                     SubmissionStatusType.accepted ? (
                       <IonIcon icon={checkmarkCircle} size="lg" />
                     ) : (
@@ -158,11 +156,12 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
         </div>
         <p className="text-sm font-medium mt-4 text-white">Output :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {resultSummary.detailedInfo[activeTestCaseId].user_output ?? "null"}
+          {resultSummary.data.detailedInfo[activeTestCaseId].user_output ??
+            "null"}
         </div>
         <p className="text-sm font-medium mt-4 text-white">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {resultSummary.detailedInfo[activeTestCaseId].expected_output}
+          {resultSummary.data.detailedInfo[activeTestCaseId].expected_output}
         </div>
       </div>
     </>
