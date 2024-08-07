@@ -1,14 +1,15 @@
-import { Image } from "@nextui-org/react";
-import React from "react";
+import { Avatar, Image } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { getUser } from "../hooks/useAuth";
+import { isUserAuthenticated } from "../hooks/useAuth";
 import {
   useSignInWithGoogleMutation,
   useSignOutMutation,
 } from "../store/services/auth";
 import { TABS } from "./constants/constants";
 import Spinner from "./custom-ui/loading";
+import { useIonRouter } from "@ionic/react";
 
 type decodeType = {
   email: string;
@@ -21,7 +22,8 @@ export default function Navbar() {
   const [singInWithGoogle, { isLoading: signinLoading }] =
     useSignInWithGoogleMutation();
   const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
-  const user = getUser();
+  const user = isUserAuthenticated();
+  const navigate = useIonRouter();
 
   async function handleSignIn() {
     try {
@@ -41,15 +43,13 @@ export default function Navbar() {
       const { data, error } = await signOut();
 
       history.go(0);
-      // window.location.reload();
       if (error) throw error;
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   return (
     <div className="flex flex-col  ">
-      <div className="bg-black h-[var(--navbar-height)] border-b border-[#2a2a2a] px-10 flex items-center justify-between">
+      <div className="bg-black h-[var(--navbar-height)] border-b border-neutral-80 px-10 flex items-center justify-between">
         <Link
           to={"/"}
           className="flex gap-2 items-center cursor-pointer justify-center"
@@ -65,7 +65,7 @@ export default function Navbar() {
           </span>
         </Link>
         <div className="text-white  ">
-          <ul className="flex flex-row gap-10  text-base cursor-pointer  my-auto">
+          <ul className="flex flex-row gap-8  text-base cursor-pointer  my-auto">
             {TABS.map((tab, i) => (
               <TextBox key={i} link={tab.link}>
                 {tab.name}
@@ -88,15 +88,13 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
-                <li onClick={handleSignOut}>
-                  <Image
+                <Link to={`/profile/${user.user.userName}`} target="_blank">
+                  <Avatar
                     src={user.user?.imageUrl ?? undefined}
-                    width={30}
-                    height={30}
                     alt="Picture of the user"
-                    className="rounded-full border border-neutral-70"
+                    className="rounded-full border border-neutral-70 h-8 w-8"
                   />
-                </li>
+                </Link>
               )}
             </div>
           </ul>

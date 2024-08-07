@@ -12,7 +12,7 @@ import {
 import {
   LANGUAGE_MAPPING,
   SubmissionStatusType,
-} from "../../common/problem/types";
+} from "../../common/problem-types";
 
 const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   const codeSubmissionResult = useAppSelector((s) => s.workspace);
@@ -29,8 +29,12 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
         <SubmissionResultSkeleton />
       ) : codeSubmissionResult.isError ? (
         <div className=" rounded-lg w-full mt-8 mb-14  gap-1 flex text-center flex-col font-bold  font-roboto ">
-          <div className="text-red-400 text-xl bg-neutral-80 px-4 py-2 rounded-lg w-fit mx-auto">Submission Failed</div>
-          <div className=" text-red-300  px-4 py-2 rounded-lg w-fit mx-auto">{codeSubmissionResult.submissionData}</div>
+          <div className="text-red-400 text-xl bg-neutral-80 px-4 py-2 rounded-lg w-fit mx-auto">
+            Submission Failed
+          </div>
+          <div className=" text-red-300  px-4 py-2 rounded-lg w-fit mx-auto">
+            {codeSubmissionResult.submissionData}
+          </div>
         </div>
       ) : (
         <SubmissionAlert

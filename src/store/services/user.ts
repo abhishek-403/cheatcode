@@ -1,15 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { RegisterUserProps } from "../../common/user-types";
+import { fetchBaseQueryWithAuth } from "./problem";
 
-export interface RegisterUserProps {
-  name: string;
-  email: string;
-  imageUrl: string;
-  uid: string;
-}
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4000/api/v1" }),
-  tagTypes: ["User"],
+  baseQuery: fetchBaseQueryWithAuth(),
+  tagTypes: ["User", "OtherUser"],
   endpoints: (builder) => ({
     registerUser: builder.mutation<any, RegisterUserProps>({
       query: (body) => ({
@@ -18,8 +14,19 @@ export const userApi = createApi({
         body,
       }),
     }),
+    getUserByUserName: builder.query<any, string>({
+      query: (userName) => `/user/profile/${userName}`,
+      providesTags: ["OtherUser"],
+    }),
+    getUser: builder.query<any, void>({
+      query: () => `/user/profile`,
+    }),
   }),
 });
 
-export const { useRegisterUserMutation } = userApi;
+export const {
+  useRegisterUserMutation,
+  useGetUserByUserNameQuery,
+  useGetUserQuery,
+} = userApi;
 export const { registerUser } = userApi.endpoints;

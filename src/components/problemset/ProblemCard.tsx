@@ -9,7 +9,7 @@ import { ProblemSkeleton } from "../../utils/skeletons";
 import {
   ProblemDifficulty,
   ProblemResponseType,
-} from "../../common/problem/types";
+} from "../../common/problem-types";
 
 type ProblemProps = {
   data: any;
@@ -19,7 +19,91 @@ type ProblemProps = {
 const ProblemCard = ({ data, isLoading }: ProblemProps) => {
   return (
     <>
-      {/* <div className="relative max-h-[75vh] overflow-x-auto mx-auto w-full  ">
+     
+      <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100">
+        <div className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4">
+          <div className=" py-3 font-medium">Title</div>
+          <div className=" py-3 font-medium">Difficulty</div>
+          <div className=" py-3 font-medium">Category</div>
+          <div className=" py-3 font-medium">Status</div>
+          <div className=" py-3 font-medium">Solution</div>
+        </div>
+
+        <div className="text-white bg-neutral-100 w-full rounded-lg">
+          {isLoading ? (
+            <ProblemSkeleton />
+          ) : (
+            data?.result.map((problem: ProblemResponseType, idx: number) => {
+              const difficultyColor =
+                problem.difficulty === ProblemDifficulty.easy
+                  ? "text-green-500"
+                  : problem.difficulty === ProblemDifficulty.medium
+                  ? "text-yellow-500"
+                  : "text-red-500";
+
+              return (
+                <div
+                  className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 "
+                  key={idx}
+                >
+                  <Link
+                    to={`/problem/${problem.id}`}
+                    className="hover:text-secondary w-full ml-8 "
+                    target="_blank"
+                  >
+                    <div className="flex gap-2 items-center ">
+                      <div>{problem.problemNo + "."}</div>
+                      <div>{problem.name}</div>
+                    </div>
+                  </Link>
+
+                  <div className={`${difficultyColor}`}>
+                    {problem.difficulty}
+                  </div>
+                  <div className=" text-gray-300">{problem.category}</div>
+                  <div className=" font-medium w-full flex items-center text-center">
+                    {problem.isSolved ? (
+                      <IonIcon
+                        icon={checkmarkCircleSharp}
+                        className="h-6 text-dark-green-s flex items-center justify-center w-full"
+                      />
+                    ) : (
+                      <Link
+                        to={`/problem/${problem.id}`}
+                        target="_blank"
+                        className="gap-2 w-full flex items-center justify-center   text-base"
+                      >
+                        <IonIcon
+                          icon={codeSlashSharp}
+                          className=" h-6 w-6 mx-auto flex items-center justify-center  text-primary-60"
+                        />
+                      </Link>
+                    )}
+                  </div>
+                  <div className=" text-center flex items-center">
+                    {problem.videoLink ? (
+                      <IonIcon
+                        onClick={() => window.open(problem.videoLink, "_blank")}
+                        icon={logoYoutube}
+                        className="text-red-500 h-6 flex items-center justify-center w-full"
+                      />
+                    ) : (
+                      <p className="text-gray-400 w-full">Coming soon</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default ProblemCard;
+
+ {/* <div className="relative max-h-[75vh] overflow-x-auto mx-auto w-full  ">
         <table className="relative text-sm text-left text-gray-400 border-2 border-neutral-90  w-full mx-auto gap-[2px] bg-neutral-100  ">
           {
             <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-neutral-90 h-[50px]  ">
@@ -111,85 +195,3 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
 
        
       </div> */}
-      <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100">
-        <div className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4">
-          <div className=" py-3 font-medium">Title</div>
-          <div className=" py-3 font-medium">Difficulty</div>
-          <div className=" py-3 font-medium">Category</div>
-          <div className=" py-3 font-medium">Status</div>
-          <div className=" py-3 font-medium">Solution</div>
-        </div>
-
-        <div className="text-white bg-neutral-100 w-full rounded-lg">
-          {isLoading ? (
-            <ProblemSkeleton />
-          ) : (
-            data?.result.map((problem: ProblemResponseType, idx: number) => {
-              const difficultyColor =
-                problem.difficulty === ProblemDifficulty.easy
-                  ? "text-green-500"
-                  : problem.difficulty === ProblemDifficulty.medium
-                  ? "text-yellow-500"
-                  : "text-pink-500";
-
-              return (
-                <div
-                  className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 "
-                  key={idx}
-                >
-                  <Link
-                    to={`/problem/${problem.id}`}
-                    className="hover:text-secondary w-full ml-8 "
-                    target="_blank"
-                  >
-                    <div className="flex gap-2 items-center ">
-                      <div>{problem.problemNo + "."}</div>
-                      <div>{problem.name}</div>
-                    </div>
-                  </Link>
-
-                  <div className={`${difficultyColor}`}>
-                    {problem.difficulty}
-                  </div>
-                  <div className=" text-gray-300">{problem.category}</div>
-                  <div className=" font-medium w-full flex items-center text-center">
-                    {problem.isSolved ? (
-                      <IonIcon
-                        icon={checkmarkCircleSharp}
-                        className="h-6 text-dark-green-s flex items-center justify-center w-full"
-                      />
-                    ) : (
-                      <Link
-                        to={`/problem/${problem.id}`}
-                        target="_blank"
-                        className="gap-2 w-full flex items-center justify-center   text-base"
-                      >
-                        <IonIcon
-                          icon={codeSlashSharp}
-                          className=" h-6 w-6 mx-auto flex items-center justify-center  text-primary-60"
-                        />
-                      </Link>
-                    )}
-                  </div>
-                  <div className=" text-center flex items-center">
-                    {problem.videoLink ? (
-                      <IonIcon
-                        onClick={() => window.open(problem.videoLink, "_blank")}
-                        icon={logoYoutube}
-                        className="text-red-500 h-6 flex items-center justify-center w-full"
-                      />
-                    ) : (
-                      <p className="text-gray-400 w-full">Coming soon</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-    </>
-  );
-};
-
-export default ProblemCard;

@@ -9,7 +9,7 @@ import {
   ResponseStatusType,
   SubmissionDescriptionType,
   SubmissionStatusType,
-} from "../../common/problem/types";
+} from "../../common/problem-types";
 import { ICheckResultSummary } from "../constants/problem-types";
 type TestCasesProps = {
   problem: ProblemDetailsProps;

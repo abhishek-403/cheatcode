@@ -2,11 +2,11 @@ import React, { SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import { Image } from "@nextui-org/react";
 import ProblemSubmission from "./ProblemSubmissions";
-import { ProblemDetailsProps } from "../../common/problem/types";
+import { ProblemDetailsProps } from "../../common/problem-types";
 import { ProblemTabs } from "../../components/constants/problem-types";
 
 type ProblemsDetailsProps = {
-  problem: ProblemDetailsProps ;
+  problem: ProblemDetailsProps;
   activeTab: ProblemTabs;
   setActiveTab: React.Dispatch<SetStateAction<ProblemTabs>>;
 };

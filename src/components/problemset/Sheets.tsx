@@ -17,7 +17,7 @@ const Sheets: React.FC<SheetsProps> = ({
 }) => {
   return (
     <div className="">
-      <header className="font-rubik font-bold flex items-center justify-center py-3 text-2xl border-y-2 border-neutral-90 rounded  text-quaternery">
+      <header className="font-rubik font-bold flex items-center justify-center py-3 text-2xl border-y-2 border-neutral-90 rounded  text-secondary">
         Popular Sheets
       </header>
       <main className=" flex flex-col gap-1 py-1">

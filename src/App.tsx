@@ -23,6 +23,7 @@ import { LayoutRoute, ProblemLayout } from "./components/layouts";
 import ProblemSet from "./pages/ProblemSet";
 import ProblemPage from "./pages/problempage/Problem";
 import RootLayout from "./components/layouts";
+import Profile from "./pages/profilepage/Profile";
 
 setupIonicReact();
 
@@ -39,6 +40,7 @@ const Routes = () => (
     <RootLayout>
       <Route exact path="/" component={Home} />
       <Route exact path="/problems" component={ProblemSet} />
+      <Route exact path="/profile/:userName" component={Profile} />
     </RootLayout>
     <LayoutRoute
       component={ProblemPage}

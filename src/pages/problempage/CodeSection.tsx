@@ -6,7 +6,7 @@ import {
   expandOutline,
   readerOutline,
   refreshOutline,
-  settingsOutline
+  settingsOutline,
 } from "ionicons/icons";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -16,20 +16,23 @@ import Split from "react-split";
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import {
   ProblemDetailsProps,
-  SUPPORTED_LANGUAGES_ARRAY
-} from "../../common/problem/types";
+  SUPPORTED_LANGUAGES_ARRAY,
+} from "../../common/problem-types";
 import {
   EDITOR_FONT_SIZES_OPTIONS,
   LS_SETTINGS,
 } from "../../components/constants/constants";
-import { ICheckResultSummary, ProblemTabs } from "../../components/constants/problem-types";
+import {
+  ICheckResultSummary,
+  ProblemTabs,
+} from "../../components/constants/problem-types";
 import { LanguageDropdownComponent } from "../../components/custom-ui/dropdown";
 import Spinner from "../../components/custom-ui/loading";
 import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingModal";
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
-import { getUser } from "../../hooks/useAuth";
+import { isUserAuthenticated } from "../../hooks/useAuth";
 import useLocalStorage from "../../hooks/useLocation";
 import { useSignInWithGoogleMutation } from "../../store/services/auth";
 import {
@@ -64,7 +67,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
     key: string;
     value: string;
   }>(SUPPORTED_LANGUAGES_ARRAY[0]);
-  const user = getUser();
+  const user = isUserAuthenticated();
 
   const [settings, setSettings] = useState<any>({
     fontSize: fontSize,
@@ -353,7 +356,8 @@ const EditorFooter: React.FC<EditorFooterProps> = ({
   handleRun,
   isLoading,
 }) => {
-  const { isAuthenticated, isLoading: fetchAuthLoading } = getUser();
+  const { isAuthenticated, isLoading: fetchAuthLoading } =
+    isUserAuthenticated();
   const [singInWithGoogle, { isLoading: signinLoading }] =
     useSignInWithGoogleMutation();
   async function handleSignIn() {

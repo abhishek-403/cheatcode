@@ -68,7 +68,7 @@ module.exports = {
           200: "#000000",
         },
         secondary: {
-          DEFAULT: "#0198EF",
+          DEFAULT: "#9D31FB",
         },
         tertiary: {
           DEFAULT: "#FFB405",
@@ -77,7 +77,7 @@ module.exports = {
           DEFAULT: "#00FFD7",
         },
         quaternery: {
-          DEFAULT: "#FF4081",
+          DEFAULT: "#8700F7",
         },
       },
       backgroundImage: {

@@ -10,7 +10,7 @@ export type SheetsFormat = {
   solvedByUser: number;
   totalProblems: number;
 };
-const fetchBaseQueryWithAuth = () => {
+export const fetchBaseQueryWithAuth = () => {
   return async (args: string | FetchArgs, api: any, extraOptions: any) => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -46,7 +46,7 @@ export const problemApi = createApi({
     }),
     getProblemsBySheetId: builder.query<any, { sheetId: string }>({
       query: (args) => ({
-        url: `/problems/by-sheet/${args.sheetId}`,
+        url: `/problem/by-sheet/${args.sheetId}`,
         method: "Get",
       }),
     }),

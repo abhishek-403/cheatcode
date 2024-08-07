@@ -2,7 +2,7 @@ import {
   CheckOutputResponse,
   ResponseStatusType,
   SubmissionStatusType,
-} from "../../common/problem/types";
+} from "../../common/problem-types";
 
 type TabType = {
   link: string;

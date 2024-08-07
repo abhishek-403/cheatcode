@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ProblemCard from "../components/problem/ProblemCard";
-import Sheets from "../components/problem/Sheets";
+import ProblemCard from "../components/problemset/ProblemCard";
+import Sheets from "../components/problemset/Sheets";
 import {
   useGetAllSheetsQuery,
   useGetProblemsBySheetIdQuery,

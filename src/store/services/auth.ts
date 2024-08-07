@@ -29,10 +29,11 @@ export const authApi = createApi({
               email: user.email,
               imageUrl: user.photoURL,
               uid: user.uid,
+              userName:user.email.split('@')[0]
             })
           );
 
-          return { data: { registeredUser } };
+          return { data:  registeredUser  };
         } catch (err) {
           return { error: err };
         }

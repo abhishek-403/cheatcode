@@ -28,6 +28,7 @@
     "@uiw/codemirror-theme-github": "^4.23.0",
     "@uiw/react-codemirror": "^4.23.0",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "firebase": "^10.12.4",
     "framer-motion": "^11.3.8",
     "ionicons": "^7.0.0",

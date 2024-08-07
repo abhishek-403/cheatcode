@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ResponseStatusType } from "../../common/problem/types";
+import { ResponseStatusType } from "../../common/problem-types";
 
 export interface WorkSpaceState {
   isLoading: boolean;
