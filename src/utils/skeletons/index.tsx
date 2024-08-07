@@ -94,8 +94,9 @@ export function SheetSkeleton() {
 }
 export function ProblemSkeleton() {
   return (
+   
     <tr className="">
-      <td className="px-1">
+      <td className="p-1">
         <SheetSkeleton />
       </td>
       <td className="pr-1">
@@ -107,7 +108,7 @@ export function ProblemSkeleton() {
       <td className="pr-1">
         <SheetSkeleton />
       </td>
-      <td className="pr-1">
+      <td className="pr-1 ">
         <SheetSkeleton />
       </td>
     </tr>

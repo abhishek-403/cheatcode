@@ -37,6 +37,7 @@ module.exports = {
         "dark-blue-s": "rgb(10 132 255)",
         neutral: {
           100: "#000000",
+          95: "#151515",
           90: "#1A1A1A",
           80: "#333333",
           70: "#4D4D4D",
@@ -57,6 +58,7 @@ module.exports = {
           20: "#FFF7CC",
           40: "#FFEF99",
           60: "#FFE766",
+          70: "#907BF8",
           80: "#6e57e0",
           100: "#6044eb",
           120: "#CCAC00",
@@ -66,13 +68,16 @@ module.exports = {
           200: "#000000",
         },
         secondary: {
-          DEFAULT: "#00FFD7",
+          DEFAULT: "#0198EF",
         },
         tertiary: {
-          DEFAULT: "#D700FF",
+          DEFAULT: "#FFB405",
         },
         link: {
           DEFAULT: "#00FFD7",
+        },
+        quaternery: {
+          DEFAULT: "#FF4081",
         },
       },
       backgroundImage: {

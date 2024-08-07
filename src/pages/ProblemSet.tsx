@@ -43,8 +43,8 @@ export default function ProblemSet() {
   }, [sheetsData, sheetsLoading]);
 
   return (
-    <div className="text-white px-[40px] mt-8">
-      <div className="flex gap-5 justify-between">
+    <div className="text-white px-[20px] mt-8">
+      <div className="flex gap-2 justify-between">
         <div className="w-[25%] h-fit  bg-black border-x border-[#2a2a2a] rounded">
           <Sheets
             data={sheetsData}
@@ -54,7 +54,7 @@ export default function ProblemSet() {
           />
         </div>
         <main className="w-[75%] overflow-auto ">
-          <div className="flex items-center justify-center font-salsa text-3xl py-3 rounded border border-[#2a2a2a] bg-gradient-to-r from-[#88ff4c] via-[#61edff] to-[#966fe5] bg-clip-text text-transparent font-bold ">
+          <div className="flex items-center justify-center font-poppins text-3xl py-3 rounded border-x-2 border-t-2 border-neutral-90 text-primary-70 font-extrabold  bg-neutral-100 ">
             {sheetsLoading || problemsLoading ? (
               <CustomSkeleton width={300} height={30} />
             ) : (
@@ -73,39 +73,3 @@ export default function ProblemSet() {
     </div>
   );
 }
-
-// <div className="text-sm text-gray-200">
-// <table className="w-full">
-//   <thead>
-//     <tr className="text-left">
-//       <th>Status</th>
-//       <th>Title</th>
-//       <th>Solution</th>
-//       <th>Acceptance</th>
-//       <th>Difficulty</th>
-//       <th>Frequency</th>
-//     </tr>
-//   </thead>
-//   <tbody>
-//     {problems.map((problem, index) => (
-//       <tr
-//         key={index}
-//         className="h-12 border-t border-gray-600 text-center"
-//       >
-//         <td>
-//           <i className={`fas fa-${problem.status}`}></i>
-//         </td>
-//         <td className="text-left">{problem.title}</td>
-//         <td>
-//           <i className={`fas fa-${problem.solution}`}></i>
-//         </td>
-//         <td>{problem.acceptance}</td>
-//         <td className="text-green-500">{problem.difficulty}</td>
-//         <td>
-//           <i className={`fas fa-${problem.frequency}`}></i>
-//         </td>
-//       </tr>
-//     ))}
-//   </tbody>
-// </table>
-// </div>

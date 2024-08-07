@@ -19,12 +19,12 @@ type ProblemProps = {
 const ProblemCard = ({ data, isLoading }: ProblemProps) => {
   return (
     <>
-      <div className="relative h-[75vh] overflow-x-auto mx-auto  ">
-        <table className="relative text-sm text-left text-gray-400 border-2 border-[#2a2a2a]  w-full mx-auto gap-[2px]  ">
+      {/* <div className="relative max-h-[75vh] overflow-x-auto mx-auto w-full  ">
+        <table className="relative text-sm text-left text-gray-400 border-2 border-neutral-90  w-full mx-auto gap-[2px] bg-neutral-100  ">
           {
-            <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-[#2a2a2a]   ">
+            <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-neutral-90 h-[50px]  ">
               <tr>
-                <th className="px-6 py-3  font-medium w-[180px]">Title</th>
+                <th className="px-8 py-3  font-medium w-[180px]">Title</th>
                 <th className="px-6 py-3 w-0 font-medium">Difficulty</th>
 
                 <th className="px-6 py-3 w-0 font-medium">Category</th>
@@ -34,7 +34,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
             </thead>
           }
 
-          <tbody className="text-white  ">
+          <tbody className="text-white bg-neutral-100 w-full rounded-lg ">
             {isLoading ? (
               <ProblemSkeleton />
             ) : (
@@ -47,21 +47,21 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
                     : "text-pink-500";
                 return (
                   <tr
-                    className={`hover:bg-neutral-90 b-[2px] border-b border-neutral-90  cursor-pointer transition-all  w-[180px] `}
+                    className="p-4 m-4 border-b-2 border-neutral-90  cursor-pointer hover:bg-neutral-95  rounded-lg transition-all duration-75 ease-in-out h-[60px]"
                     key={idx}
                   >
-                    <Link
-                      to={`/problem/${problem.id}`}
-                      className="hover:text-[#5eb6ff]"
-                      target="_blank"
-                    >
-                      <td className="px-6 py-4 ">
-                        <div className="flex gap-2">
+                    <td className="px-6 py-4">
+                      <Link
+                        to={`/problem/${problem.id}`}
+                        className="hover:text-secondary "
+                        target="_blank"
+                      >
+                        <div className="flex gap-2 items-center w-full h-full">
                           <div className="">{problem.problemNo + "."} </div>
                           <div className="">{problem.name}</div>
                         </div>
-                      </td>
-                    </Link>
+                      </Link>
+                    </td>
                     <td className={`px-6 py-4 ${difficulyColor} pl-10  `}>
                       {problem.difficulty}
                     </td>
@@ -107,7 +107,86 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
               })
             )}
           </tbody>
-        </table>
+        </table> 
+
+       
+      </div> */}
+      <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100">
+        <div className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4">
+          <div className=" py-3 font-medium">Title</div>
+          <div className=" py-3 font-medium">Difficulty</div>
+          <div className=" py-3 font-medium">Category</div>
+          <div className=" py-3 font-medium">Status</div>
+          <div className=" py-3 font-medium">Solution</div>
+        </div>
+
+        <div className="text-white bg-neutral-100 w-full rounded-lg">
+          {isLoading ? (
+            <ProblemSkeleton />
+          ) : (
+            data?.result.map((problem: ProblemResponseType, idx: number) => {
+              const difficultyColor =
+                problem.difficulty === ProblemDifficulty.easy
+                  ? "text-green-500"
+                  : problem.difficulty === ProblemDifficulty.medium
+                  ? "text-yellow-500"
+                  : "text-pink-500";
+
+              return (
+                <div
+                  className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 "
+                  key={idx}
+                >
+                  <Link
+                    to={`/problem/${problem.id}`}
+                    className="hover:text-secondary w-full ml-8 "
+                    target="_blank"
+                  >
+                    <div className="flex gap-2 items-center ">
+                      <div>{problem.problemNo + "."}</div>
+                      <div>{problem.name}</div>
+                    </div>
+                  </Link>
+
+                  <div className={`${difficultyColor}`}>
+                    {problem.difficulty}
+                  </div>
+                  <div className=" text-gray-300">{problem.category}</div>
+                  <div className=" font-medium w-full flex items-center text-center">
+                    {problem.isSolved ? (
+                      <IonIcon
+                        icon={checkmarkCircleSharp}
+                        className="h-6 text-dark-green-s flex items-center justify-center w-full"
+                      />
+                    ) : (
+                      <Link
+                        to={`/problem/${problem.id}`}
+                        target="_blank"
+                        className="gap-2 w-full flex items-center justify-center   text-base"
+                      >
+                        <IonIcon
+                          icon={codeSlashSharp}
+                          className=" h-6 w-6 mx-auto flex items-center justify-center  text-primary-60"
+                        />
+                      </Link>
+                    )}
+                  </div>
+                  <div className=" text-center flex items-center">
+                    {problem.videoLink ? (
+                      <IonIcon
+                        onClick={() => window.open(problem.videoLink, "_blank")}
+                        icon={logoYoutube}
+                        className="text-red-500 h-6 flex items-center justify-center w-full"
+                      />
+                    ) : (
+                      <p className="text-gray-400 w-full">Coming soon</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
     </>
   );
