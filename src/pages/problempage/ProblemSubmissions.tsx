@@ -23,6 +23,7 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   if (isLoading) {
     return <SubmissionListSkeleton />;
   }
+  console.log(data);
   return (
     <div className="w-full">
       {codeSubmissionResult.isLoading ? (
@@ -37,9 +38,11 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
           </div>
         </div>
       ) : (
-        <SubmissionAlert
-          codeSubmissionResult={codeSubmissionResult.submissionData}
-        />
+        codeSubmissionResult.submissionData && (
+          <SubmissionAlert
+            codeSubmissionResult={codeSubmissionResult.submissionData}
+          />
+        )
       )}
 
       <SubmissionsList data={data.result} />

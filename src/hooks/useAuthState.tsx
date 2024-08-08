@@ -1,8 +1,9 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useEffect, useState } from "react";
-import { auth } from "../utils/firebaseConfig";
-import { useGetUserQuery, userApi } from "../store/services/user";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { useLayoutEffect, useState } from "react";
+import { ResponseStatusType } from "../common/problem-types";
 import { useAppDispatch } from "../store";
+import { userApi } from "../store/services/user";
+import { auth } from "../utils/firebaseConfig";
 
 interface AuthUser {
   imageUrl: string;
@@ -28,19 +29,28 @@ export function isUserAuthenticated() {
   });
 
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth,async (user: any) => {
+  useLayoutEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user: any) => {
       if (auth.currentUser) {
         const { data } = await dispatch(userApi.endpoints.getUser.initiate());
-        
-        return setIsAuthenticated({
-          user: { ...data.result },
-          isAuthenticated: true,
-          isLoading: false,
-        });
+
+        if (data.status === ResponseStatusType.Error) {
+          await auth.signOut();
+          return setIsAuthenticated({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+          });
+        } else {
+          return setIsAuthenticated({
+            user: { ...data.result },
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        }
       } else {
         return setIsAuthenticated({
-          user:null,
+          user: null,
           isAuthenticated: false,
           isLoading: false,
         });

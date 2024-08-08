@@ -1,6 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { RegisterUserProps } from "../../common/user-types";
-import { fetchBaseQueryWithAuth } from "./problem";
+import {
+  baseQueryWithAuthToken,
+  fetchBaseQueryWithAuth,
+} from "../services/index";
 
 export const userApi = createApi({
   reducerPath: "userApi",
@@ -16,7 +19,6 @@ export const userApi = createApi({
     }),
     getUserByUserName: builder.query<any, string>({
       query: (userName) => `/user/profile/${userName}`,
-      providesTags: ["OtherUser"],
     }),
     getUser: builder.query<any, void>({
       query: () => `/user/profile`,

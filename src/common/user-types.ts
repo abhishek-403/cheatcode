@@ -1,3 +1,9 @@
+import {
+  ProblemDifficulty,
+  ResponseStatusCode,
+  ResponseStatusType,
+} from "./problem-types";
+
 interface RegisterUserProps {
   name: string;
   email: string;
@@ -6,4 +12,20 @@ interface RegisterUserProps {
   userName: string;
 }
 
-export { type RegisterUserProps };
+interface GetUserByNameResponse {
+  result: {
+    user: {
+      name: string;
+      email: string;
+      userName: string;
+      imageUrl: string;
+      submissions: any;
+    };
+    solvedTotals: { difficulty: ProblemDifficulty; total: number }[];
+    totals: { difficulty: ProblemDifficulty; total: number }[];
+    isMyProfile: boolean;
+  };
+  status: ResponseStatusType;
+  statusCode: ResponseStatusCode;
+}
+export { type RegisterUserProps, type GetUserByNameResponse };

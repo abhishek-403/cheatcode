@@ -1,15 +1,13 @@
 import { Avatar, Image } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { isUserAuthenticated } from "../hooks/useAuth";
+import { isUserAuthenticated } from "../hooks/useAuthState";
 import {
-  useSignInWithGoogleMutation,
-  useSignOutMutation,
+  useSignInWithGoogleMutation
 } from "../store/services/auth";
 import { TABS } from "./constants/constants";
 import Spinner from "./custom-ui/loading";
-import { useIonRouter } from "@ionic/react";
 
 type decodeType = {
   email: string;
@@ -18,12 +16,9 @@ type decodeType = {
 };
 
 export default function Navbar() {
-  const history = useHistory();
   const [singInWithGoogle, { isLoading: signinLoading }] =
     useSignInWithGoogleMutation();
-  const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
   const user = isUserAuthenticated();
-  const navigate = useIonRouter();
 
   async function handleSignIn() {
     try {
@@ -36,16 +31,7 @@ export default function Navbar() {
     }
   }
 
-  async function handleSignOut() {
-    try {
-      if (logoutLoading) return;
 
-      const { data, error } = await signOut();
-
-      history.go(0);
-      if (error) throw error;
-    } catch (e) {}
-  }
 
   return (
     <div className="flex flex-col  ">
@@ -65,18 +51,18 @@ export default function Navbar() {
           </span>
         </Link>
         <div className="text-white  ">
-          <ul className="flex flex-row gap-8  text-base cursor-pointer  my-auto">
+          <ul className="flex flex-row gap-8 items-center  text-base cursor-pointer  my-auto">
             {TABS.map((tab, i) => (
               <TextBox key={i} link={tab.link}>
                 {tab.name}
               </TextBox>
             ))}
-            <div style={{ height: 30, width: 30 }}>
+            <div>
               {!user.isAuthenticated ? (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center ">
                   {user.isLoading ? (
                     <li>
-                      <Spinner size={24} />
+                      <Spinner size={26} />
                     </li>
                   ) : (
                     <li

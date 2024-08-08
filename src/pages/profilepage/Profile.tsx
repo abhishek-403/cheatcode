@@ -2,21 +2,51 @@ import { Avatar, Button, cn } from "@nextui-org/react";
 import { HeatmapCalendar } from "../../components/profilepage/ProfileCards";
 import { useGetUserByUserNameQuery } from "../../store/services/user";
 import { ProblemDifficulty } from "../../common/problem-types";
+import { useEffect } from "react";
+import { isUserAuthenticated } from "../../hooks/useAuthState";
+import { useSignOutMutation } from "../../store/services/auth";
+import { useIonRouter } from "@ionic/react";
+import { useHistory } from "react-router";
+import { ProfilePageSkeleton } from "../../utils/skeletons";
 
-type Props = {};
 
 export default function Profile({
   match,
 }: {
   match: { params: { userName: string } };
 }) {
-  const { data: user, isLoading } = useGetUserByUserNameQuery(
-    match.params.userName
-  );
-  console.log(user);
+  const {
+    data: user,
+    isLoading,
+    refetch,
+  } = useGetUserByUserNameQuery(match.params.userName);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  const auth = isUserAuthenticated();
+  const history = useHistory();
+
+  useEffect(() => {
+    refetch();
+  }, [auth]);
+
+  const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
+  const router = useIonRouter();
+  async function handleSignOut() {
+    try {
+      if (logoutLoading) return;
+      const { data, error } = await signOut();
+      router.push("/");
+      history.go(0);
+
+      if (error) throw error;
+    } catch (e) {}
+  }
+
+  if (isLoading || logoutLoading) {
+    return (
+      <div className="px-32 py-6">
+        <ProfilePageSkeleton />
+      </div>
+    );
   }
   if (!user) {
     return <div>Error</div>;
@@ -60,8 +90,8 @@ export default function Profile({
                     )}
                   >
                     <div className="">{solved.difficulty} - </div>
-                    <div className=" font-bold ">
-                      {solved.total}/{user.result.solvedTotals[i].total}
+                    <div className="font-bold">
+                      {solved.total} / {user.result.solvedTotals[i].total}
                     </div>
                   </div>
                 );
@@ -69,8 +99,9 @@ export default function Profile({
             </div>
           </div>
         </div>
-        <div className="flex flex-col py-3 items-start w-fit">
-          <div className="flex gap-2 items-center justify-center ">
+
+        <div className="flex flex-col items-start p-2 ">
+          <div className="flex gap-2 items-center   ">
             <Avatar src={user.result.user.imageUrl} className="w-12 h-12" />
             <div className="flex flex-col">
               <div className="text-lg ">{user.result.user.name}</div>
@@ -79,15 +110,24 @@ export default function Profile({
               </div>
             </div>
           </div>
-          <div className="flex gap-2 mt-4">
-            <Button variant="solid">Edit</Button>
-            <Button variant="solid" className="bg-red-500 ">
-              Logout
-            </Button>
-          </div>
+          {!!user.result.isMyProfile && (
+            <div className="flex gap-2 mt-auto ml-auto w-fit">
+              {/* <Button variant="solid" size="md">
+                Edit
+              </Button> */}
+              <Button
+                onClick={handleSignOut}
+                variant="solid"
+                className="bg-red-500 "
+                size="md"
+              >
+                Logout
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-      <div className="w-full flex items-center justify-center overflow-auto ">
+      <div className="w-full py-2 flex items-center justify-center overflow-auto mt-10">
         <HeatmapCalendar submissionsMap={user.result.user.submissions} />
       </div>
     </div>

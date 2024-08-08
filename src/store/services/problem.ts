@@ -4,35 +4,14 @@ import {
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 import { getAuth } from "firebase/auth";
+import { baseQueryWithAuthToken, fetchBaseQueryWithAuth } from "./index";
 
 export type SheetsFormat = {
   name: string;
   solvedByUser: number;
   totalProblems: number;
 };
-export const fetchBaseQueryWithAuth = () => {
-  return async (args: string | FetchArgs, api: any, extraOptions: any) => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    let token = "";
 
-    if (user) {
-      try {
-        token = await user.getIdToken();
-      } catch (error) {}
-    }
-
-    const headers = new Headers();
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
-
-    return fetchBaseQuery({
-      baseUrl: "http://localhost:4000/api/v1",
-      headers,
-    })(args, api, extraOptions);
-  };
-};
 export const problemApi = createApi({
   reducerPath: "problemApi",
   baseQuery: fetchBaseQueryWithAuth(),

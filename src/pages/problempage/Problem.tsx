@@ -22,7 +22,7 @@ const ProblemPage: React.FC<any> = () => {
   });
 
   if (error) {
-    return <div>Network failure</div>;
+    return <div className="w-full my-20 text-red-500">Network failure</div>;
   }
 
   return (

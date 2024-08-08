@@ -32,7 +32,7 @@ import CodeEditorSettingModal from "../../components/modals/CodeEditorSettingMod
 import TestCases, {
   TestCasesResult,
 } from "../../components/problempage/TestCases";
-import { isUserAuthenticated } from "../../hooks/useAuth";
+import { isUserAuthenticated } from "../../hooks/useAuthState";
 import useLocalStorage from "../../hooks/useLocation";
 import { useSignInWithGoogleMutation } from "../../store/services/auth";
 import {

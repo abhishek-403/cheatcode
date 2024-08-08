@@ -58,7 +58,7 @@ module.exports = {
           20: "#FFF7CC",
           40: "#FFEF99",
           60: "#FFE766",
-          70: "#907BF8",
+          70: "#B277FF",
           80: "#6e57e0",
           100: "#6044eb",
           120: "#CCAC00",
@@ -68,7 +68,7 @@ module.exports = {
           200: "#000000",
         },
         secondary: {
-          DEFAULT: "#9D31FB",
+          DEFAULT: "#5EC3FA",
         },
         tertiary: {
           DEFAULT: "#FFB405",

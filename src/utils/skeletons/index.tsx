@@ -2,6 +2,40 @@ import { cn } from "@nextui-org/react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+export function ProfilePageSkeleton() {
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="flex items-center justify-between  px-10 ">
+        <div className="flex w-full gap-2 items-center">
+          <CustomSkeleton height={170} width={170} />
+          <div className="flex flex-col gap-1">
+            <CustomSkeleton height={50} width={150} />
+            <CustomSkeleton height={50} width={150} />
+            <CustomSkeleton height={50} width={150} />
+          </div>
+        </div>
+        <div className="flex py-3 items-center gap-2">
+          <CustomSkeleton className="rounded-full" width={80} height={80} />
+          <div className="flex flex-col gap-2">
+            <CustomSkeleton width={100} height={30} />
+            <CustomSkeleton width={100} height={30} />
+          </div>
+        </div>
+      </div>
+      <div className="w-full flex items-center py-2 justify-center overflow-auto">
+        <div className="flex gap-6 flex-shrink-0">
+          {new Array(8).fill(0).map(() => (
+            <div className="flex flex-col items-center justify-center gap-2">
+              <CustomSkeleton width={120} height={100} />
+              <CustomSkeleton width={70} height={20} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function SubmissionResultSkeleton() {
   return (
     <div className="w-full px-3 flex flex-col gap-1 mb-3">
@@ -94,24 +128,11 @@ export function SheetSkeleton() {
 }
 export function ProblemSkeleton() {
   return (
-   
-    <tr className="">
-      <td className="p-1">
-        <SheetSkeleton />
-      </td>
-      <td className="pr-1">
-        <SheetSkeleton />
-      </td>
-      <td className="pr-1">
-        <SheetSkeleton />
-      </td>
-      <td className="pr-1">
-        <SheetSkeleton />
-      </td>
-      <td className="pr-1 ">
-        <SheetSkeleton />
-      </td>
-    </tr>
+    <div className="m-1">
+      <CustomSkeleton height={60} />
+      <CustomSkeleton height={60} />
+      <CustomSkeleton height={60} />
+    </div>
   );
 }
 

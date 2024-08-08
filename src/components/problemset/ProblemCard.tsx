@@ -19,13 +19,12 @@ type ProblemProps = {
 const ProblemCard = ({ data, isLoading }: ProblemProps) => {
   return (
     <>
-     
       <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100">
-        <div className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4">
+        <div className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4 m-1">
           <div className=" py-3 font-medium">Title</div>
           <div className=" py-3 font-medium">Difficulty</div>
           <div className=" py-3 font-medium">Category</div>
-          <div className=" py-3 font-medium">Status</div>
+          <div className=" py-3 font-medium">Company</div>
           <div className=" py-3 font-medium">Solution</div>
         </div>
 
@@ -43,42 +42,47 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
 
               return (
                 <div
-                  className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 "
+                  className="grid grid-cols-[180px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 text-neutral-40"
                   key={idx}
                 >
                   <Link
                     to={`/problem/${problem.id}`}
-                    className="hover:text-secondary w-full ml-8 "
+                    className="hover:text-secondary w-full flex"
                     target="_blank"
                   >
-                    <div className="flex gap-2 items-center ">
-                      <div>{problem.problemNo + "."}</div>
-                      <div>{problem.name}</div>
+                    <div className="flex gap-6 items-center w-full">
+                      <div>
+                        {problem.isSolved ? (
+                          <IonIcon
+                            icon={checkmarkCircleSharp}
+                            className="h-6 text-dark-green-s flex items-center justify-center w-6"
+                          />
+                        ) : (
+                          <Link
+                            to={`/problem/${problem.id}`}
+                            target="_blank"
+                            className="gap-2  flex items-center justify-center   text-base"
+                          >
+                            <IonIcon
+                              icon={codeSlashSharp}
+                              className=" h-6 w-6 mx-auto flex items-center justify-center  text-primary-60"
+                            />
+                          </Link>
+                        )}
+                      </div>
+                      <div className="flex gap-1 text-neutral-0">
+                        <div>{problem.problemNo + "."}</div>
+                        <div>{problem.name}</div>
+                      </div>
                     </div>
                   </Link>
 
                   <div className={`${difficultyColor}`}>
                     {problem.difficulty}
                   </div>
-                  <div className=" text-gray-300">{problem.category}</div>
-                  <div className=" font-medium w-full flex items-center text-center">
-                    {problem.isSolved ? (
-                      <IonIcon
-                        icon={checkmarkCircleSharp}
-                        className="h-6 text-dark-green-s flex items-center justify-center w-full"
-                      />
-                    ) : (
-                      <Link
-                        to={`/problem/${problem.id}`}
-                        target="_blank"
-                        className="gap-2 w-full flex items-center justify-center   text-base"
-                      >
-                        <IonIcon
-                          icon={codeSlashSharp}
-                          className=" h-6 w-6 mx-auto flex items-center justify-center  text-primary-60"
-                        />
-                      </Link>
-                    )}
+                  <div className=" ">{problem.category}</div>
+                  <div className=" font-medium w-full flex items-center text-center justify-center">
+                    Google
                   </div>
                   <div className=" text-center flex items-center">
                     {problem.videoLink ? (
@@ -88,7 +92,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
                         className="text-red-500 h-6 flex items-center justify-center w-full"
                       />
                     ) : (
-                      <p className="text-gray-400 w-full">Coming soon</p>
+                      <p className=" w-full">Coming soon</p>
                     )}
                   </div>
                 </div>
@@ -103,7 +107,8 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
 
 export default ProblemCard;
 
- {/* <div className="relative max-h-[75vh] overflow-x-auto mx-auto w-full  ">
+{
+  /* <div className="relative max-h-[75vh] overflow-x-auto mx-auto w-full  ">
         <table className="relative text-sm text-left text-gray-400 border-2 border-neutral-90  w-full mx-auto gap-[2px] bg-neutral-100  ">
           {
             <thead className="text-md font-bold font-rubik text-gray-300  uppercase border-b border-neutral-90 h-[50px]  ">
@@ -194,4 +199,5 @@ export default ProblemCard;
         </table> 
 
        
-      </div> */}
+      </div> */
+}
