@@ -9,7 +9,6 @@ import { useIonRouter } from "@ionic/react";
 import { useHistory } from "react-router";
 import { ProfilePageSkeleton } from "../../utils/skeletons";
 
-
 export default function Profile({
   match,
 }: {
@@ -91,7 +90,7 @@ export default function Profile({
                   >
                     <div className="">{solved.difficulty} - </div>
                     <div className="font-bold">
-                      {solved.total} / {user.result.solvedTotals[i].total}
+                      {solved.total} / {user.result.totals[i].total}
                     </div>
                   </div>
                 );

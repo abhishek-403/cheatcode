@@ -23,7 +23,6 @@ const ProblemSubmission = ({ problemId }: { problemId: string }) => {
   if (isLoading) {
     return <SubmissionListSkeleton />;
   }
-  console.log(data);
   return (
     <div className="w-full">
       {codeSubmissionResult.isLoading ? (

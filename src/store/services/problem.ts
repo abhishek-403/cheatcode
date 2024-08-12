@@ -1,10 +1,7 @@
 import {
-  createApi,
-  FetchArgs,
-  fetchBaseQuery,
+  createApi
 } from "@reduxjs/toolkit/query/react";
-import { getAuth } from "firebase/auth";
-import { baseQueryWithAuthToken, fetchBaseQueryWithAuth } from "./index";
+import { fetchBaseQueryWithAuth } from "./index";
 
 export type SheetsFormat = {
   name: string;
@@ -20,19 +17,19 @@ export const problemApi = createApi({
     getAllSheets: builder.query<any, void>({
       query: () => ({
         url: "/sheets/all",
-        method: "Get",
+        method: "GET",
       }),
     }),
     getProblemsBySheetId: builder.query<any, { sheetId: string }>({
       query: (args) => ({
         url: `/problem/by-sheet/${args.sheetId}`,
-        method: "Get",
+        method: "GET",
       }),
     }),
     getProblem: builder.query<any, { problemId: string }>({
       query: (args) => ({
         url: `/problem/${args.problemId}`,
-        method: "Get",
+        method: "GET",
       }),
     }),
     runProblem: builder.mutation<
@@ -41,7 +38,7 @@ export const problemApi = createApi({
     >({
       query: (args) => ({
         url: `/problem/${args.problemId}/check`,
-        method: "Post",
+        method: "POST",
         body: {
           sourceCode: args.sourceCode,
           languageId: args.languageId,
@@ -54,7 +51,7 @@ export const problemApi = createApi({
     >({
       query: (args) => ({
         url: `/problem/${args.problemId}/submit`,
-        method: "Post",
+        method: "POST",
         body: {
           sourceCode: args.sourceCode,
           languageId: args.languageId,

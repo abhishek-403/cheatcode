@@ -1,15 +1,16 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBMeRFdkeoo4y-cIrUf5yf49jbKzXHtCc0",
-  authDomain: "cheatcode-e75c7.firebaseapp.com",
-  projectId: "cheatcode-e75c7",
-  storageBucket: "cheatcode-e75c7.appspot.com",
-  messagingSenderId: "325134334048",
-  appId: "1:325134334048:web:6e413dff4d6d6ce35beb05",
-  measurementId: "G-RQCJSPJZ1M",
+export const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

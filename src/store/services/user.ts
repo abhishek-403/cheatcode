@@ -1,7 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { RegisterUserProps } from "../../common/user-types";
 import {
-  baseQueryWithAuthToken,
   fetchBaseQueryWithAuth,
 } from "../services/index";
 

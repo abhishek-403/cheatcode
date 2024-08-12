@@ -12,6 +12,12 @@ interface RegisterUserProps {
   userName: string;
 }
 
+enum UserRoles {
+  admin = "Admin",
+  moderator = "Moderator",
+  user = "User",
+}
+
 interface GetUserByNameResponse {
   result: {
     user: {
@@ -28,4 +34,4 @@ interface GetUserByNameResponse {
   status: ResponseStatusType;
   statusCode: ResponseStatusCode;
 }
-export { type RegisterUserProps, type GetUserByNameResponse };
+export { type RegisterUserProps, type GetUserByNameResponse, UserRoles };

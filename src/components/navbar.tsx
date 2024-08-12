@@ -110,7 +110,7 @@ export function TextBox({
         {isActive && (
           <span
             className={
-              "block rounded group-hover:max-w-full transition-all duration-200 h-[2.2px] bg-primary-100 "
+              "block rounded ag-hover:max-w-full transition-all duration-200 h-[2.2px] bg-primary-100 "
             }
           ></span>
         )}

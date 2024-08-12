@@ -81,7 +81,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   problem,
 }) => {
   return (
-    <div className="px-5">
+    <div className="px-5  w-full">
       {/* Problem heading */}
       <div className="w-full">
         <div className="flex space-x-4">
