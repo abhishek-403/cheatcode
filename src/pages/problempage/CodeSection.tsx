@@ -168,7 +168,6 @@ const CodeSection: React.FC<CodeSectionProps> = ({
                 wordWrap: settings.wordWrap,
                 smoothScrolling: true,
                 automaticLayout: true,
-                autoIndent: "full",
               }}
               onMount={(editor) => {
                 editorRef.current = editor;

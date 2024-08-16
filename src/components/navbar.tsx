@@ -3,9 +3,7 @@ import React from "react";
 import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { isUserAuthenticated } from "../hooks/useAuthState";
-import {
-  useSignInWithGoogleMutation
-} from "../store/services/auth";
+import { useSignInWithGoogleMutation } from "../store/services/auth";
 import { TABS } from "./constants/constants";
 import Spinner from "./custom-ui/loading";
 
@@ -30,8 +28,6 @@ export default function Navbar() {
       toast.error("Internal Error");
     }
   }
-
-
 
   return (
     <div className="flex flex-col  ">
@@ -58,12 +54,20 @@ export default function Navbar() {
               </TextBox>
             ))}
             <div>
-              {!user.isAuthenticated ? (
+              {user.isLoading ? (
+                <li>
+                  <Spinner size={26} />
+                </li>
+              ) : (
                 <div className="flex items-center justify-center ">
-                  {user.isLoading ? (
-                    <li>
-                      <Spinner size={26} />
-                    </li>
+                  {user.isAuthenticated ? (
+                    <Link to={`/profile/${user.user.userName}`} target="_blank">
+                      <Avatar
+                        src={user.user?.imageUrl ?? undefined}
+                        alt="Picture of the user"
+                        className="rounded-full border border-neutral-70 h-8 w-8"
+                      />
+                    </Link>
                   ) : (
                     <li
                       onClick={handleSignIn}
@@ -73,14 +77,6 @@ export default function Navbar() {
                     </li>
                   )}
                 </div>
-              ) : (
-                <Link to={`/profile/${user.user.userName}`} target="_blank">
-                  <Avatar
-                    src={user.user?.imageUrl ?? undefined}
-                    alt="Picture of the user"
-                    className="rounded-full border border-neutral-70 h-8 w-8"
-                  />
-                </Link>
               )}
             </div>
           </ul>

@@ -24,7 +24,7 @@ export const HeatmapCalendar = ({
     return days.map((day) => {
       const dateString = format(day, "yyyy-MM-dd");
       const count = submissionsMap[dateString] || 0;
-      const intensity = Math.min(count * 10, 100);
+      const intensity = Math.min(count * 25, 100);
 
       return (
         <div

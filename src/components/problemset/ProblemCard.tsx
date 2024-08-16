@@ -20,7 +20,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
   return (
     <>
       <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100">
-        <div className="grid grid-cols-[220px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4 m-1">
+        <div className="grid grid-cols-[260px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4 m-1">
           <div className=" py-3 font-medium">Title</div>
           <div className=" py-3 font-medium">Difficulty</div>
           <div className=" py-3 font-medium">Category</div>
@@ -42,7 +42,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
 
               return (
                 <div
-                  className="grid grid-cols-[220px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 text-neutral-40"
+                  className="grid grid-cols-[260px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 text-neutral-40"
                   key={idx}
                 >
                   <Link

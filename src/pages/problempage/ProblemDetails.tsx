@@ -1,8 +1,11 @@
 import React, { SetStateAction } from "react";
 import { Link } from "react-router-dom";
-import { Image } from "@nextui-org/react";
+import { cn, Image } from "@nextui-org/react";
 import ProblemSubmission from "./ProblemSubmissions";
-import { ProblemDetailsProps } from "../../common/problem-types";
+import {
+  ProblemDetailsProps,
+  ProblemDifficulty,
+} from "../../common/problem-types";
 import { ProblemTabs } from "../../components/constants/problem-types";
 
 type ProblemsDetailsProps = {
@@ -27,7 +30,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
 
   return (
     <div>
-      <div className="flex gap-4 py-2 w-full items-center px-4 h-[var(--problem-header-height)]   border-b border-[#2a2a2a] text-white overflow-hidden">
+      <div className="flex gap-4 py-2 w-full items-center px-4 h-[var(--problem-header-height)] font-inter  border-b border-[#2a2a2a] text-white overflow-hidden">
         <Link
           to={"/"}
           className="flex gap-2 items-center cursor-pointer justify-center"
@@ -44,29 +47,25 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
           className={`${
             activeTab == ProblemTabs.description
               ? "bg-neutral-80 "
-              : "text-[#848484]"
-          } font-inter rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2 `}
+              : "text-neutral-30"
+          }  rounded text-sm cursor-pointer hover:text-neutral-40 px-3 py-2 transition-all`}
         >
-          Description
+          {ProblemTabs.description}
         </button>
         <button
           onClick={() => setActiveTab(ProblemTabs.submissions)}
           className={`font-inter  ${
             activeTab == ProblemTabs.submissions
               ? "bg-neutral-80"
-              : "text-[#848484]"
-          }  rounded text-sm cursor-pointer hover:text-[#cecece] px-3 py-2`}
+              : "text-neutral-30"
+          }  rounded text-sm cursor-pointer hover:text-neutral-40 px-3 py-2`}
         >
-          Submissions
+          {ProblemTabs.submissions}
         </button>
       </div>
 
       <div className="flex px-0 py-4 h-[calc(100vh-var(--problem-header-height))] scrollbar-hide overflow-y-auto w-full">
-        {/* {activeTab == "Description" ? (
-          <ProblemsDescription problem={problem} />
-        ) : (
-          <Submissions />
-        )} */}
+       
         {displayTab()}
       </div>
     </div>
@@ -80,13 +79,26 @@ type ProblemsDescriptionProps = {
 const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
   problem,
 }) => {
+  const difficulyColor =
+    problem.difficulty === ProblemDifficulty.easy
+      ? "text-green-500 bg-green-200"
+      : problem.difficulty === ProblemDifficulty.medium
+      ? "text-yellow-500 bg-yellow-200"
+      : "text-red-500 bg-red-300";
   return (
-    <div className="px-5  w-full">
-      {/* Problem heading */}
-      <div className="w-full">
-        <div className="flex space-x-4">
-          <div className="flex-1 mr-2 text-lg text-white font-medium">
+    <div className="px-5 w-full font-inter">
+      <div className="">
+        <div className="flex gap-2 w-full items-center py-2 px-1">
+          <div className="flex mr-2 text-xl text-white font-semibold">
             {problem?.problemNo + ". " + problem?.name}
+          </div>
+          <div
+            className={cn(
+              "text-sm ml-auto px-4 rounded-full bg-opacity-20 py-1",
+              difficulyColor
+            )}
+          >
+            {problem?.difficulty}
           </div>
         </div>
 
@@ -98,7 +110,6 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
           />
         </div>
 
-        {/* Examples */}
         <div className="mt-4">
           {problem?.infoPage.examples?.map((example: any, index: any) => (
             <div key={example.id}>
@@ -122,7 +133,6 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
           ))}
         </div>
 
-        {/* Constraints */}
         <div className="my-8 pb-4">
           <div className="text-white text-sm font-medium">Constraints:</div>
           <ul className="text-white ml-5 list-disc ">

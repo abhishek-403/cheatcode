@@ -1,7 +1,10 @@
 import { Avatar, Button, cn } from "@nextui-org/react";
 import { HeatmapCalendar } from "../../components/profilepage/ProfileCards";
 import { useGetUserByUserNameQuery } from "../../store/services/user";
-import { ProblemDifficulty } from "../../common/problem-types";
+import {
+  ProblemDifficulty,
+  ResponseStatusType,
+} from "../../common/problem-types";
 import { useEffect } from "react";
 import { isUserAuthenticated } from "../../hooks/useAuthState";
 import { useSignOutMutation } from "../../store/services/auth";
@@ -47,8 +50,8 @@ export default function Profile({
       </div>
     );
   }
-  if (!user) {
-    return <div>Error</div>;
+  if (user.status === ResponseStatusType.Error) {
+    return <div className="h-full center">{user.result}</div>;
   }
 
   return (

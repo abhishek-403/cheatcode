@@ -106,3 +106,9 @@ code {
   color: white;
   font-size: 1rem;
 }
+
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
