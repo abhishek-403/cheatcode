@@ -94,7 +94,7 @@ const ProblemsDescription: React.FC<ProblemsDescriptionProps> = ({
           </div>
           <div
             className={cn(
-              "text-sm ml-auto px-4 rounded-full bg-opacity-20 py-1",
+              "text-xs ml-auto px-4 rounded-full bg-opacity-20 py-1",
               difficulyColor
             )}
           >

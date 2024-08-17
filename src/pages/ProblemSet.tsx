@@ -43,9 +43,9 @@ export default function ProblemSet() {
   }, [sheetsData, sheetsLoading]);
 
   return (
-    <div className="text-white px-[20px] mt-8">
+    <div className="text-white px-[20px] mt-8 ">
       <div className="flex gap-2 justify-between">
-        <div className="w-[25%] h-fit  bg-black border-x border-[#2a2a2a] rounded">
+        <div className="w-[25%] h-fit  bg-black border-x border-neutral-80 rounded">
           <Sheets
             data={sheetsData}
             isLoading={sheetsLoading}
@@ -54,7 +54,7 @@ export default function ProblemSet() {
           />
         </div>
         <main className="w-[75%] overflow-auto ">
-          <div className="flex items-center justify-center font-poppins text-3xl py-3 rounded border-x-2 border-t-2 border-neutral-90 text-primary-70 font-extrabold  bg-neutral-100 ">
+          <div className="flex items-center justify-center font-poppins text-3xl py-3 rounded border-x-2 border-t-2 border-neutral-90 text-primary-70 font-extrabold  bg-neutral-100 font-inter">
             {sheetsLoading || problemsLoading ? (
               <CustomSkeleton width={300} height={30} />
             ) : (
