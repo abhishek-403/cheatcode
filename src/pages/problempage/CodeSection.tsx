@@ -152,7 +152,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         className="h-[calc(100vh-var(--navbar-height))]"
         direction="vertical"
         sizes={[60, 40]}
-        minSize={20}
+        minSize={80}
       >
         <div className="flex flex-col overflow-auto  rounded relative min-h-[10vh] min-w-[50vw]">
           <div className="overflow-auto h-full  ">
@@ -181,11 +181,11 @@ const CodeSection: React.FC<CodeSectionProps> = ({
           </div>
         </div>
 
-        <div className="px-4  overflow-idden w-full  h-full overflow-y-auto">
-          <div className="flex h-10 items-center space-x-6 cursor-pointer border-b border-neutral-80">
+        <div className="  overflow-idden w-full  h-full overflow-y-auto">
+          <div className="flex h-10 px-4 items-center space-x-6 cursor-pointer border-b border-neutral-80 w-full  absolute bg-black opacity-100 z-[10]">
             <div
               onClick={() => setIsResultActive(false)}
-              className="relative flex h-full flex-col justify-center "
+              className="relative flex h-full flex-col justify-center"
             >
               <div className="text-sm font-medium leading-5 text-white">
                 Testcases
@@ -209,7 +209,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
             </div>
           </div>
 
-          <div className="pb-12 relative">
+          <div className="pb-12 relative mt-12 px-4">
             {isResultActive ? (
               <TestCasesResult
                 resultSummary={resultSummary}

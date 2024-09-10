@@ -70,6 +70,9 @@ module.exports = {
         secondary: {
           DEFAULT: "#5EC3FA",
         },
+        multi: {
+          DEFAULT: "#8c52ff",
+        },
         tertiary: {
           DEFAULT: "#FFB405",
         },

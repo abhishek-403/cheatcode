@@ -74,9 +74,10 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   }
   if (!resultSummary) {
     return (
-      <div className="flex items-center justify-center mt-16">
-        Run your code first!
-      </div>
+        <TestCases problem={problem} />
+      // <div className="flex items-center justify-center mt-16 text-red-400 ">
+      //   Error Occurred
+      // </div>
     );
   }
 

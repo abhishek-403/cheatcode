@@ -36,9 +36,9 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
           className="flex gap-2 items-center cursor-pointer justify-center"
         >
           <Image
-            src="./logo.png"
-            width={30}
-            height={30}
+            src="./seclogo.png"
+            width={40}
+            height={40}
             alt="Picture of the author"
           />
         </Link>

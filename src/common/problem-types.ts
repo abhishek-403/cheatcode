@@ -1,4 +1,4 @@
-type SupportedLanguagesInternal = "js" | "java" | "cpp";
+type SupportedLanguagesInternal = "js" | "cpp";
 const LANGUAGE_MAPPING: {
   [key: string]: {
     judge0: number;
@@ -7,14 +7,14 @@ const LANGUAGE_MAPPING: {
     monaco: string;
   };
 } = {
+  cpp: { judge0: 54, internal: "cpp", name: "C++", monaco: "cpp" },
   javascript: {
     judge0: 63,
     internal: "js",
     name: "Javascript",
     monaco: "javascript",
   },
-  cpp: { judge0: 54, internal: "cpp", name: "C++", monaco: "cpp" },
-  java: { judge0: 62, internal: "java", name: "Java", monaco: "java" },
+  // java: { judge0: 62, internal: "java", name: "Java", monaco: "java" },
 };
 
 enum SubmissionDescriptionType {
@@ -66,7 +66,7 @@ const SUPPORTED_LANGUAGES_ARRAY: {
   value: string;
 }[] = [
   { key: "javascript", value: "JavaScript" },
-  { key: "java", value: "Java" },
+  // { key: "java", value: "Java" },
   { key: "cpp", value: "C++" },
 ];
 interface ProblemDetailsProps extends ProblemSchema {

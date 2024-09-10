@@ -21,8 +21,8 @@ const ProblemPage: React.FC<any> = () => {
     problemId: questionId.problemId,
   });
 
-  if (error) {
-    return <div className="w-full my-20 text-red-500">Network failure</div>;
+  if (error ) {
+    return <div className="text-xl w-full center text-red-500 h-screen">Network failure</div>;
   }
 
   return (

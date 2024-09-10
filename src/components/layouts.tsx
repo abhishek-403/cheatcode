@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <IonPage>
-      <div className="flex h-full w-full flex-col">
+      <div className="flex h-full w-full flex-col ">
         <Navbar />
         <IonContent>{children}</IonContent>
       </div>

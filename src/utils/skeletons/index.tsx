@@ -132,6 +132,9 @@ export function ProblemSkeleton() {
       <CustomSkeleton height={60} />
       <CustomSkeleton height={60} />
       <CustomSkeleton height={60} />
+      <CustomSkeleton height={60} />
+      <CustomSkeleton height={60} />
+      <CustomSkeleton height={60} />
     </div>
   );
 }

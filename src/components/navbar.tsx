@@ -1,4 +1,4 @@
-import { Avatar, Image } from "@nextui-org/react";
+import { Avatar, cn, Image } from "@nextui-org/react";
 import React from "react";
 import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
@@ -34,17 +34,17 @@ export default function Navbar() {
       <div className="bg-black h-[var(--navbar-height)] border-b border-neutral-80 px-10 flex items-center justify-between">
         <Link
           to={"/"}
-          className="flex gap-2 items-center cursor-pointer justify-center"
+          className="flex gap-2 items-center cursor-pointer justify-center "
         >
           <Image
-            src="./logo.png"
-            width={40}
-            height={40}
+            src="./primarylogo.png"
+            width={220}
+            // height={100}
             alt="Picture of the author"
           />
-          <span className="text-white font-mono font-bold text-xl">
+          {/* <span className="text-white font-mono font-bold text-xl">
             CHEATCODE
-          </span>
+          </span> */}
         </Link>
         <div className="text-white  ">
           <ul className="flex flex-row gap-8 items-center  text-base cursor-pointer  my-auto">
@@ -100,16 +100,16 @@ export function TextBox({
     <li className="w-fit list-none  ">
       <Link
         to={link}
-        className="group font-medium w-fit  text-white transition duration-300 hover:text-[#a6a6a6]"
+        className={cn("group font-medium w-fit  text-white transition duration-300 hover:text-neutral-40 ",isActive&&"text-primary-70")}
       >
         {children}
-        {isActive && (
+        {/* {isActive && (
           <span
             className={
               "block rounded ag-hover:max-w-full transition-all duration-200 h-[2.2px] bg-primary-100 "
             }
           ></span>
-        )}
+        )} */}
       </Link>
     </li>
   );
