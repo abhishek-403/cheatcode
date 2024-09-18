@@ -24,7 +24,7 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
       case ProblemTabs.description:
         return <ProblemsDescription problem={problem} />;
       case ProblemTabs.submissions:
-        return <ProblemSubmission problemId={problem._id} />;
+        return <ProblemSubmission problemId={problem.id} />;
     }
   }
 
@@ -65,7 +65,6 @@ const ProblemDetails: React.FC<ProblemsDetailsProps> = ({
       </div>
 
       <div className="flex px-0 py-4 h-[calc(100vh-var(--problem-header-height))] scrollbar-hide overflow-y-auto w-full">
-       
         {displayTab()}
       </div>
     </div>

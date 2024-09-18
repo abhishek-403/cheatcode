@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Split from "react-split";
 
-import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 import {
   ProblemDetailsProps,
   SUPPORTED_LANGUAGES_ARRAY,
@@ -80,7 +80,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
     useSubmitProblemMutation();
   const dispatch = useDispatch();
 
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const editorRef = useRef<any | null>(null);
 
   function handleIndent() {
     const editor = editorRef.current;
