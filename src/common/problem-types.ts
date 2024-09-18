@@ -1,4 +1,4 @@
-type SupportedLanguagesInternal = "js" | "cpp";
+type SupportedLanguagesInternal = "cpp";
 const LANGUAGE_MAPPING: {
   [key: string]: {
     judge0: number;
@@ -8,14 +8,23 @@ const LANGUAGE_MAPPING: {
   };
 } = {
   cpp: { judge0: 54, internal: "cpp", name: "C++", monaco: "cpp" },
-  javascript: {
-    judge0: 63,
-    internal: "js",
-    name: "Javascript",
-    monaco: "javascript",
-  },
+  // javascript: {
+  //   judge0: 63,
+  //   internal: "js",
+  //   name: "Javascript",
+  //   monaco: "javascript",
+  // },
   // java: { judge0: 62, internal: "java", name: "Java", monaco: "java" },
 };
+
+const SUPPORTED_LANGUAGES_ARRAY: {
+  key: string;
+  value: string;
+}[] = [
+  { key: "cpp", value: "C++" },
+  // { key: "javascript", value: "JavaScript" },
+  // { key: "java", value: "Java" },
+];
 
 enum SubmissionDescriptionType {
   success = "Success",
@@ -40,9 +49,15 @@ enum ResponseStatusType {
   Success = "success",
   Error = "error",
 }
-
-type ResponseStatusCode = 200 | 400 | 401 | 403 | 404 | 500;
-
+type ResponseStatusCode = 200 | 400 | 401 | 403 | 404 | 500 | 429;
+// enum ResponseStatusCode {
+//   OK = 200,
+//   BadRequest = 400,
+//   Unauthorized = 401,
+//   Forbidden = 403,
+//   NotFound = 404,
+//   InternalServerError = 500,
+// }
 type ProblemSchema = {
   id: string;
   problemNo: number;
@@ -51,7 +66,6 @@ type ProblemSchema = {
   status: string;
   videoLink: string;
   category: string;
-  _id: string;
 };
 interface ProblemExampleProps {
   id: number;
@@ -61,14 +75,12 @@ interface ProblemExampleProps {
   explanation?: string;
 }
 
-const SUPPORTED_LANGUAGES_ARRAY: {
-  key: string;
-  value: string;
-}[] = [
-  { key: "javascript", value: "JavaScript" },
-  // { key: "java", value: "Java" },
-  { key: "cpp", value: "C++" },
-];
+interface StarterCode {
+  js: string;
+  java?: string;
+  cpp?: string;
+}
+
 interface ProblemDetailsProps extends ProblemSchema {
   infoPage: {
     problemStatement: string;
@@ -121,16 +133,3 @@ export {
   SUPPORTED_LANGUAGES_ARRAY,
 };
 
-// export {
-//     SubmitOutputResponse,
-//     CheckOutputResponse,
-//     ProblemDetailsProps,
-//     ProblemSchema,
-//     ResponseStatusCode,
-//     ResponseStatusType,
-//     SubmissionStatusType,
-//     ProblemDifficulty,
-//     SubmissionDescriptionType,
-//     LANGUAGE_MAPPING,
-//     SupportedLanguagesInternal,
-//   };

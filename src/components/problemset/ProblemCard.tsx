@@ -20,12 +20,12 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
   return (
     <>
       <div className="relative text-sm text-left text-gray-400 border-2 border-neutral-90 w-full mx-auto gap-[2px] bg-neutral-100 overflow-y-scroll overflow-x-hidden max-h-[70vh] ">
-        <div className="grid grid-cols-[290px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4 m-1">
+        <div className="grid grid-cols-[290px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)] text-md font-bold font-rubik text-gray-300 uppercase border-b border-neutral-90 text-center px-4 m-1">
           <div className=" py-3 font-medium">Title</div>
           <div className=" py-3 font-medium">Difficulty</div>
           <div className=" py-3 font-medium">Category</div>
           <div className=" py-3 font-medium">Company</div>
-          <div className=" py-3 font-medium">Solution</div>
+          {/* <div className=" py-3 font-medium">Solution</div> */}
         </div>
 
         <div className="text-white bg-neutral-100 w-full rounded-lg">
@@ -42,7 +42,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
 
               return (
                 <div
-                  className="grid grid-cols-[290px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 text-neutral-40"
+                  className="grid grid-cols-[290px_minmax(0,_1fr)_minmax(0,_1fr)_minmax(0,_1fr)]  p-4 border-b-2 border-neutral-90 cursor-pointer hover:bg-neutral-95 rounded transition-all duration-75 ease-in-out h-[60px] items-center text-center m-1 text-neutral-40"
                   key={idx}
                 >
                   <Link
@@ -84,7 +84,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
                   <div className=" font-medium w-full flex items-center text-center justify-center">
                     Coming soon
                   </div>
-                  <div className=" text-center flex items-center">
+                  {/* <div className=" text-center flex items-center">
                     {problem.videoLink ? (
                       <IonIcon
                         onClick={() => window.open(problem.videoLink, "_blank")}
@@ -94,7 +94,7 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
                     ) : (
                       <p className=" w-full">Coming soon</p>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               );
             })

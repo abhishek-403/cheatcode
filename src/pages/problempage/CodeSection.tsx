@@ -182,7 +182,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         </div>
 
         <div className="  overflow-idden w-full  h-full overflow-y-auto">
-          <div className="flex h-10 px-4 items-center space-x-6 cursor-pointer border-b border-neutral-80 w-full  absolute bg-black opacity-100 z-[10]">
+          <div className="flex h-10 px-4 items-center space-x-6 cursor-pointer border-b border-neutral-80 w-full  absolute bg-neutral-90 opacity-100 z-[10]">
             <div
               onClick={() => setIsResultActive(false)}
               className="relative flex h-full flex-col justify-center"
@@ -220,7 +220,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
               <TestCases problem={problem} />
             )}
           </div>
-          <div className="bg-neutral-90 border w-[97%] mb-1 border-neutral-80 absolute px-4 bottom-0 rounded-lg ">
+          <div className="bg-neutral-90 border w-full mb-1  border-neutral-80 absolute px-4 bottom-0 rounded-lg ">
             <EditorFooter
               handleSubmit={handleSubmit}
               handleRun={handleRun}

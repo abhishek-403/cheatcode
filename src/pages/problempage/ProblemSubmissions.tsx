@@ -192,12 +192,12 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
         <div className="">Date</div>
       </div>
 
-      <Accordion variant="splitted" className="dark ">
+      <Accordion variant="splitted" className="dark">
         {data?.map((elem: any, i: any) => (
           <AccordionItem
             key={i}
             title={
-              <div className="grid grid-cols-5 text-sm font-inter align-center justify-center text-center  text-neutral-30  items-center w-full ">
+              <div className="grid grid-cols-5 text-sm font-inter align-center justify-center text-center  text-neutral-30  items-center w-full h-fit">
                 <div className=" text-left text-base font-bold w-[200px]">
                   {elem.submissionStatus.status ===
                   SubmissionStatusType.accepted ? (
@@ -218,7 +218,7 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
                 <div className="">{elem.data.submissionDate}</div>
               </div>
             }
-            className="py-0"
+            className="mb-[1px] hover:bg-neutral-80"
             indicator={<div className=""></div>}
           >
             <div className="py-2 h-[40vh] overflow-auto rounded-xl ">
