@@ -28,7 +28,7 @@ export default function Profile({
 
   useEffect(() => {
     refetch();
-  }, [auth]);
+  }, [auth, refetch]);
 
   const [signOut, { isLoading: logoutLoading }] = useSignOutMutation();
   const router = useIonRouter();

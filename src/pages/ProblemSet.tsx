@@ -32,20 +32,10 @@ export default function ProblemSet() {
   const authUser = isUserAuthenticated();
 
   useEffect(() => {
-    if (sheetsError) console.error("Sheets Error:", sheetsError);
-    if (problemsError) console.error("Problems Error:", problemsError);
     if (problemsArray) {
-      refetchProblems().then((result) => {
-        if (result.error) {
-          console.error("Problems refetch error:", result.error);
-        }
-      });
+      refetchProblems()
     }
-    refetchSheets().then((result) => {
-      if (result.error) {
-        console.error("Sheets refetch error:", result.error);
-      }
-    });
+    refetchSheets()
   }, [refetchSheets, refetchProblems, authUser]);
   useEffect(() => {
     if (!sheetsLoading && sheetsData?.result?.length > 0) {
