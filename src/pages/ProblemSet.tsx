@@ -28,6 +28,7 @@ export default function ProblemSet() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log("Auth state changed:", user);
       if (user) {
         refetchProblems();
         refetchSheets();
