@@ -211,7 +211,9 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
                   )}
                 </div>
                 <div className="">
-                  {LANGUAGE_MAPPING[elem.data.language].name}
+                  {LANGUAGE_MAPPING[elem.data.language]===undefined
+                    ? "JavaScript"
+                    : LANGUAGE_MAPPING[elem.data.language].name}
                 </div>
                 <div className="">{Math.round(elem.data.runtime)} ms</div>
                 <div className="">{Math.round(elem.data.memoryUsed)} MB</div>
@@ -225,7 +227,7 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
               <Editor
                 height={"100%"}
                 width={"100%"}
-                language={LANGUAGE_MAPPING[elem.data.language].monaco}
+                language={LANGUAGE_MAPPING[elem.data.language]===undefined?"javascript":LANGUAGE_MAPPING[elem.data.language].monaco}
                 theme="vs-dark"
                 value={elem.userCode}
                 options={{
