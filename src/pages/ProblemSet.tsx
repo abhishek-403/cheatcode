@@ -8,11 +8,14 @@ import {
 import { CustomSkeleton } from "../utils/skeletons";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utils/firebaseConfig";
+import { isUserAuthenticated } from "../hooks/useAuthState";
 
 export default function ProblemSet() {
   const {
     data: sheetsData,
     isLoading: sheetsLoading,
+    error: sheetsError,
+
     refetch: refetchSheets,
   } = useGetAllSheetsQuery();
   const [activeSheet, setActiveSheet] = useState<string | null>(null);
@@ -20,23 +23,30 @@ export default function ProblemSet() {
   const {
     data: problemsArray,
     isLoading: problemsLoading,
+    error: problemsError,
     refetch: refetchProblems,
   } = useGetProblemsBySheetIdQuery(
     { sheetId: activeSheet ?? "" },
     { skip: !activeSheet }
   );
+  const authUser = isUserAuthenticated();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("Auth state changed:", user);
-      if (user) {
-        refetchProblems();
-        refetchSheets();
+    if (sheetsError) console.error("Sheets Error:", sheetsError);
+    if (problemsError) console.error("Problems Error:", problemsError);
+    if (problemsArray) {
+      refetchProblems().then((result) => {
+        if (result.error) {
+          console.error("Problems refetch error:", result.error);
+        }
+      });
+    }
+    refetchSheets().then((result) => {
+      if (result.error) {
+        console.error("Sheets refetch error:", result.error);
       }
     });
-
-    return () => unsubscribe();
-  }, [refetchSheets, refetchProblems]);
+  }, [refetchSheets, refetchProblems, authUser]);
   useEffect(() => {
     if (!sheetsLoading && sheetsData?.result?.length > 0) {
       setActiveSheet(sheetsData.result[0]._id);

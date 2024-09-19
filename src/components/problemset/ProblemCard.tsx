@@ -58,16 +58,16 @@ const ProblemCard = ({ data, isLoading }: ProblemProps) => {
                             className="h-6 text-dark-green-s flex items-center justify-center w-6"
                           />
                         ) : (
-                          <Link
-                            to={`/problem/${problem.id}`}
-                            target="_blank"
+                          <div
+                            // to={`/problem/${problem.id}`}
+                            // target="_blank"
                             className="gap-2  flex items-center justify-center   text-base"
                           >
                             <IonIcon
                               icon={codeSlashSharp}
                               className=" h-5 w-5 mx-auto flex items-center justify-center  text-primary-60"
                             />
-                          </Link>
+                          </div>
                         )}
                       </div>
                       <div className="flex  gap-[3px] group-hover:text-secondary text-neutral-0 ">

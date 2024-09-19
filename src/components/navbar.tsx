@@ -31,15 +31,16 @@ export default function Navbar() {
 
   return (
     <div className="flex flex-col  ">
-      <div className="bg-black h-[var(--navbar-height)] border-b border-neutral-80 px-10 flex items-center justify-between">
+      <div className="bg-black h-[var(--navbar-height)] border-b overflow-hidden border-neutral-80 px-10 flex items-center justify-between">
         <Link
           to={"/"}
-          className="flex gap-2 items-center cursor-pointer justify-center "
+          className="flex gap-2 items-center cursor-pointer justify-center  "
         >
           <Image
             src="./primarylogo.png"
             width={220}
             // height={100}
+            className=""
             alt="Picture of the author"
           />
           {/* <span className="text-white font-mono font-bold text-xl">
