@@ -175,7 +175,7 @@ const SubmissionAlert = ({ codeSubmissionResult }: any) => {
 type SubmissionsListProps = { data: any };
 
 const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
-  if (!data.length) {
+  if (typeof data !== typeof [] || !data.length) {
     return (
       <div className="w-full mt-10 text-primary-120 font-poppins items-center justify-center flex ">
         No previous submissions
@@ -211,7 +211,7 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
                   )}
                 </div>
                 <div className="">
-                  {LANGUAGE_MAPPING[elem.data.language]===undefined
+                  {LANGUAGE_MAPPING[elem.data.language] === undefined
                     ? "JavaScript"
                     : LANGUAGE_MAPPING[elem.data.language].name}
                 </div>
@@ -227,7 +227,11 @@ const SubmissionsList: React.FC<SubmissionsListProps> = ({ data }) => {
               <Editor
                 height={"100%"}
                 width={"100%"}
-                language={LANGUAGE_MAPPING[elem.data.language]===undefined?"javascript":LANGUAGE_MAPPING[elem.data.language].monaco}
+                language={
+                  LANGUAGE_MAPPING[elem.data.language] === undefined
+                    ? "javascript"
+                    : LANGUAGE_MAPPING[elem.data.language].monaco
+                }
                 theme="vs-dark"
                 value={elem.userCode}
                 options={{
