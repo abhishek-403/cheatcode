@@ -64,7 +64,8 @@ export default function Navbar() {
                   {user.isAuthenticated ? (
                     <Link to={`/profile/${user.user.userName}`} target="_blank">
                       <Avatar
-                        src={user.user?.imageUrl ?? undefined}
+                        src={user.user?.imageUrl}
+                        showFallback
                         alt="Picture of the user"
                         className="rounded-full border border-neutral-70 h-8 w-8"
                       />
@@ -101,7 +102,10 @@ export function TextBox({
     <li className="w-fit list-none  ">
       <Link
         to={link}
-        className={cn("group font-medium w-fit  text-white transition duration-300 hover:text-neutral-40 ",isActive&&"text-primary-70")}
+        className={cn(
+          "group font-medium w-fit  text-white transition duration-300 hover:text-neutral-40 ",
+          isActive && "text-primary-70"
+        )}
       >
         {children}
         {/* {isActive && (

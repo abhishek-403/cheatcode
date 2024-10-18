@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import { isUserAuthenticated } from "../../hooks/useAuthState";
 import { useSignOutMutation } from "../../store/services/auth";
-import { useIonRouter } from "@ionic/react";
+import { IonAvatar, useIonRouter } from "@ionic/react";
 import { useHistory } from "react-router";
 import { ProfilePageSkeleton } from "../../utils/skeletons";
 
@@ -53,7 +53,8 @@ export default function Profile({
   if (user.status === ResponseStatusType.Error) {
     return <div className="h-full center">{user.result}</div>;
   }
-
+  console.log(user.result.user.imageUrl);
+  
   return (
     <div className="px-32 py-6 flex flex-col gap-8 font-inter">
       <div className="flex  px-10 justify-between">
@@ -104,7 +105,7 @@ export default function Profile({
 
         <div className="flex flex-col items-start p-2 ">
           <div className="flex gap-2 items-center   ">
-            <Avatar src={user.result.user.imageUrl} className="w-12 h-12" />
+            <Avatar  showFallback src={user.result.user.imageUrl ??""} className="w-12 h-12" />
             <div className="flex flex-col">
               <div className="text-lg ">{user.result.user.name}</div>
               <div className="text-sm text-neutral-40">

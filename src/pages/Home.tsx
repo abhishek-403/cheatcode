@@ -46,7 +46,7 @@ function Card() {
           One Place for All the DSA Sheets
         </h1>
         <p className="text-neutral-40 ">
-          Access all your DSA sheets in one convenient location.
+          Access all your DSA sheets at one convenient platform.
         </p>
       </div>
     </div>
