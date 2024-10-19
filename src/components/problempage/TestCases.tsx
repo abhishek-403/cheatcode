@@ -95,13 +95,15 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
 
   const isAccepted =
     resultSummary.data.submission_status === SubmissionStatusType.accepted;
-  const formattedMessage = resultSummary.data.detailedInfo[activeTestCaseId]
-    .error_description!.split("\r\n")
-    .map((line, index) => (
-      <div key={index} style={{ whiteSpace: "pre-wrap" }}>
-        {line}
-      </div>
-    ));
+  const formattedMessage =
+    resultSummary.data.detailedInfo[activeTestCaseId].error_description &&
+    resultSummary.data.detailedInfo[activeTestCaseId].error_description
+      .split("\r\n")
+      .map((line, index) => (
+        <div key={index} style={{ whiteSpace: "pre-wrap" }}>
+          {line}
+        </div>
+      ));
   return (
     <>
       <div className="my-2 font-bold text-xl">
@@ -166,7 +168,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
         {resultSummary.data.detailedInfo[activeTestCaseId]
           .error_description && (
           <div className="w-full text-red-400 cursor-text rounded-lg border px-3 py-[10px] font-normal mx-auto bg-dark-fill-3 border-transparent text-sm mt-2">
-            {formattedMessage}
+            {formattedMessage ?? ""}
           </div>
         )}
         <p className="text-sm font-medium mt-4 text-white">Input :</p>
@@ -179,7 +181,6 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
             <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
               {resultSummary.data.detailedInfo[activeTestCaseId].user_output}
             </div>
-            
           </>
         )}
         <p className="text-sm font-medium mt-4 text-white">Expected :</p>
