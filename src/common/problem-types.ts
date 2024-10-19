@@ -96,6 +96,7 @@ interface CheckOutputResponse {
   user_output: any;
   expected_output: any;
   message: SubmissionDescriptionType;
+  error_description: null | string;
 }
 
 interface SubmitOutputResponse {
@@ -132,4 +133,3 @@ export {
   type ProblemResponseType,
   SUPPORTED_LANGUAGES_ARRAY,
 };
-

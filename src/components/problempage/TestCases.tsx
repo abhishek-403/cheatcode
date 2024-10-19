@@ -28,8 +28,12 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
           >
             <div className="flex flex-wrap items-center gap-y-4">
               <div
-                className={`font-medium items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-										${activeTestCaseId === index ? "text-white" : "text-gray-500"}
+                className={`font-medium items-center  focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
+										${
+                      activeTestCaseId === index
+                        ? "text-white border-[2px] border-neutral-40"
+                        : "text-gray-500 border-[2px] border-black"
+                    }
                     `}
               >
                 Case {index + 1}
@@ -74,7 +78,7 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   }
   if (!resultSummary) {
     return (
-        <TestCases problem={problem} />
+      <TestCases problem={problem} />
       // <div className="flex items-center justify-center mt-16 text-red-400 ">
       //   Error Occurred
       // </div>
@@ -91,7 +95,13 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
 
   const isAccepted =
     resultSummary.data.submission_status === SubmissionStatusType.accepted;
-
+  const formattedMessage = resultSummary.data.detailedInfo[activeTestCaseId]
+    .error_description!.split("\r\n")
+    .map((line, index) => (
+      <div key={index} style={{ whiteSpace: "pre-wrap" }}>
+        {line}
+      </div>
+    ));
   return (
     <>
       <div className="my-2 font-bold text-xl">
@@ -114,15 +124,16 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
       <div className="flex items-center gap-2 ">
         {problem?.infoPage?.examples
           ?.slice(0, resultSummary.data.detailedInfo.length)
-          .map((example: any, index: number) => (
-            <div
-              className="items-start "
-              key={example.id}
-              onClick={() => setActiveTestCaseId(index)}
-            >
-              <div className="flex flex-wrap items-center gap-y-4">
-                <div
-                  className={`font-semibold items-center transition-all focus:outline-none inline-flex border border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
+          .map((example: any, index: number) => {
+            return (
+              <div
+                className="items-start "
+                key={example.id}
+                onClick={() => setActiveTestCaseId(index)}
+              >
+                <div className="flex flex-wrap items-center gap-y-4">
+                  <div
+                    className={`font-semibold items-center  focus:outline-none inline-flex  border-black bg-dark-fill-3 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap border-[2px]
                   ${
                     resultSummary.data.detailedInfo[index].status ===
                     SubmissionStatusType.accepted
@@ -130,36 +141,47 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
                         ? "border-green-500 text-green-500 "
                         : "text-green-500"
                       : activeTestCaseId === index
-                      ? "text-red-500 border-red-500"
+                      ? "text-red-500 border-[2px] border-red-500"
                       : "text-red-500"
                   }
 
                     `}
-                >
-                  <div className="flex gap-2 items-center justify-center">
-                    {resultSummary.data.detailedInfo[index].status ===
-                    SubmissionStatusType.accepted ? (
-                      <IonIcon icon={checkmarkCircle} size="lg" />
-                    ) : (
-                      <IonIcon icon={closeCircleOutline} size="lg" />
-                    )}{" "}
-                    Case {index + 1}
+                  >
+                    <div className="flex gap-2 items-center justify-center">
+                      {resultSummary.data.detailedInfo[index].status ===
+                      SubmissionStatusType.accepted ? (
+                        <IonIcon icon={checkmarkCircle} size="lg" />
+                      ) : (
+                        <IonIcon icon={closeCircleOutline} size="lg" />
+                      )}{" "}
+                      Case {index + 1}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
       </div>
       <div className="font-semibold my-4">
+        {resultSummary.data.detailedInfo[activeTestCaseId]
+          .error_description && (
+          <div className="w-full text-red-400 cursor-text rounded-lg border px-3 py-[10px] font-normal mx-auto bg-dark-fill-3 border-transparent text-sm mt-2">
+            {formattedMessage}
+          </div>
+        )}
         <p className="text-sm font-medium mt-4 text-white">Input :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {problem.infoPage.examples[activeTestCaseId].inputText}
         </div>
-        <p className="text-sm font-medium mt-4 text-white">Output :</p>
-        <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-          {resultSummary.data.detailedInfo[activeTestCaseId].user_output ??
-            "null"}
-        </div>
+        {resultSummary.data.detailedInfo[activeTestCaseId].user_output && (
+          <>
+            <p className="text-sm font-medium mt-4 text-white">Output :</p>
+            <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+              {resultSummary.data.detailedInfo[activeTestCaseId].user_output}
+            </div>
+            
+          </>
+        )}
         <p className="text-sm font-medium mt-4 text-white">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {resultSummary.data.detailedInfo[activeTestCaseId].expected_output}

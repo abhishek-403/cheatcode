@@ -98,6 +98,7 @@ const CodeSection: React.FC<CodeSectionProps> = ({
         toast.error("Login to submit");
         return;
       }
+      setResultSummary(null);
 
       setIsResultActive(true);
       const res = await runProblem({
