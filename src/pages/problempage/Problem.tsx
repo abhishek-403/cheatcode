@@ -3,8 +3,8 @@ import { useParams } from "react-router";
 import Split from "react-split";
 import { useGetProblemQuery } from "../../store/services/problem";
 import { ProblemPageSkeleton } from "../../utils/skeletons";
-import CodeSection from "./CodeSection";
-import ProblemDetails from "./ProblemDetails";
+import CodeSection from "../../components/problempage/CodeSection";
+import ProblemDetails from "../../components/problempage/ProblemDetails";
 import { ProblemTabs } from "../../components/constants/problem-types";
 
 type WorkSpaceProps = {
@@ -21,8 +21,12 @@ const ProblemPage: React.FC<any> = () => {
     problemId: questionId.problemId,
   });
 
-  if (error ) {
-    return <div className="text-xl w-full center text-red-500 h-screen">Network failure</div>;
+  if (error) {
+    return (
+      <div className="text-xl w-full center text-red-500 h-screen">
+        Network failure
+      </div>
+    );
   }
 
   return (

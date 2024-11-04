@@ -97,6 +97,7 @@ interface CheckOutputResponse {
   expected_output: any;
   message: SubmissionDescriptionType;
   error_description: null | string;
+  user_stdout: null | string;
 }
 
 interface SubmitOutputResponse {

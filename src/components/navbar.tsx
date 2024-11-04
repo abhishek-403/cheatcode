@@ -1,5 +1,5 @@
 import { Avatar, cn, Image } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { isUserAuthenticated } from "../hooks/useAuthState";
@@ -16,8 +16,7 @@ type decodeType = {
 export default function Navbar() {
   const [singInWithGoogle, { isLoading: signinLoading }] =
     useSignInWithGoogleMutation();
-  const user = isUserAuthenticated();
-
+  const user= isUserAuthenticated();
   async function handleSignIn() {
     try {
       if (signinLoading) return;
@@ -28,6 +27,7 @@ export default function Navbar() {
       toast.error("Internal Error");
     }
   }
+
 
   return (
     <div className="flex flex-col  ">
@@ -61,10 +61,10 @@ export default function Navbar() {
                 </li>
               ) : (
                 <div className="flex items-center justify-center ">
-                  {user.isAuthenticated ? (
+                  {user.isAuthenticated  ? (
                     <Link to={`/profile/${user.user.userName}`} target="_blank">
                       <Avatar
-                        src={user.user?.imageUrl}
+                        src={user.user.imageUrl}
                         showFallback
                         alt="Picture of the user"
                         className="rounded-full border border-neutral-70 h-8 w-8"

@@ -43,11 +43,11 @@ const TestCases: React.FC<TestCasesProps> = ({ problem }) => {
         ))}
       </div>
       <div className="font-semibold my-4">
-        <p className="text-sm font-medium mt-4 text-white">Input :</p>
+        <p className="text-sm font-medium mt-4 text-neutral-40">Input :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {problem?.infoPage.examples[activeTestCaseId].inputText}
         </div>
-        <p className="text-sm font-medium mt-4 text-white">Expected :</p>
+        <p className="text-sm font-medium mt-4 text-neutral-40">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {problem?.infoPage.examples[activeTestCaseId].outputText}
         </div>
@@ -98,6 +98,15 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
   const formattedMessage =
     resultSummary.data.detailedInfo[activeTestCaseId].error_description &&
     resultSummary.data.detailedInfo[activeTestCaseId].error_description
+      .split("\r\n")
+      .map((line, index) => (
+        <div key={index} style={{ whiteSpace: "pre-wrap" }}>
+          {line}
+        </div>
+      ));
+  const formattedStdout =
+    resultSummary.data.detailedInfo[activeTestCaseId].user_stdout &&
+    resultSummary.data.detailedInfo[activeTestCaseId].user_stdout
       .split("\r\n")
       .map((line, index) => (
         <div key={index} style={{ whiteSpace: "pre-wrap" }}>
@@ -165,25 +174,33 @@ export const TestCasesResult: React.FC<TestCasesResultProps> = ({
           })}
       </div>
       <div className="font-semibold my-4">
-        {resultSummary.data.detailedInfo[activeTestCaseId]
-          .error_description && (
+        {formattedMessage && (
           <div className="w-full text-red-400 cursor-text rounded-lg border px-3 py-[10px] font-normal mx-auto bg-dark-fill-3 border-transparent text-sm mt-2">
-            {formattedMessage ?? ""}
+            {formattedMessage}
           </div>
         )}
-        <p className="text-sm font-medium mt-4 text-white">Input :</p>
+        {formattedStdout && (
+          <>
+            <p className="text-sm font-medium mt-4 text-neutral-40">Stdout :</p>
+            <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+              {formattedStdout}
+            </div>
+          </>
+        )}
+        <p className="text-sm font-medium mt-4 text-neutral-40">Input :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {problem.infoPage.examples[activeTestCaseId].inputText}
         </div>
         {resultSummary.data.detailedInfo[activeTestCaseId].user_output && (
           <>
-            <p className="text-sm font-medium mt-4 text-white">Output :</p>
+            <p className="text-sm font-medium mt-4 text-neutral-40">Output :</p>
             <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
               {resultSummary.data.detailedInfo[activeTestCaseId].user_output}
             </div>
           </>
         )}
-        <p className="text-sm font-medium mt-4 text-white">Expected :</p>
+
+        <p className="text-sm font-medium mt-4 text-neutral-40">Expected :</p>
         <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
           {resultSummary.data.detailedInfo[activeTestCaseId].expected_output}
         </div>

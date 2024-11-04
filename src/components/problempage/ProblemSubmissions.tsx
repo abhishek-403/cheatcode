@@ -56,6 +56,18 @@ const SubmissionAlert = ({ codeSubmissionResult }: any) => {
   const userCode = codeSubmissionResult.userCode;
   const language = codeSubmissionResult.data.language;
 
+  const error_description = codeSubmissionResult.data.error_description;
+  const user_stdout = codeSubmissionResult.data.user_stdout;
+  const user_output = codeSubmissionResult.data.user_output;
+  const expected_output = codeSubmissionResult.data.expected_output;
+  const formattederror =
+  error_description &&
+  error_description.split("\r\n").map((line: any, index: any) => (
+      <div key={index} style={{ whiteSpace: "pre-wrap" }}>
+        {line}
+      </div>
+    ));
+
   if (!codeSubmissionResult) {
     return (
       <div className="flex items-center justify-center mt-16 text-red-400 font-semibold">
@@ -147,24 +159,50 @@ const SubmissionAlert = ({ codeSubmissionResult }: any) => {
                 }}
               />
             </div>
-            {/* <div className="">
+            <div className="">
               <div className="font-semibold my-4">
-                <p className="text-sm font-medium mt-4 text-white">Input :</p>
+                {/* <p className="text-sm font-medium mt-4 text-white">Input :</p>
                 <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-                  {codeSubmissionResult.failed_test_case}
-                </div>
-                <p className="text-sm font-medium mt-4 text-white">Output :</p>
-                <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-                  {codeSubmissionResult.your_output}
-                </div>
-                <p className="text-sm font-medium mt-4 text-white">
-                  Expected :
-                </p>
-                <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-                  {codeSubmissionResult.expected_output}
-                </div>
+                  {}
+                </div> */}
+                {formattederror && (
+                  <div className="w-full text-red-400 cursor-text rounded-lg border px-3 py-[10px] font-normal mx-auto bg-dark-fill-3 border-transparent text-sm mt-2">
+                    {formattederror}
+                  </div>
+                )}
+                {user_stdout && (
+                  <>
+                    <p className="text-sm font-medium mt-4 text-neutral-40">
+                      Stdout :
+                    </p>
+                    <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+                      {user_stdout}
+                    </div>
+                  </>
+                )}
+                {user_output && (
+                  <>
+                    <p className="text-sm font-medium mt-4 text-neutral-40">
+                      Output :
+                    </p>
+                    <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+                      {user_output}
+                    </div>
+                  </>
+                )}
+
+                {expected_output && (
+                  <>
+                    <p className="text-sm font-medium mt-4 text-neutral-40">
+                      Expected :
+                    </p>
+                    <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
+                      {expected_output}
+                    </div>
+                  </>
+                )}
               </div>
-            </div> */}
+            </div>
           </div>
         )}
       </div>
