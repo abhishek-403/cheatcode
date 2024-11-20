@@ -2,6 +2,7 @@ import { IonIcon, useIonRouter } from "@ionic/react";
 import { flashOutline } from "ionicons/icons";
 import { Typewriter } from "react-simple-typewriter";
 import { PrimaryButton } from "../components/custom-ui/button";
+import Footer from "../components/footer";
 const Home: React.FC = () => {
   const navigate = useIonRouter();
   return (
@@ -35,6 +36,7 @@ const Home: React.FC = () => {
           />
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };
