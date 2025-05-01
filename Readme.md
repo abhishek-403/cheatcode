@@ -1,14 +1,13 @@
 # CheatCode
 
 
-**CheatCode** is an interactive web application designed to provide quick access to programming cheat sheets and code snippets. Built using modern web technologies, it aims to be a valuable resource for developers seeking fast solutions and code references.
+**CheatCode** is an interactive web application designed to provide quick access to programming cheat sheets and code snippets. 
 
 ## 🚀 Features
 
 - Access to a variety of programming cheat sheets.
 - Search functionality to quickly find specific code snippets.
 - User-friendly interface for easy navigation.
-- Responsive design for seamless use on both desktop and mobile devices.
 
 ## 🧱 Technologies Used
 
