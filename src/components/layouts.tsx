@@ -1,13 +1,7 @@
-import {
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonPage,
-  IonRouterOutlet,
-  IonRow,
-} from "@ionic/react";
-import Navbar from "./navbar";
+import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { Route, RouteProps } from "react-router";
+import Navbar from "./navbar";
+import ScreeSizeAlert from "./screensize-alert";
 
 interface ProblemLayoutProps extends RouteProps {
   component: React.ComponentType<any>;
@@ -18,6 +12,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (window.innerWidth < 768) {
+    return <ScreeSizeAlert />;
+  }
   return (
     <IonPage>
       <div className="flex h-full w-full flex-col ">

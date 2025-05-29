@@ -31,7 +31,7 @@ export default function Navbar() {
 
   return (
     <div className="flex flex-col  ">
-      <div className="bg-black h-[var(--navbar-height)] border-b overflow-hidden border-neutral-80 px-10 flex items-center justify-between">
+      <div className="bg-black h-[var(--navbar-height)] border-b overflow-hidden border-neutral-80 px-2 md:px-10 flex items-center justify-between">
         <Link
           to={"/"}
           className="flex gap-2 items-center cursor-pointer justify-center  "
@@ -48,7 +48,7 @@ export default function Navbar() {
           </span> */}
         </Link>
         <div className="text-white  ">
-          <ul className="flex flex-row gap-8 items-center  text-base cursor-pointer  my-auto">
+          <ul className="flex  flex-row gap-8 items-center  text-base cursor-pointer  my-auto">
             {TABS.map((tab, i) => (
               <TextBox key={i} link={tab.link}>
                 {tab.name}

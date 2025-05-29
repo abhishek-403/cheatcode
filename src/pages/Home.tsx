@@ -1,6 +1,5 @@
 import { IonIcon, useIonRouter } from "@ionic/react";
 import { flashOutline } from "ionicons/icons";
-import { Typewriter } from "react-simple-typewriter";
 import { PrimaryButton } from "../components/custom-ui/button";
 const Home: React.FC = () => {
   const navigate = useIonRouter();

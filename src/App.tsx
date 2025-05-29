@@ -19,10 +19,9 @@ import "@ionic/react/css/padding.css";
 import "@ionic/react/css/palettes/dark.system.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
-import { LayoutRoute, ProblemLayout } from "./components/layouts";
+import RootLayout, { LayoutRoute, ProblemLayout } from "./components/layouts";
 import ProblemSet from "./pages/ProblemSet";
 import ProblemPage from "./pages/problempage/Problem";
-import RootLayout from "./components/layouts";
 import Profile from "./pages/profilepage/Profile";
 
 setupIonicReact();
